@@ -48,7 +48,5 @@ namespace MemberClasses
         public void setSuspended(bool value) { suspended = value; }
 
 
-
-
     }
 }

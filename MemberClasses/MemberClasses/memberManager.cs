@@ -8,15 +8,22 @@ namespace MemberClasses
 {
     static class memberManager
     {
+        //attributes 
         private static List<member> memberList = new List<member>();
         private static int nextMemberNumber = 0;
 
-
+        //function to load in next ID. only called on startup
         public static void LoadNextMemberNumber(int number)
         {
             nextMemberNumber = number;
         }
+        //function returns next ID. called durring save
+        public static int getNextMemberNumber()
+        {
+            return nextMemberNumber;
+        }
 
+        //returns member object if found
         public static member getMember(int number)
         {
             foreach(member M in memberList)
@@ -24,14 +31,15 @@ namespace MemberClasses
                 if (M.getNumber() == number)
                     return M;
             }
-            return new member();
+            return new member(); //if not found return empty object
         }
 
+        
         public static string validateMember(int number)
         {
             member checkMember = getMember(number);
 
-            if(checkMember.getMemberName() == null)//check this
+            if(checkMember.getMemberName() == null)//if checkMember isnt found values will be null.
             {
                 return "Invalid number";
             }
@@ -49,12 +57,12 @@ namespace MemberClasses
         {
             member newMember = new member(nextMemberNumber, name, street, city, state, zip);
             memberList.Add(newMember);
-            nextMemberNumber++;
+            nextMemberNumber++;//update next member number
         }
         public static void deleteMember(int number)
         {
             member memberToDelete = getMember(number);
-            memberList.Remove(memberToDelete);
+            memberList.Remove(memberToDelete);  //if member isnt found do nothing
         }
 
         public static void editMember(int number, string newName)
@@ -73,7 +81,7 @@ namespace MemberClasses
             {
                 memberToEdit.setMemberStreetAddress(newStreet);
                 memberToEdit.setMemberCity(newCity);
-                memberToEdit.setMemberState(newStreet);
+                memberToEdit.setMemberState(newState);
                 memberToEdit.setZipCode(newZip);
             }
         }
