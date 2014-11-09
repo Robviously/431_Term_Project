@@ -10,14 +10,14 @@ namespace PizzaAnonymousApplication
     {
         private static PizzaAnonymous pizzaAnonymous;
         private static ProviderManager providerManager;
-        //private static MemberManager memberManager;
-        //private static ServiceManager serviceManager;
+        private static MemberManager memberManager;
+        private static ServiceManager serviceManager;
 
         private PizzaAnonymous()
         {
             providerManager = new ProviderManager();
-            //memberManager = new MemberManager();
-            //serviceManager = new ServiceManager();
+            memberManager = new MemberManager();
+            serviceManager = new ServiceManager();
         }
 
         public static PizzaAnonymous instance()
@@ -113,8 +113,6 @@ namespace PizzaAnonymousApplication
 
         public void addMember()
         {
-            Console.Out.WriteLine("addMember Method");
-            /*
             String name = UserInterface.getString("Enter the member's name: ");
             String streetAddress = UserInterface.getString("Enter the member's street address: ");
             String city = UserInterface.getString("Enter the member's city: ");
@@ -124,13 +122,10 @@ namespace PizzaAnonymousApplication
             memberManager.addMember(name, streetAddress, city, state, zipCode);
 
             Console.Out.WriteLine("Success adding member!");
-             */
         }
 
         public void printMembers()
         {
-            Console.Out.WriteLine("printMembers Method");
-            /*
             String membersString = memberManager.toString();
 
             if (membersString == "")
@@ -141,13 +136,10 @@ namespace PizzaAnonymousApplication
             {
                 Console.Out.WriteLine(membersString);
             }
-             * */
         }
 
         public void deleteMember()
         {
-            Console.Out.WriteLine("deleteMember Method");
-            /*
             int memberId = UserInterface.getInteger("Enter the member ID: ");
 
             if (memberManager.validateMember(memberId))
@@ -159,13 +151,10 @@ namespace PizzaAnonymousApplication
             {
                 Console.Out.WriteLine("Unable to find member");
             }
-             * */
         }
 
         public void editMember()
         {
-            Console.Out.WriteLine("editMember Method");
-            /*
             int memberId = UserInterface.getInteger("Enter provider ID: ");
 
             if (memberManager.validateMember(memberId))
@@ -199,26 +188,20 @@ namespace PizzaAnonymousApplication
             {
                 Console.Out.WriteLine("Unable to find member.");
             }
-             */
         }
 
         public void addService()
         {
-            Console.Out.WriteLine("addService Method");
-            /*
             String name = UserInterface.getString("Enter the service's name: ");
             float fee = UserInterface.getFloat("Enter the service's fee: ");
             String description = UserInterface.getString("Enter the service's description: ");
 
             serviceManager.addService(name, fee, description);
             Console.Out.WriteLine("Success adding service!");
-            */
         }
 
         public void printServices()
         {
-            Console.Out.WriteLine("printServices Method");
-            /*
             String servicesString = serviceManager.toString();
 
             if (servicesString == "")
@@ -229,13 +212,10 @@ namespace PizzaAnonymousApplication
             {
                 Console.Out.WriteLine(servicesString);
             }
-            */
         }
 
         public void deleteService()
         {
-            Console.Out.WriteLine("deleteService Method");
-            /*
             int serviceId = UserInterface.getInteger("Enter the service ID: ");
 
             if (serviceManager.validateService(serviceId))
@@ -247,13 +227,10 @@ namespace PizzaAnonymousApplication
             {
                 Console.Out.WriteLine("Unable to find service");
             }
-            */
         }
 
         public void editService()
         {
-            Console.Out.WriteLine("editService Method");
-            /*
             int serviceId = UserInterface.getInteger("Enter service ID: ");
 
             if (serviceManager.validateService(serviceId))
@@ -290,7 +267,6 @@ namespace PizzaAnonymousApplication
             {
                 Console.Out.WriteLine("Unable to find service");
             }
-            */
         }
     }
 }
