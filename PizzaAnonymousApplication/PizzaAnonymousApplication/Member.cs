@@ -59,6 +59,14 @@ public class Member
         set { zipCode = value; }
     }
 
+    // Member's zip code with get/set properties.
+    private bool suspended;
+    public bool Suspended
+    {
+        get { return suspended; }
+        set { suspended = value; }
+    }
+
     /// <summary>
     /// This is the only constructor for Member and must be passed parameters (no default constructor)
     /// </summary>
@@ -76,6 +84,7 @@ public class Member
         city = c;
         state = s;
         zipCode = zc;
+        suspended = false;
     }
 
     public String toString()

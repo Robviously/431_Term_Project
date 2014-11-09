@@ -111,6 +111,11 @@ namespace PizzaAnonymousApplication
             }
         }
 
+        public bool validateProviderId (int providerId)
+        {
+            return providerManager.validateProvider(providerId);
+        }
+
         public void addMember()
         {
             String name = UserInterface.getString("Enter the member's name: ");
@@ -187,6 +192,26 @@ namespace PizzaAnonymousApplication
             else
             {
                 Console.Out.WriteLine("Unable to find member.");
+            }
+        }
+
+        public void validateMember()
+        {
+            int memberId = UserInterface.getInteger("Enter member ID: ");
+            Member member = memberManager.getMemberById(memberId);
+
+            if (member != null)
+            {
+                if (member.Suspended)
+                {
+                    Console.Out.WriteLine("SUSPENDED - Member exists but is suspended.");
+                }
+
+                Console.Out.WriteLine("VALID - Member exists and is not suspended.");
+            }
+            else
+            {
+                Console.Out.WriteLine("INVALID - Member does not exist.");
             }
         }
 

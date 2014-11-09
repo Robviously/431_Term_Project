@@ -49,12 +49,10 @@ namespace PizzaAnonymousApplication
 
                 switch (choice)
                 {
-                    case 1:   done = true;
-                		      displayManagerMenu();
+                    case 1:   displayManagerMenu();
                               break;
 
-                    case 2:   done = true;
-                	          displayProviderMenu();
+                    case 2:   displayProviderMenu();
                               break;
 
                     case 3:   done = true;
@@ -77,19 +75,19 @@ namespace PizzaAnonymousApplication
         	    Console.Out.WriteLine("        MANAGER MENU                 ");
         	    Console.Out.WriteLine("        Pizza-anonymous              ");
         	    Console.Out.WriteLine("                                     ");
-        	    Console.Out.WriteLine("        1. Add Member                ");
-        	    Console.Out.WriteLine("        2. Edit Member               ");
-        	    Console.Out.WriteLine("        3. Delete Member             ");
-        	    Console.Out.WriteLine("        4. Add Provider              ");
-                Console.Out.WriteLine("        5. Edit Provider             ");
-                Console.Out.WriteLine("        6. Delete Provider           ");
-                Console.Out.WriteLine("        7. Add Service               ");
-                Console.Out.WriteLine("        8. Edit Service              ");
-                Console.Out.WriteLine("        9. Delete Service            "); 
-                Console.Out.WriteLine("       10. Show Members              "); 
-                Console.Out.WriteLine("       11. Show Providers            "); 
-                Console.Out.WriteLine("       12. Show Services             "); 
-                Console.Out.WriteLine("       13. Display Main Menu         ");
+        	    Console.Out.WriteLine("         1. Add Member               ");
+        	    Console.Out.WriteLine("         2. Edit Member              ");
+        	    Console.Out.WriteLine("         3. Delete Member            ");
+        	    Console.Out.WriteLine("         4. Add Provider             ");
+                Console.Out.WriteLine("         5. Edit Provider            ");
+                Console.Out.WriteLine("         6. Delete Provider          ");
+                Console.Out.WriteLine("         7. Add Service              ");
+                Console.Out.WriteLine("         8. Edit Service             ");
+                Console.Out.WriteLine("         9. Delete Service           "); 
+                Console.Out.WriteLine("        10. Show Members             "); 
+                Console.Out.WriteLine("        11. Show Providers           "); 
+                Console.Out.WriteLine("        12. Show Services            "); 
+                Console.Out.WriteLine("        13. Display Main Menu        ");
                 Console.Out.WriteLine("                                     ");
 
                 choice = getInteger("Enter your choice: ");
@@ -133,7 +131,6 @@ namespace PizzaAnonymousApplication
     						    break;
                            
                     case 13:   	done = true;
-     		   				    displayMainMenu();
      		   				    break;    
 
                     default:   	Console.Out.WriteLine("Not a valid choice! Please try again.\n");
@@ -145,25 +142,33 @@ namespace PizzaAnonymousApplication
         private void displayProviderMenu ()
         {
             bool done = false;
-            int choice;				    
-        
+            int choice;
+
+            int providerId = getInteger("Enter Provider ID: ");
+
+            if (!pizzaAnonymous.validateProviderId(providerId))
+            {
+                Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
+                return;
+            }
+
             while (!done)
             {
                 Console.Out.WriteLine("                                     ");
-        	    Console.Out.WriteLine("      PROVIDER MENU                  ");
-        	    Console.Out.WriteLine("      Pizza-anonymous                ");
+        	    Console.Out.WriteLine("        PROVIDER MENU                ");
+        	    Console.Out.WriteLine("        Pizza-anonymous              ");
         	    Console.Out.WriteLine("                                     ");
-        	    Console.Out.WriteLine("      1. Authenticate Member         ");
-        	    Console.Out.WriteLine("      2. Provide Service             ");
-        	    Console.Out.WriteLine("      3. Generate Report             ");
-        	    Console.Out.WriteLine("      4. Display Main Menu           ");
+        	    Console.Out.WriteLine("        1. Authenticate Member       ");
+        	    Console.Out.WriteLine("        2. Provide Service           ");
+        	    Console.Out.WriteLine("        3. Generate Report           ");
+        	    Console.Out.WriteLine("        4. Display Main Menu         ");
                 Console.Out.WriteLine("                                     ");
 
                 choice = getInteger("Enter your choice: ");
          
                 switch (choice)
                 {
-                    case  1:   Console.Out.WriteLine("Authenticate Member Method"); //authenticateMember();
+                    case  1:   pizzaAnonymous.validateMember();
                                break;
 
                     case  2:   Console.Out.WriteLine("Provide Service Method"); //provideService();
@@ -173,7 +178,6 @@ namespace PizzaAnonymousApplication
                                break;
 
                     case  4:   done = true;
-                			   displayMainMenu();
                                break;
 
                     default:   Console.Out.WriteLine("Not a valid choice! Please try again.\n");
