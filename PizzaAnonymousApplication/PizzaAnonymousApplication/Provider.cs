@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Reports;
 
 /// <summary>
 /// Provider Class: 
@@ -10,7 +11,7 @@ using System.Collections.Generic;
 /// Last Modified By: Ryan Schwartz
 /// Date Last Modified: November 6, 2014
 /// </summary>
-public class Provider
+public class Provider : Entity
 {
     // Provider's name with get/set properties.
     private String name;
