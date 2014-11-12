@@ -44,6 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity.cs" />
+    <Compile Include="Interfaces\IMemberReport.cs" />
+    <Compile Include="Interfaces\IProviderReport.cs" />
+    <Compile Include="Interfaces\ISummaryReport.cs" />
+    <Compile Include="Interfaces\I_EFTReport.cs" />
     <Compile Include="Member.cs" />
     <Compile Include="MemberManager.cs" />
     <Compile Include="PizzaAnonymous.cs" />
@@ -51,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="ProviderManager.cs" />
+    <Compile Include="Report.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="ServiceManager.cs" />
     <Compile Include="UserInterface.cs" />
