@@ -25,7 +25,7 @@ public class ServiceManager
     /// <param name="name">Service Name</param>
     /// <param name="fee">Service Fee</param>
     /// <param name="description">Service Description</param>
-    public void addService(String name, float fee, String description)
+    public void addService(String name, double fee, String description)
     {
         // Creates a new service to add to the system.  Note: nextID is incremented.
         Service service = new Service(name, nextId++, fee, description);
@@ -53,7 +53,7 @@ public class ServiceManager
     /// </summary>
     /// <param name="id">Service ID</param>
     /// <param name="fee">Service fee</param>
-    public void editServiceFee(int id, float fee)
+    public void editServiceFee(int id, double fee)
     {
         // Get the service object using its ID
         Service service = getServiceById(id);

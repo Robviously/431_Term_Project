@@ -28,8 +28,8 @@ public class Service
     }
 
     // Service's fee with get/set properties.
-    private float fee;
-    public float Fee
+    private double fee;
+    public double Fee
     {
         get { return fee; }
         set { fee = value; }
@@ -52,7 +52,7 @@ public class Service
     /// <param name="c">Service city</param>
     /// <param name="s">Service state</param>
     /// <param name="zc">Service zip code</param>
-    public Service(String n, int i, float f, String d)
+    public Service(String n, int i, double f, String d)
     {
         name = n;
         id = i;

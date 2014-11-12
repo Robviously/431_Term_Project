@@ -186,39 +186,53 @@ namespace PizzaAnonymousApplication
             }  
         }
 
-        public static String getString(String prompt)
+        public static String getString(String prompt, int min = 1, int max = 1000)
 	    {
             Console.Out.WriteLine(prompt);
-            return Console.In.ReadLine(); 
+            String input = Console.In.ReadLine(); 
+
+            while (input.Length < min || input.Length > max)
+            {
+                Console.Out.WriteLine("Please input a string with length between [" + min + "] and [" + max + "] characters: ");
+                input = Console.In.ReadLine(); 
+            }
+
+            return input;
 	    }
 
-        public static int getInteger(String prompt)
+        public static int getInteger(String prompt, int min = 1, int max = 20)
 	    {
             int number;
 
             Console.Out.Write(prompt);
             String input = Console.ReadLine();
 
-            while (!Int32.TryParse(input, out number))
+            while (!Int32.TryParse(input, out number) || input.Length < min || input.Length > max)
             {
-                Console.WriteLine("Please enter an integer: ");
-                input = Console.ReadLine();
+                Console.Out.WriteLine("Please input an integer with length between [" + min + "] and [" + max + "] digits: ");
+                input = Console.In.ReadLine();
+
             }
+
             return number;
 	    }
 
-        public static float getFloat(String prompt)
+        public static double getDouble(String prompt, double min = 0.0, double max = 999.99, int places = 2)
 	    {
-            float number;
+            double number;
 
             Console.Out.Write(prompt);
             String input = Console.ReadLine();
 
-            while (!float.TryParse(input, out number))
+            while (!double.TryParse(input, out number) || number < min || number > max)
             {
-                Console.WriteLine("Please enter a decimal: ");
+                Console.WriteLine("Please enter a decimal with value between [" + min + "] and [" + max + "]: ");
                 input = Console.ReadLine();
             }
+            
+            // Round the number to the the number of places given by *places*
+            number = (double)Math.Round(number * (Math.Pow(10, places))) / Math.Pow(10, places);
+            
             return number;
 	    }
 

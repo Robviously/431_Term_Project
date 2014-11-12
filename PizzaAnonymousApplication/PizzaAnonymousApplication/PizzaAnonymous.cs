@@ -34,11 +34,11 @@ namespace PizzaAnonymousApplication
 
         public void addProvider()
         {
-            String name = UserInterface.getString("Enter the provider's name: ");
+            String name = UserInterface.getString("Enter the provider's name: ", 1, 25);
             String streetAddress = UserInterface.getString("Enter the provider's street address: ");
             String city = UserInterface.getString("Enter the provider's city: ");
             String state = UserInterface.getString("Enter the provider's state: ");
-            int zipCode = UserInterface.getInteger("Enter the provider's ZIP code: ");
+            int zipCode = UserInterface.getInteger("Enter the provider's ZIP code: ", 5, 5);
 
             providerManager.addProvider(name, streetAddress, city, state, zipCode);
 
@@ -218,7 +218,7 @@ namespace PizzaAnonymousApplication
         public void addService()
         {
             String name = UserInterface.getString("Enter the service's name: ");
-            float fee = UserInterface.getFloat("Enter the service's fee: ");
+            double fee = UserInterface.getDouble("Enter the service's fee: ", 0.0, 999.99, 2);
             String description = UserInterface.getString("Enter the service's description: ");
 
             serviceManager.addService(name, fee, description);
@@ -271,7 +271,7 @@ namespace PizzaAnonymousApplication
                 }
                 else if (choice.ToLower().Equals("fee"))
                 {
-                    float fee = UserInterface.getFloat("Enter service fee: ");
+                    double fee = UserInterface.getDouble("Enter service fee: ");
 
                     serviceManager.editServiceFee(serviceId, fee);
                     Console.Out.WriteLine("Service fee edited.");
