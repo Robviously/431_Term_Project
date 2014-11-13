@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaAnonymousApplication", "PizzaAnonymousApplication\PizzaAnonymousApplication.csproj", "{73D6794A-975A-420F-BE90-851D1FCBE500}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{2B783847-CD4A-45AD-817C-FB8E337017E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{73D6794A-975A-420F-BE90-851D1FCBE500}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73D6794A-975A-420F-BE90-851D1FCBE500}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73D6794A-975A-420F-BE90-851D1FCBE500}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B783847-CD4A-45AD-817C-FB8E337017E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B783847-CD4A-45AD-817C-FB8E337017E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B783847-CD4A-45AD-817C-FB8E337017E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B783847-CD4A-45AD-817C-FB8E337017E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PizzaAnonymousApplication
 {
-    class PizzaAnonymous
+    public class PizzaAnonymous
     {
         private static PizzaAnonymous pizzaAnonymous;
         private static ProviderManager providerManager;
