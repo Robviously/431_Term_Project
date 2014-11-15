@@ -11,7 +11,7 @@ using Reports;
 /// Last Modified By: Ryan Schwartz
 /// Date Last Modified: November 6, 2014
 /// </summary>
-public class Member : Entity
+public class Member
 {
     // Member's name with get/set properties.
     private String name;

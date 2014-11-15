@@ -11,7 +11,7 @@ using Reports;
 /// Last Modified By: Ryan Schwartz
 /// Date Last Modified: November 6, 2014
 /// </summary>
-public class Provider : Entity
+public class Provider
 {
     // Provider's name with get/set properties.
     private String name;
