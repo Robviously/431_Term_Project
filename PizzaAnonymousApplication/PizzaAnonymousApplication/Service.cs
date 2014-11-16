@@ -62,10 +62,9 @@ public class Service
 
     public String toString()
     {
-        return "\n" +
-               "  Name:       " + name + "\n" +
+        return "  Name:       " + name + "\n" +
                "  ID:         " + id + "\n" +
                "  Fee:        " + fee + "\n" +
-               "  Descripton: " + description + "\n";
+               "  Descripton: " + description + "\n\n";
     }
 }

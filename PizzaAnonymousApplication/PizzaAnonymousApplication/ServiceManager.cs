@@ -37,7 +37,7 @@ public class ServiceManager
     private List<Service> serviceList = new List<Service>();
 
     // This int is for generating new service IDs.
-    int nextId = 100000000;
+    int nextId = 100000;
 
     /// <summary>
     /// This adds a new service to the serviceList based on passed arguments.  The service ID is generated from nextId.

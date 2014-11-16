@@ -90,10 +90,9 @@ public class Member : Entity
 
     public String toString()
     {
-        return "\n" +
-               "  Name:    " + name + "\n" +
+        return "  Name:    " + name + "\n" +
                "  ID:      " + id + "\n" +
                "  Address: " + streetAddress + "\n" +
-               "           " + city + ", " + state + " " + zipCode + "\n";
+               "           " + city + ", " + state + " " + zipCode + "\n\n";
     }
 }

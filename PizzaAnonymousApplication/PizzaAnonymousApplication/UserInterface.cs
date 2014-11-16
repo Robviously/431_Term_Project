@@ -42,17 +42,18 @@ namespace PizzaAnonymousApplication
         
             while (!done)
             {
-                Console.Out.WriteLine("                                     ");
-                Console.Out.WriteLine("        MAIN MENU                    ");
-                Console.Out.WriteLine("        Pizza-anonymous              ");
-                Console.Out.WriteLine("                                     ");
-                Console.Out.WriteLine("        1. Display Manager Menu      ");
-                Console.Out.WriteLine("        2. Display Provider Menu     ");
-                Console.Out.WriteLine("        3. Quit                      ");
-                Console.Out.WriteLine("                                     ");
-                Console.Out.WriteLine("        4. Save                      ");
+                Console.Out.WriteLine("                                         ");
+                Console.Out.WriteLine("        MAIN MENU                        ");
+                Console.Out.WriteLine("        Pizza-anonymous                  ");
+                Console.Out.WriteLine("                                         ");
+                Console.Out.WriteLine("        1. Display Manager Menu          ");
+                Console.Out.WriteLine("        2. Display Provider Menu         ");
+                Console.Out.WriteLine("        3. Quit                          ");
+                Console.Out.WriteLine("                                         ");
 
                 choice = getInteger("Enter your choice: ");
+
+                Console.Out.WriteLine();
 
                 switch (choice)
                 {
@@ -63,9 +64,6 @@ namespace PizzaAnonymousApplication
                               break;
 
                     case 3:   done = true;
-                              break;
-
-                    case 4:   pizzaAnonymous.save();
                               break;
 
                     default:  Console.Out.WriteLine("Not a valid choice! Please try again.\n");
@@ -81,27 +79,34 @@ namespace PizzaAnonymousApplication
         
             while (!done)
             {
-                Console.Out.WriteLine("                                     ");
-        	    Console.Out.WriteLine("        MANAGER MENU                 ");
-        	    Console.Out.WriteLine("        Pizza-anonymous              ");
-        	    Console.Out.WriteLine("                                     ");
-        	    Console.Out.WriteLine("         1. Add Member               ");
-        	    Console.Out.WriteLine("         2. Edit Member              ");
-        	    Console.Out.WriteLine("         3. Delete Member            ");
-        	    Console.Out.WriteLine("         4. Add Provider             ");
-                Console.Out.WriteLine("         5. Edit Provider            ");
-                Console.Out.WriteLine("         6. Delete Provider          ");
-                Console.Out.WriteLine("         7. Add Service              ");
-                Console.Out.WriteLine("         8. Edit Service             ");
-                Console.Out.WriteLine("         9. Delete Service           "); 
-                Console.Out.WriteLine("        10. Show Members             "); 
-                Console.Out.WriteLine("        11. Show Providers           "); 
-                Console.Out.WriteLine("        12. Show Services            ");
-                Console.Out.WriteLine("        13. Add Service To Provider  ");
-                Console.Out.WriteLine("        14. Display Main Menu        ");
-                Console.Out.WriteLine("                                     ");
+                Console.Out.WriteLine("                                         ");
+        	    Console.Out.WriteLine("        MANAGER MENU                     ");
+        	    Console.Out.WriteLine("        Pizza-anonymous                  ");
+        	    Console.Out.WriteLine("                                         ");
+        	    Console.Out.WriteLine("         1. Add Member                   ");
+        	    Console.Out.WriteLine("         2. Edit Member                  ");
+        	    Console.Out.WriteLine("         3. Delete Member                ");
+                Console.Out.WriteLine("         4. Print All Members            ");
+                Console.Out.WriteLine("                                         ");
+        	    Console.Out.WriteLine("         5. Add Provider                 ");
+                Console.Out.WriteLine("         6. Edit Provider                ");
+                Console.Out.WriteLine("         7. Delete Provider              ");
+                Console.Out.WriteLine("         8. Add Service To Provider      ");
+                Console.Out.WriteLine("         9. Delete Service From Provider ");
+                Console.Out.WriteLine("        10. Print All Providers          ");
+                Console.Out.WriteLine("                                         ");
+                Console.Out.WriteLine("        11. Add Service                  ");
+                Console.Out.WriteLine("        12. Edit Service                 ");
+                Console.Out.WriteLine("        13. Delete Service               ");  
+                Console.Out.WriteLine("        14. Print All Services           ");
+                Console.Out.WriteLine("                                         ");
+                Console.Out.WriteLine("        15. Save                         ");
+                Console.Out.WriteLine("        16. Display Main Menu            ");
+                Console.Out.WriteLine("                                         ");
 
                 choice = getInteger("Enter your choice: ");
+
+                Console.Out.WriteLine();
          
                 switch (choice)
                 {
@@ -112,39 +117,45 @@ namespace PizzaAnonymousApplication
                            	    break;
 
                     case  3:   	pizzaAnonymous.deleteMember();
-                           	    break; 
-                           
-                    case  4:   	pizzaAnonymous.addProvider();
-                           	    break;  
-                           
-                    case  5:   	pizzaAnonymous.editProvider();
-                           	    break; 
-                           
-                    case  6:   	pizzaAnonymous.deleteProvider();
-                           	    break;            
-                           
-                    case  7:   	pizzaAnonymous.addService();
-                           	    break;            
-                           
-                    case  8:   	pizzaAnonymous.editService();
-                           	    break;            
-                           
-                    case  9:   	pizzaAnonymous.deleteService();
-                           	    break;  
-                           
-                    case 10:   	pizzaAnonymous.printMembers();
+                           	    break;
+
+                    case 4:     pizzaAnonymous.printMembers();
+                           	    break;
+
+                    case 5:     pizzaAnonymous.addProvider(); 
+                           	    break;
+
+                    case 6:     pizzaAnonymous.editProvider(); 
+                           	    break;
+
+                    case 7:     pizzaAnonymous.deleteProvider();
+                           	    break;
+
+                    case 8:     pizzaAnonymous.addServiceToProvider(); 
+                           	    break;
+
+                    case 9:     pizzaAnonymous.deleteServiceFromProvider(); 
+                           	    break;
+
+                    case 10:    pizzaAnonymous.printProviders(); 
                 			    break;
-                			
-                    case 11:   	pizzaAnonymous.printProviders();
-    						    break;
-    						
-                    case 12:   	pizzaAnonymous.printServices();
+
+                    case 11:    pizzaAnonymous.addService();
     						    break;
 
-                    case 13:    pizzaAnonymous.addServiceToProvider();
+                    case 12:    pizzaAnonymous.editService(); 
+    						    break;
+
+                    case 13:    pizzaAnonymous.deleteService();
+                                break;
+
+                    case 14:    pizzaAnonymous.printServices();
+                                break;
+
+                    case 15:    pizzaAnonymous.save();
                                 break;
                            
-                    case 14:   	done = true;
+                    case 16:   	done = true;
      		   				    break;    
 
                     default:   	Console.Out.WriteLine("Not a valid choice! Please try again.\n");
@@ -168,22 +179,24 @@ namespace PizzaAnonymousApplication
 
             while (!done)
             {
-                Console.Out.WriteLine("                                     ");
-        	    Console.Out.WriteLine("        PROVIDER MENU                ");
-        	    Console.Out.WriteLine("        Pizza-anonymous              ");
-        	    Console.Out.WriteLine("                                     ");
-        	    Console.Out.WriteLine("        1. Authenticate Member       ");
-        	    Console.Out.WriteLine("        2. Provide Service           ");
-        	    Console.Out.WriteLine("        3. Generate Report           ");
-        	    Console.Out.WriteLine("        4. Display Main Menu         ");
-                Console.Out.WriteLine("                                     ");
+                Console.Out.WriteLine("                                         ");
+        	    Console.Out.WriteLine("        PROVIDER MENU                    ");
+        	    Console.Out.WriteLine("        Pizza-anonymous                  ");
+        	    Console.Out.WriteLine("                                         ");
+        	    Console.Out.WriteLine("        1. Authenticate Member           ");
+        	    Console.Out.WriteLine("        2. Provide Service               ");
+        	    Console.Out.WriteLine("        3. Generate Report               ");
+                Console.Out.WriteLine("        4. Service Lookup                ");
+        	    Console.Out.WriteLine("        5. Display Main Menu             ");
+                Console.Out.WriteLine("                                         ");
 
                 choice = getInteger("Enter your choice: ");
+
+                Console.Out.WriteLine();
          
                 switch (choice)
                 {
-                    case 1:    int memberId = getInteger("Enter the member's ID: ");
-                               pizzaAnonymous.validateMember(memberId);
+                    case 1:    pizzaAnonymous.validateMember();
                                break;
 
                     case  2:   pizzaAnonymous.captureService(providerId);
@@ -192,7 +205,10 @@ namespace PizzaAnonymousApplication
                     case  3:   Console.Out.WriteLine("Generate Report Method"); //generateReport();
                                break;
 
-                    case  4:   done = true;
+                    case 4:    pizzaAnonymous.serviceLookup(providerId);
+                               break;
+
+                    case  5:   done = true;
                                break;
 
                     default:   Console.Out.WriteLine("Not a valid choice! Please try again.\n");
@@ -203,12 +219,12 @@ namespace PizzaAnonymousApplication
 
         public static String getString(String prompt, int min = 1, int max = 1000)
 	    {
-            Console.Out.WriteLine(prompt);
+            Console.Out.Write(prompt);
             String input = Console.In.ReadLine(); 
 
             while (input.Length < min || input.Length > max)
             {
-                Console.Out.WriteLine("Please input a string with length between [" + min + "] and [" + max + "] characters: ");
+                Console.Out.Write("Please input a string with length between [" + min + "] and [" + max + "] characters: ");
                 input = Console.In.ReadLine(); 
             }
 
@@ -224,7 +240,7 @@ namespace PizzaAnonymousApplication
 
             while (!Int32.TryParse(input, out number) || input.Length < min || input.Length > max)
             {
-                Console.Out.WriteLine("Please input an integer with length between [" + min + "] and [" + max + "] digits: ");
+                Console.Out.Write("Please input an integer with length between [" + min + "] and [" + max + "] digits: ");
                 input = Console.In.ReadLine();
 
             }
@@ -241,7 +257,7 @@ namespace PizzaAnonymousApplication
 
             while (!double.TryParse(input, out number) || number < min || number > max)
             {
-                Console.WriteLine("Please enter a decimal with value between [" + min + "] and [" + max + "]: ");
+                Console.Write("Please enter a decimal with value between [" + min + "] and [" + max + "]: ");
                 input = Console.ReadLine();
             }
             
@@ -255,13 +271,13 @@ namespace PizzaAnonymousApplication
         {
             Regex regex = new Regex(@"\d{2}-\d{2}-\d{4}");
 
-            Console.Out.WriteLine(prompt);
+            Console.Out.Write(prompt);
             String input = Console.In.ReadLine();
             Match match = regex.Match(input);
 
             while (!match.Success)
             {
-                Console.Out.WriteLine("Please enter a date in the format MM-DD-YYYY: ");
+                Console.Out.Write("Please enter a date in the format MM-DD-YYYY: ");
                 input = Console.In.ReadLine();
                 match = regex.Match(input);
             }
@@ -271,7 +287,7 @@ namespace PizzaAnonymousApplication
 
         public static bool yesOrNo(String prompt)
         {
-            String more = getString(prompt + " (Y|y)[es] or anything else for no");
+            String more = getString(prompt + " (Y|y)[es] or anything else for no: ");
             if (more.ElementAt(0) != 'y' && more.ElementAt(0) != 'Y')
             {
                 return false;

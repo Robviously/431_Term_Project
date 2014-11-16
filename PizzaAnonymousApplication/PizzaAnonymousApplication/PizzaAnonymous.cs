@@ -38,14 +38,14 @@ namespace PizzaAnonymousApplication
         public void addProvider()
         {
             String name = UserInterface.getString("Enter the provider's name: ", 1, 25);
-            String streetAddress = UserInterface.getString("Enter the provider's street address: ");
-            String city = UserInterface.getString("Enter the provider's city: ");
-            String state = UserInterface.getString("Enter the provider's state: ");
+            String streetAddress = UserInterface.getString("Enter the provider's street address: ", 1, 25);
+            String city = UserInterface.getString("Enter the provider's city: ", 1, 14);
+            String state = UserInterface.getString("Enter the provider's state: ", 2, 2);
             int zipCode = UserInterface.getInteger("Enter the provider's ZIP code: ", 5, 5);
 
             providerManager.addProvider(name, streetAddress, city, state, zipCode);
 
-            Console.Out.WriteLine("Success adding provider!");
+            Console.Out.WriteLine("Successfully added provider.");
         }
 
         public void printProviders()
@@ -69,11 +69,11 @@ namespace PizzaAnonymousApplication
             if (providerManager.validateProvider(providerId))
             {
                 providerManager.deleteProvider(providerId);
-                Console.Out.WriteLine("Provider deleted.");
+                Console.Out.WriteLine("Successfully deleted provider.");
             }
             else
             {
-                Console.Out.WriteLine("Unable to find provider.");
+                Console.Out.WriteLine("Unable to find provider [" + providerId + "].");
             }
         }
 
@@ -87,21 +87,21 @@ namespace PizzaAnonymousApplication
 
                 if (choice.ToLower().Equals("name"))
                 {
-                    String name = UserInterface.getString("Enter provider name: ");
+                    String name = UserInterface.getString("Enter a new provider name: ", 1, 25);
 
                     providerManager.editProviderName(providerId, name);
-                    Console.Out.WriteLine("Provider name edited.");
+                    Console.Out.WriteLine("Successfully edited provider name.");
        
                 }
                 else if (choice.ToLower().Equals("address"))
                 {
-                    String streetAddress = UserInterface.getString("Enter provider street address: ");
-                    String city = UserInterface.getString("Enter provider city: ");
-                    String state = UserInterface.getString("Enter provider state: ");
-                    int zipCode = UserInterface.getInteger("Enter provider ZIP code: ");
+                    String streetAddress = UserInterface.getString("Enter provider street address: ", 1, 25);
+                    String city = UserInterface.getString("Enter provider city: ", 1, 14);
+                    String state = UserInterface.getString("Enter provider state: ", 2, 2);
+                    int zipCode = UserInterface.getInteger("Enter provider ZIP code: ", 5, 5);
 
                     providerManager.editProviderAddress(providerId, streetAddress, city, state, zipCode);
-                    Console.Out.WriteLine("Provider address edited.");
+                    Console.Out.WriteLine("Successfully edited provider address.");
                 }
                 else
                 {
@@ -110,7 +110,7 @@ namespace PizzaAnonymousApplication
             }
             else
             {
-                Console.Out.WriteLine("Unable to find provider");
+                Console.Out.WriteLine("Unable to find provider [" + providerId + "].");
             }
         }
 
@@ -142,17 +142,56 @@ namespace PizzaAnonymousApplication
             }
         }
 
+        public void deleteServiceFromProvider()
+        {
+            int providerId = UserInterface.getInteger("Enter provider ID: ");
+
+            if (providerManager.validateProvider(providerId))
+            {
+                int serviceId = UserInterface.getInteger("Enter service ID: ");
+
+                if (serviceManager.validateService(serviceId))
+                {
+                    providerManager.deleteService(providerId, serviceId);
+                }
+                else
+                {
+                    Console.Out.WriteLine("Service ID [" + serviceId + "] is not valid.");
+                }
+            }
+            else
+            {
+                Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
+            }
+        }
+
+        public void serviceLookup(int providerId)
+        {
+            Provider provider = providerManager.getProviderById(providerId);
+            List<int> providerServices = provider.getServiceList();
+
+            if (providerServices.Count == 0)
+            {
+                Console.Out.WriteLine("This provider doesn't provide any services.");
+            } 
+
+            foreach (int service in providerServices)
+            {
+                Console.Out.WriteLine(service);
+            }
+        }
+
         public void addMember()
         {
-            String name = UserInterface.getString("Enter the member's name: ");
-            String streetAddress = UserInterface.getString("Enter the member's street address: ");
-            String city = UserInterface.getString("Enter the member's city: ");
-            String state = UserInterface.getString("Enter the member's state: ");
-            int zipCode = UserInterface.getInteger("Enter the member's ZIP code: ");
+            String name = UserInterface.getString("Enter the member's name: ", 1, 25);
+            String streetAddress = UserInterface.getString("Enter the member's street address: ", 1, 25);
+            String city = UserInterface.getString("Enter the member's city: ", 1, 14);
+            String state = UserInterface.getString("Enter the member's state: ", 2, 2);
+            int zipCode = UserInterface.getInteger("Enter the member's ZIP code: ", 5, 5);
 
             memberManager.addMember(name, streetAddress, city, state, zipCode);
 
-            Console.Out.WriteLine("Success adding member!");
+            Console.Out.WriteLine("Successfully added member.");
         }
 
         public void printMembers()
@@ -176,11 +215,11 @@ namespace PizzaAnonymousApplication
             if (memberManager.validateMember(memberId))
             {
                 memberManager.deleteMember(memberId);
-                Console.Out.WriteLine("Member deleted.");
+                Console.Out.WriteLine("Successfully deleted member.");
             }
             else
             {
-                Console.Out.WriteLine("Unable to find member");
+                Console.Out.WriteLine("Unable to find member [" + memberId +"]");
             }
         }
 
@@ -194,21 +233,21 @@ namespace PizzaAnonymousApplication
 
                 if (choice.ToLower().Equals("name"))
                 {
-                    String name = UserInterface.getString("Enter member name: ");
+                    String name = UserInterface.getString("Enter new member name: ", 1, 25);
 
                     memberManager.editMemberName(memberId, name);
-                    Console.Out.WriteLine("Member name edited.");
+                    Console.Out.WriteLine("Successfully edited member name.");
 
                 }
                 else if (choice.ToLower().Equals("address"))
                 {
-                    String streetAddress = UserInterface.getString("Enter member street address: ");
-                    String city = UserInterface.getString("Enter member city: ");
-                    String state = UserInterface.getString("Enter member state: ");
-                    int zipCode = UserInterface.getInteger("Enter member ZIP code: ");
+                    String streetAddress = UserInterface.getString("Enter member street address: ", 1, 25);
+                    String city = UserInterface.getString("Enter member city: ", 1, 14);
+                    String state = UserInterface.getString("Enter member state: ", 2, 2);
+                    int zipCode = UserInterface.getInteger("Enter member ZIP code: ", 5, 5);
 
                     memberManager.editMemberAddress(memberId, streetAddress, city, state, zipCode);
-                    Console.Out.WriteLine("Member address edited.");
+                    Console.Out.WriteLine("Successfully edited member address.");
                 }
                 else
                 {
@@ -217,12 +256,13 @@ namespace PizzaAnonymousApplication
             }
             else
             {
-                Console.Out.WriteLine("Unable to find member.");
+                Console.Out.WriteLine("Unable to find member [" + memberId + "].");
             }
         }
 
-        public bool validateMember(int memberId)
+        public void validateMember()
         {
+            int memberId = UserInterface.getInteger("Enter the member's ID: ");
             Member member = memberManager.getMemberById(memberId);
 
             if (member != null)
@@ -230,27 +270,24 @@ namespace PizzaAnonymousApplication
                 if (member.Suspended)
                 {
                     Console.Out.WriteLine("SUSPENDED - Member exists but is suspended.");
-                    return false;
                 }
 
                 Console.Out.WriteLine("VALID - Member exists and is not suspended.");
-                return true;
             }
             else
             {
                 Console.Out.WriteLine("INVALID - Member does not exist.");
-                return false;
             }
         }
 
         public void addService()
         {
-            String name = UserInterface.getString("Enter the service's name: ");
+            String name = UserInterface.getString("Enter the service's name: ", 1, 25);
             double fee = UserInterface.getDouble("Enter the service's fee: ", 0.0, 999.99, 2);
-            String description = UserInterface.getString("Enter the service's description: ");
+            String description = UserInterface.getString("Enter the service's description: ", 1, 100);
 
             serviceManager.addService(name, fee, description);
-            Console.Out.WriteLine("Success adding service!");
+            Console.Out.WriteLine("Successfully added service.");
         }
 
         public void printServices()
@@ -278,7 +315,7 @@ namespace PizzaAnonymousApplication
             }
             else
             {
-                Console.Out.WriteLine("Unable to find service");
+                Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
             }
         }
 
@@ -292,24 +329,24 @@ namespace PizzaAnonymousApplication
 
                 if (choice.ToLower().Equals("name"))
                 {
-                    String name = UserInterface.getString("Enter service name: ");
+                    String name = UserInterface.getString("Enter new service name: ", 1, 25);
 
                     serviceManager.editServiceName(serviceId, name);
-                    Console.Out.WriteLine("Service name edited.");
+                    Console.Out.WriteLine("Successfully edited service name.");
                 }
                 else if (choice.ToLower().Equals("fee"))
                 {
-                    double fee = UserInterface.getDouble("Enter service fee: ");
+                    double fee = UserInterface.getDouble("Enter new service fee: ", 0.0, 999.99, 2);
 
                     serviceManager.editServiceFee(serviceId, fee);
-                    Console.Out.WriteLine("Service fee edited.");
+                    Console.Out.WriteLine("Successfully edited service name.");
                 }
                 else if (choice.ToLower().Equals("description"))
                 {
-                    String description = UserInterface.getString("Enter service description");
+                    String description = UserInterface.getString("Enter new service description: ", 1, 100);
 
                     serviceManager.editServiceDescription(serviceId, description);
-                    Console.Out.WriteLine("Service description edited.");
+                    Console.Out.WriteLine("Successfully edited service description.");
                 }
                 else
                 {
@@ -318,7 +355,7 @@ namespace PizzaAnonymousApplication
             }
             else
             {
-                Console.Out.WriteLine("Unable to find service");
+                Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
             }
         }
 
@@ -341,11 +378,11 @@ namespace PizzaAnonymousApplication
             String file = "CapturedServices.xml";
             XDocument doc;
             XElement xmlRoot;
-            int memberId = UserInterface.getInteger("Enter the member's Id: ");
+            int memberId = UserInterface.getInteger("Enter the member's ID: ");
 
-            if (validateMember(memberId))
+            if (memberManager.validateMember(memberId))
             {
-                String dateOfService = UserInterface.getDate("Enter the date the service was provided: ");
+                String dateOfService = UserInterface.getDate("Enter the date the service was provided (Format: MM-DD-YYYY): ");
                 int serviceId = UserInterface.getInteger("Enter the ID of the service provided: ");
 
                 if (providerManager.validateService(providerId, serviceId))
@@ -384,12 +421,13 @@ namespace PizzaAnonymousApplication
                     }
                     else
                     {
+                        Console.Out.WriteLine("Exiting to menu. No service was captured.");
                         return;
                     }
                 }
                 else
                 {
-                    Console.Out.WriteLine("Service entered is not listed as a service provided by [" + providerId + "].");
+                    Console.Out.WriteLine("Service [" + serviceId + "] is not listed as a service provided by provider [" + providerId + "].");
                 }
             }
         }
