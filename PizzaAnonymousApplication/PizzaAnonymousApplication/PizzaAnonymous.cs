@@ -15,12 +15,14 @@ namespace PizzaAnonymousApplication
         private static MemberManager memberManager;
         private static ProviderManager providerManager;
         private static ServiceManager serviceManager;
+        private static Report report;
 
         private PizzaAnonymous()
         {
             memberManager = MemberManager.instance();
             providerManager = ProviderManager.instance();
             serviceManager = ServiceManager.instance();
+            report = Report.getInstance;
         }
 
         public static PizzaAnonymous instance()
@@ -407,22 +409,37 @@ namespace PizzaAnonymousApplication
                         else
                         {
                             doc = new XDocument();
-                            xmlRoot = new XElement("CapturedServices");
+                            xmlRoot = new XElement("services");
                             doc.Add(xmlRoot);
                         }
 
-                        XElement capturedService = 
-                            new XElement("CapturedService",
-                                new XElement("CurrentDate", currentTime),
-                                new XElement("DateOfService", dateOfService),
-                                new XElement("ProviderNumber", providerId),
-                                new XElement("MemberNumber", memberId),
-                                new XElement("ServiceCode", serviceId),
-                                new XElement("Comments", comments));
+                        Provider provider = providerManager.getProviderById(providerId);
+                        Member member = memberManager.getMemberById(memberId);
+                        Service service = serviceManager.getServiceById(serviceId);
+
+                        XElement capturedService =
+                            new XElement("service",
+                                new XElement("providerID", providerId),
+                                new XElement("memberID", memberId),
+                                new XElement("memberName", member.Name),
+                                new XElement("providerName", provider.Name),
+                                new XElement("serviceDate", dateOfService),
+                                new XElement("serviceCode", service.Id),
+                                new XElement("serviceFee", service.Fee),
+                                new XElement("serviceName", service.Name),
+                                new XElement("comments", comments),
+                                new XElement("currentDate", currentTime),
+                                new XElement("mStrtAddr", member.StreetAddress),
+                                new XElement("mState", member.State),
+                                new XElement("mCity", member.City),
+                                new XElement("mZip", member.ZipCode),
+                                new XElement("pStrtAddr", provider.StreetAddress),
+                                new XElement("pState", provider.State),
+                                new XElement("pCity", provider.City),
+                                new XElement("pZip", provider.ZipCode));
 
                         xmlRoot.Add(capturedService);
                         doc.Save(file);
-                        Console.Out.WriteLine(System.IO.File.ReadAllText(file));
                     }
                     else
                     {
@@ -435,6 +452,15 @@ namespace PizzaAnonymousApplication
                     Console.Out.WriteLine("Service [" + serviceId + "] is not listed as a service provided by provider [" + providerId + "].");
                 }
             }
+            else
+            {
+                Console.Out.WriteLine("That member doesn't exist.");
+            }
+        }
+
+        public void printMemberReport()
+        {
+
         }
     }
 }
