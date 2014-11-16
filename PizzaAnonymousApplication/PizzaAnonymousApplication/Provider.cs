@@ -121,7 +121,7 @@ public class Provider
         zipCode = zc;
     }
 
-    public String toString()
+    public override string ToString()
     {
         return "  Name:    " + name + "\n" +
                "  ID:      " + id + "\n" +
