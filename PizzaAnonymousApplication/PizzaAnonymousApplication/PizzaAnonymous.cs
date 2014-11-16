@@ -47,7 +47,7 @@ namespace PizzaAnonymousApplication
 
         public void printProviders()
         {
-            String providersString = providerManager.toString();
+            String providersString = providerManager.ToString();
 
             if (providersString == "")
             {
