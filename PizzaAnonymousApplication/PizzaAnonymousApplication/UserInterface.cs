@@ -100,8 +100,13 @@ namespace PizzaAnonymousApplication
                 Console.Out.WriteLine("        13. Delete Service               ");  
                 Console.Out.WriteLine("        14. Print All Services           ");
                 Console.Out.WriteLine("                                         ");
-                Console.Out.WriteLine("        15. Save                         ");
-                Console.Out.WriteLine("        16. Display Main Menu            ");
+                Console.Out.WriteLine("        15. Print Member Report          ");
+                Console.Out.WriteLine("        16. Print Provider Report        ");
+                Console.Out.WriteLine("        17. Print Summary Report         ");
+                Console.Out.WriteLine("        18. Print EFT Report             ");
+                Console.Out.WriteLine("                                         ");
+                Console.Out.WriteLine("        19. Save                         ");
+                Console.Out.WriteLine("        20. Display Main Menu            ");
                 Console.Out.WriteLine("                                         ");
 
                 choice = getInteger("Enter your choice: ");
@@ -152,11 +157,23 @@ namespace PizzaAnonymousApplication
                     case 14:    pizzaAnonymous.printServices();
                                 break;
 
-                    case 15:    pizzaAnonymous.save();
+                    case 15:    pizzaAnonymous.printMemberReport();
+                                break;
+
+                    case 16:    pizzaAnonymous.printProviderReport();
+                                break;
+
+                    case 17:    pizzaAnonymous.printSummaryReport();
+                                break;
+
+                    case 18:    pizzaAnonymous.printEFTReport();
+                                break;
+
+                    case 19:    pizzaAnonymous.save();
                                 break;
                            
-                    case 16:   	done = true;
-     		   				    break;    
+                    case 20:   	done = true;
+     		   				    break;
 
                     default:   	Console.Out.WriteLine("Not a valid choice! Please try again.\n");
                            	    break;     

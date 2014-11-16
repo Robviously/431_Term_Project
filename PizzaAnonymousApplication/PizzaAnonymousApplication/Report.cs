@@ -33,8 +33,8 @@ namespace PizzaAnonymousApplication
         private readonly string PROVIDER_WEEKLY = "Provider Weekly Report";
         private readonly string MEMBER_ON_DEMAND = "Member Report";
         private readonly string PROVIDER_ON_DEMAND = "Provider Report";
-        private readonly string PROVIDER_SUMMARY = "Provider Summary Report";
-        private readonly string EFT_SUMMARY = "EFT Report";
+        //private readonly string PROVIDER_SUMMARY = "Provider Summary Report";
+        //private readonly string EFT_SUMMARY = "EFT Report";
 
         XElement serviceDB;
 
@@ -46,7 +46,7 @@ namespace PizzaAnonymousApplication
         {
             try
             {
-                serviceDB = XElement.Load(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/ServicesXML.xml");
+                serviceDB = XElement.Load("CapturedServices.xml");
             }
             catch (Exception e)
             {

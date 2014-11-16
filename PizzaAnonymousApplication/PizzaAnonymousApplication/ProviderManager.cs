@@ -264,6 +264,7 @@ public class ProviderManager
             String city = "Undefined City";
             String state = "Undefined State";
             int zipCode = -1;
+            List<int> services = new List<int>();
 
             while (reader.Read())
             {
@@ -293,6 +294,9 @@ public class ProviderManager
                         case "ZIPCode":
                             zipCode = reader.ReadElementContentAsInt();
                             break;
+                        case "ServiceID":
+                            services.Add(reader.ReadElementContentAsInt());
+                            break;
                     }
                 }
                 else
@@ -301,6 +305,13 @@ public class ProviderManager
                     {
                         Provider provider = new Provider(name, id, streetAddress, city, state, zipCode);
                         providerList.Add(provider);
+
+                        foreach (int service in services)
+                        {
+                            addService(id, service);
+                        }
+
+                        services.Clear();
                     }
                 }
             }

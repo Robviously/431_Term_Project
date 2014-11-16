@@ -460,7 +460,26 @@ namespace PizzaAnonymousApplication
 
         public void printMemberReport()
         {
+            int memberId = UserInterface.getInteger("Enter the member's ID: ");
 
+            report.getMemberReport(memberId);
+        }
+
+        public void printProviderReport()
+        {
+            int providerId = UserInterface.getInteger("Enter the provider's ID: ");
+
+            report.getProviderReport(providerId);
+        }
+
+        public void printSummaryReport()
+        {
+            report.getProviderSummary();
+        }
+
+        public void printEFTReport()
+        {
+            report.createEFT();
         }
     }
 }
