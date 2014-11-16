@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
+using System.IO;
 
 /// <summary>
 /// ServiceManager Class: 
@@ -148,6 +150,95 @@ public class ServiceManager
         // Otherwise return false.
         return false;
     }
+
+    public void save()
+    {
+        // Create an XmlWriterSettings object with the correct options. 
+        XmlWriterSettings settings = new XmlWriterSettings();
+        settings.Indent = true;
+        settings.IndentChars = ("\t");
+        settings.OmitXmlDeclaration = true;
+        settings.NewLineChars = "\r\n";
+        settings.NewLineHandling = NewLineHandling.Replace;
+
+        String file = "ServiceManager.xml";
+
+        using (XmlWriter writer = XmlWriter.Create(file, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("ServiceManager");
+            writer.WriteElementString("NextID", nextId.ToString());
+            writer.WriteStartElement("Services");
+
+            foreach (Service service in serviceList)
+            {
+                writer.WriteStartElement("Service");
+                writer.WriteElementString("Name", service.Name);
+                writer.WriteElementString("ID", service.Id.ToString());
+                writer.WriteElementString("Fee", service.Fee.ToString());
+                writer.WriteElementString("Description", service.Description);
+                writer.WriteEndElement();
+            }
+
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+        }
+    }
+
+    public void load()
+    {
+        String file = "ServiceManager.xml";
+
+        if (!File.Exists(file))
+        {
+            return;
+        }
+
+        // Create an XML reader for this file.
+        using (XmlReader reader = XmlReader.Create(file))
+        {
+            String name = "Undefined Name";
+            int id = -1;
+            double fee = -1.0;
+            String description = "Undefined Description";
+
+
+            while (reader.Read())
+            {
+                if (reader.IsStartElement())
+                {
+                    // Get element name and switch on it.
+                    switch (reader.Name)
+                    {
+                        case "NextID":
+                            nextId = reader.ReadElementContentAsInt();
+                            break;
+                        case "Name":
+                            name = reader.ReadElementContentAsString();
+                            break;
+                        case "ID":
+                            id = reader.ReadElementContentAsInt();
+                            break;
+                        case "Fee":
+                            fee = reader.ReadElementContentAsDouble();
+                            break;
+                        case "Description":
+                            description = reader.ReadElementContentAsString();
+                            break;
+                    }
+                }
+                else
+                {
+                    if (reader.Name == "Service")
+                    {
+                        Service service = new Service(name, id, fee, description);
+                        serviceList.Add(service);
+                    }
+                }
+            }
+        }
+    }   
 
     public String toString()
     {

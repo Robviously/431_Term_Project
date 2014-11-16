@@ -4,20 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
+using System.IO;
 
 namespace PizzaAnonymousApplication
 {
     public class PizzaAnonymous
     {
         private static PizzaAnonymous pizzaAnonymous;
-        private static ProviderManager providerManager;
         private static MemberManager memberManager;
+        private static ProviderManager providerManager;
         private static ServiceManager serviceManager;
 
         private PizzaAnonymous()
         {
-            providerManager = ProviderManager.instance();
             memberManager = MemberManager.instance();
+            providerManager = ProviderManager.instance();
             serviceManager = ServiceManager.instance();
         }
 
@@ -112,9 +114,32 @@ namespace PizzaAnonymousApplication
             }
         }
 
-        public bool validateProviderId (int providerId)
+        public bool validateProviderId(int providerId)
         {
             return providerManager.validateProvider(providerId);
+        }
+
+        public void addServiceToProvider()
+        {
+            int providerId = UserInterface.getInteger("Enter provider ID: ");
+
+            if (providerManager.validateProvider(providerId))
+            {
+                int serviceId = UserInterface.getInteger("Enter service ID: ");
+
+                if (serviceManager.validateService(serviceId))
+                {
+                    providerManager.addService(providerId, serviceId);
+                }
+                else
+                {
+                    Console.Out.WriteLine("Service ID [" + serviceId + "] is not valid.");
+                }
+            }
+            else
+            {
+                Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
+            }
         }
 
         public void addMember()
@@ -196,9 +221,8 @@ namespace PizzaAnonymousApplication
             }
         }
 
-        public void validateMember()
+        public bool validateMember(int memberId)
         {
-            int memberId = UserInterface.getInteger("Enter member ID: ");
             Member member = memberManager.getMemberById(memberId);
 
             if (member != null)
@@ -206,13 +230,16 @@ namespace PizzaAnonymousApplication
                 if (member.Suspended)
                 {
                     Console.Out.WriteLine("SUSPENDED - Member exists but is suspended.");
+                    return false;
                 }
 
                 Console.Out.WriteLine("VALID - Member exists and is not suspended.");
+                return true;
             }
             else
             {
                 Console.Out.WriteLine("INVALID - Member does not exist.");
+                return false;
             }
         }
 
@@ -299,12 +326,72 @@ namespace PizzaAnonymousApplication
         {
             memberManager.save();
             providerManager.save();
+            serviceManager.save();
         }
 
         public void load()
         {
             memberManager.load();
             providerManager.load();
+            serviceManager.load();
+        }
+
+        public void captureService(int providerId)
+        {
+            String file = "CapturedServices.xml";
+            XDocument doc;
+            XElement xmlRoot;
+            int memberId = UserInterface.getInteger("Enter the member's Id: ");
+
+            if (validateMember(memberId))
+            {
+                String dateOfService = UserInterface.getDate("Enter the date the service was provided: ");
+                int serviceId = UserInterface.getInteger("Enter the ID of the service provided: ");
+
+                if (providerManager.validateService(providerId, serviceId))
+                {
+                    if (UserInterface.yesOrNo("Is [" + serviceManager.getServiceById(serviceId).Name + "] the correct service? "))
+                    {
+                        String comments = UserInterface.getString("Enter comments [optional]: ", 0, 100);
+                        String currentTime = DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Year.ToString() +
+                            " " + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
+
+                        if (File.Exists(file))
+                        {
+                            doc = XDocument.Load(file);
+                            xmlRoot = doc.Root;
+
+                        }
+                        else
+                        {
+                            doc = new XDocument();
+                            xmlRoot = new XElement("CapturedServices");
+                            doc.Add(xmlRoot);
+                        }
+
+                        XElement capturedService = 
+                            new XElement("CapturedService",
+                                new XElement("CurrentDate", currentTime),
+                                new XElement("DateOfService", dateOfService),
+                                new XElement("ProviderNumber", providerId),
+                                new XElement("MemberNumber", memberId),
+                                new XElement("ServiceCode", serviceId),
+                                new XElement("Comments", comments));
+
+                        xmlRoot.Add(capturedService);
+                        doc.Save(file);
+                        Console.Out.WriteLine(System.IO.File.ReadAllText(file));
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    Console.Out.WriteLine("Service entered is not listed as a service provided by [" + providerId + "].");
+                }
+            }
         }
     }
 }

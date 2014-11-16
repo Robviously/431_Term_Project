@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace PizzaAnonymousApplication
 {
@@ -20,8 +21,6 @@ namespace PizzaAnonymousApplication
             {
                 pizzaAnonymous.load();
             }
-
-            pizzaAnonymous = PizzaAnonymous.instance();
         }
 
         public static UserInterface instance()
@@ -97,8 +96,9 @@ namespace PizzaAnonymousApplication
                 Console.Out.WriteLine("         9. Delete Service           "); 
                 Console.Out.WriteLine("        10. Show Members             "); 
                 Console.Out.WriteLine("        11. Show Providers           "); 
-                Console.Out.WriteLine("        12. Show Services            "); 
-                Console.Out.WriteLine("        13. Display Main Menu        ");
+                Console.Out.WriteLine("        12. Show Services            ");
+                Console.Out.WriteLine("        13. Add Service To Provider  ");
+                Console.Out.WriteLine("        14. Display Main Menu        ");
                 Console.Out.WriteLine("                                     ");
 
                 choice = getInteger("Enter your choice: ");
@@ -140,8 +140,11 @@ namespace PizzaAnonymousApplication
     						
                     case 12:   	pizzaAnonymous.printServices();
     						    break;
+
+                    case 13:    pizzaAnonymous.addServiceToProvider();
+                                break;
                            
-                    case 13:   	done = true;
+                    case 14:   	done = true;
      		   				    break;    
 
                     default:   	Console.Out.WriteLine("Not a valid choice! Please try again.\n");
@@ -179,10 +182,11 @@ namespace PizzaAnonymousApplication
          
                 switch (choice)
                 {
-                    case  1:   pizzaAnonymous.validateMember();
+                    case 1:    int memberId = getInteger("Enter the member's ID: ");
+                               pizzaAnonymous.validateMember(memberId);
                                break;
 
-                    case  2:   Console.Out.WriteLine("Provide Service Method"); //provideService();
+                    case  2:   pizzaAnonymous.captureService(providerId);
                                break;
                             
                     case  3:   Console.Out.WriteLine("Generate Report Method"); //generateReport();
@@ -247,7 +251,25 @@ namespace PizzaAnonymousApplication
             return number;
 	    }
 
-        public bool yesOrNo(String prompt)
+        public static String getDate(String prompt)
+        {
+            Regex regex = new Regex(@"\d{2}-\d{2}-\d{4}");
+
+            Console.Out.WriteLine(prompt);
+            String input = Console.In.ReadLine();
+            Match match = regex.Match(input);
+
+            while (!match.Success)
+            {
+                Console.Out.WriteLine("Please enter a date in the format MM-DD-YYYY: ");
+                input = Console.In.ReadLine();
+                match = regex.Match(input);
+            }
+
+            return input;
+        }
+
+        public static bool yesOrNo(String prompt)
         {
             String more = getString(prompt + " (Y|y)[es] or anything else for no");
             if (more.ElementAt(0) != 'y' && more.ElementAt(0) != 'Y')

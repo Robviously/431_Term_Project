@@ -117,11 +117,11 @@ public class MemberManager
     public Member getMemberById(int id)
     {
         // Cycle through members until a match is found, then return that member.
-        foreach (Member p in memberList)
+        foreach (Member m in memberList)
         {
-            if (p.Id == id)
+            if (m.Id == id)
             {
-                return p;
+                return m;
             }
         }
 
@@ -209,7 +209,6 @@ public class MemberManager
                     switch (reader.Name)
                     {
                         case "NextID":
-                            Console.Out.WriteLine("Here");
                             nextId = reader.ReadElementContentAsInt();
                             break;
                         case "Name":
@@ -252,9 +251,9 @@ public class MemberManager
     {
         String members = "";
 
-        foreach (Member p in memberList)
+        foreach (Member m in memberList)
         {
-            members = members + p.toString();
+            members = members + m.toString();
         }
 
         return members;
