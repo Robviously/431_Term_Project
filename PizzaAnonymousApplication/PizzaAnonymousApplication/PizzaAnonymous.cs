@@ -310,6 +310,11 @@ namespace PizzaAnonymousApplication
 
             if (serviceManager.validateService(serviceId))
             {
+                foreach (Provider provider in providerManager.getProviderList())
+                {
+                    provider.removeService(serviceId);
+                }
+
                 serviceManager.deleteService(serviceId);
                 Console.Out.WriteLine("Service deleted.");
             }
