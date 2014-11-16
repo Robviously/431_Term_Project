@@ -19,9 +19,9 @@ namespace PizzaAnonymousApplication
 
         private PizzaAnonymous()
         {
-            memberManager = MemberManager.instance();
-            providerManager = ProviderManager.instance();
-            serviceManager = ServiceManager.instance();
+            memberManager = new MemberManager();
+            providerManager = new ProviderManager();
+            serviceManager = new ServiceManager();
             report = Report.getInstance;
         }
 
@@ -198,7 +198,7 @@ namespace PizzaAnonymousApplication
 
         public void printMembers()
         {
-            String membersString = memberManager.toString();
+            String membersString = memberManager.ToString();
 
             if (membersString == "")
             {
@@ -294,7 +294,7 @@ namespace PizzaAnonymousApplication
 
         public void printServices()
         {
-            String servicesString = serviceManager.toString();
+            String servicesString = serviceManager.ToString();
 
             if (servicesString == "")
             {
@@ -312,7 +312,7 @@ namespace PizzaAnonymousApplication
 
             if (serviceManager.validateService(serviceId))
             {
-                foreach (Provider provider in providerManager.getProviderList())
+                foreach (Provider provider in providerManager.ProviderList)
                 {
                     provider.removeService(serviceId);
                 }

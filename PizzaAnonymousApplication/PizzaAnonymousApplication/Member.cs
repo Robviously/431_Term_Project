@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Reports;
 
 /// <summary>
 /// Member Class: 
 /// The member class stores all of the data for each member that uses the Pizza Anonymous system.
 ///  
-/// Author: Ryan Schwartz
+/// Author: Matt Lauter
 /// Date Created: November 6, 2014
-/// Last Modified By: Ryan Schwartz
-/// Date Last Modified: November 6, 2014
+/// Last Modified By: Matt Lauter
+/// Date Last Modified: November 16, 2014
 /// </summary>
 public class Member
 {
@@ -60,7 +59,7 @@ public class Member
         set { zipCode = value; }
     }
 
-    // Member's zip code with get/set properties.
+    // Member's suspended status with get/set properties.
     private bool suspended;
     public bool Suspended
     {
@@ -88,7 +87,7 @@ public class Member
         suspended = false;
     }
 
-    public String toString()
+    public override string ToString()
     {
         return "  Name:    " + name + "\n" +
                "  ID:      " + id + "\n" +

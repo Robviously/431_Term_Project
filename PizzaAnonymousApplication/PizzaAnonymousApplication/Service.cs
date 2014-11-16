@@ -5,10 +5,10 @@ using System.Collections.Generic;
 /// Service Class: 
 /// The service class stores all of the data for each service that uses the Pizza Anonymous system.
 ///  
-/// Author: Ryan Schwartz
+/// Author: Julius Karmacharya
 /// Date Created: November 6, 2014
-/// Last Modified By: Ryan Schwartz
-/// Date Last Modified: November 6, 2014
+/// Last Modified By: Julius Karmacharya
+/// Date Last Modified: November 16, 2014
 /// </summary>
 public class Service
 {
@@ -46,12 +46,10 @@ public class Service
     /// <summary>
     /// This is the only constructor for Service and must be passed parameters (no default constructor)
     /// </summary>
-    /// <param name="n">Service name</param>
+    /// <param name="n">Service Name</param>
     /// <param name="i">Generated ID</param>
-    /// <param name="sa">Service address</param>
-    /// <param name="c">Service city</param>
-    /// <param name="s">Service state</param>
-    /// <param name="zc">Service zip code</param>
+    /// <param name="f">Service Fee</param>
+    /// <param name="d">Service Description</param>
     public Service(String n, int i, double f, String d)
     {
         name = n;

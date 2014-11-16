@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
+using System.IO;
 
 /// <summary>
 /// ProviderManager Class: 
@@ -9,7 +11,7 @@ using System.Collections.Generic;
 /// Author: Ryan Schwartz
 /// Date Created: November 6, 2014
 /// Last Modified By: Ryan Schwartz
-/// Date Last Modified: November 6, 2014
+/// Date Last Modified: November 16, 2014
 /// </summary>
 public class ProviderManager
 {
@@ -20,14 +22,14 @@ public class ProviderManager
         get { return providerList; }
     }
 
-    // This int is for generating new provider IDs.
+    // This int is for generating new unique provider IDs.
     int nextID = 100000000;
 
     /// <summary>
-    /// This adds a new provider to the providerList based on passed arguments.  The provider ID is generated from nextID.
+    /// This adds a new provider to the providerList based on passed arguments. The provider ID is generated from nextID.
     /// </summary>
     /// <param name="name">Provider Name</param>
-    /// <param name="streetAddress">Provider Address</param>
+    /// <param name="streetAddress">Provider Street Address</param>
     /// <param name="city">Provider City</param>
     /// <param name="state">Provider State</param>
     /// <param name="zipCode">Provider Zip Code</param>
@@ -47,10 +49,10 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID: " + id + " doesn't exist in system.");
+            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
-            // Cycle through providers until a match is found, then replace the provider name.
+            // Cycle through providers until a match is found, then replace the provider's name.
             foreach (Provider p in providerList)
             {
                 if (p.Id == id)
@@ -66,15 +68,15 @@ public class ProviderManager
     /// This is the other edit method to change the provider address.
     /// </summary>
     /// <param name="id">Provider ID</param>
-    /// <param name="streetAddress">Provider address</param>
-    /// <param name="city">Provider city</param>
-    /// <param name="state">Provider state</param>
-    /// <param name="zipCode">Provider zip code</param>
+    /// <param name="streetAddress">Provider Street Address</param>
+    /// <param name="city">Provider City</param>
+    /// <param name="state">Provider State</param>
+    /// <param name="zipCode">Provider Zip Code</param>
     public void editProviderAddress(int id, String streetAddress, String city, String state, int zipCode)
     {
         // Ensure the provider exists in the system
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID: " + id + " doesn't exist in system.");
+            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found, then replace address elements.
@@ -100,7 +102,7 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID: " + id + " doesn't exist in system.");
+            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found and then remove the provider from providerList.
@@ -116,7 +118,7 @@ public class ProviderManager
     }
 
     /// <summary>
-    /// This adds a service to a provider.
+    /// This adds a service to a provider's list of services.
     /// </summary>
     /// <param name="id">Provider ID</param>
     /// <param name="code">Service Code</param>
@@ -124,11 +126,11 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID: " + id + " doesn't exist in system.");
+            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             if (validateService(id, code))
-                Console.Out.WriteLine("Service with code " + code + " already exists in system.");
+                Console.Out.WriteLine("Service with code [" + code + "] already exists in system.");
             else
             {
                 // Cycle through providers until a match is found and then add the service to that provider.
@@ -145,7 +147,7 @@ public class ProviderManager
     }
 
     /// <summary>
-    /// This removes a service from a provider.
+    /// This removes a service from a provider's list of services.
     /// </summary>
     /// <param name="id">Provider ID</param>
     /// <param name="code">Service Code</param>
@@ -153,11 +155,11 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID " + id + " doesn't exist in system.");
+            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             if (!validateService(id, code))
-                Console.Out.WriteLine("Service with code " + code + " is not currently provided.");
+                Console.Out.WriteLine("Service with code [" + code + "] is not currently provided.");
             else
             {
                 // Cycle through providers until a match is found and then remove the service from the provider.
@@ -177,12 +179,12 @@ public class ProviderManager
     /// This returns a provider's list of services
     /// </summary>
     /// <param name="id">Provider ID</param>
-    /// <returns>The list of service codes</returns>
+    /// <returns>The list of service codes as a list of integers</returns>
     public List<int> getAllServices(int id)
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID: " + id + " doesn't exist in system.");
+            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found and then return service list.
@@ -205,7 +207,7 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID: " + id + " doesn't exist in system.");
+            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found and then check for service.
@@ -229,7 +231,7 @@ public class ProviderManager
     {
         // Ensure the provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID: " + id + " doesn't exist in system.");
+            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found, then return that provider.
@@ -263,16 +265,134 @@ public class ProviderManager
     }
 
     /// <summary>
-    /// 
+    /// Saves the contents of this class to an XML file so it can be recovered at a later time.
     /// </summary>
-    /// <returns></returns>
+    public void save()
+    {
+        // Path to the file in which the information will be stored in XML
+        String file = "ProviderManager.xml";
+
+        // Create an XmlWriterSettings object with the correct options. 
+        XmlWriterSettings settings = new XmlWriterSettings();
+        settings.Indent = true;
+        settings.IndentChars = ("\t");
+        settings.OmitXmlDeclaration = true;
+        settings.NewLineChars = "\r\n";
+        settings.NewLineHandling = NewLineHandling.Replace;
+
+        // Create the XML document writer and perform the writing
+        using (XmlWriter writer = XmlWriter.Create(file, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("ProviderManager");
+            writer.WriteElementString("NextID", nextID.ToString());
+            writer.WriteStartElement("Providers");
+
+            // Write the contents of each provider in providerList to the file
+            foreach (Provider provider in providerList)
+            {
+                writer.WriteStartElement("Provider");
+                writer.WriteElementString("Name", provider.Name);
+                writer.WriteElementString("ID", provider.Id.ToString());
+                writer.WriteElementString("StreetAddress", provider.StreetAddress);
+                writer.WriteElementString("City", provider.City);
+                writer.WriteElementString("State", provider.State);
+                writer.WriteElementString("ZIPCode", provider.ZipCode.ToString());
+                writer.WriteEndElement();
+            }
+
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+        }
+    }
+
+    /// <summary>
+    /// Loads the contents of a previously saved XML file into this instance of the class
+    /// </summary>
+    public void load()
+    {
+        // The path to the file to read from
+        String file = "ProviderManager.xml";
+
+        // If there isn't a file to read from: exit, otherwise start reading.
+        if (!File.Exists(file))
+        {
+            return;
+        }
+        else
+        {
+            Console.Out.WriteLine("Reading data in to ProviderManager from file [" + file + "].");
+        }
+
+        // Create an XML reader for this file.
+        using (XmlReader reader = XmlReader.Create(file))
+        {
+            // The variables should be overwritten when loading the information in.
+            String name = "Undefined Name";
+            int id = -1;
+            String streetAddress = "Undefined Street Address";
+            String city = "Undefined City";
+            String state = "Undefined State";
+            int zipCode = -1;
+
+            // While there is information to read in the file
+            while (reader.Read())
+            {
+                // If the read is a start tag
+                if (reader.IsStartElement())
+                {
+                    // Get element name and switch on it.
+                    switch (reader.Name)
+                    {
+                        case "NextID":
+                            nextID = reader.ReadElementContentAsInt();
+                            break;
+                        case "Name":
+                            name = reader.ReadElementContentAsString();
+                            break;
+                        case "ID":
+                            id = reader.ReadElementContentAsInt();
+                            break;
+                        case "StreetAddress":
+                            streetAddress = reader.ReadElementContentAsString();
+                            break;
+                        case "City":
+                            city = reader.ReadElementContentAsString();
+                            break;
+                        case "State":
+                            state = reader.ReadElementContentAsString();
+                            break;
+                        case "ZIPCode":
+                            zipCode = reader.ReadElementContentAsInt();
+                            break;
+                    }
+                }
+                else
+                {
+                    // If the read is a closing provider tag
+                    if (reader.Name == "Provider")
+                    {
+                        // Create the provider and add it to the list of providers
+                        Provider provider = new Provider(name, id, streetAddress, city, state, zipCode);
+                        providerList.Add(provider);
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Creates a formatted string representation of this object.
+    /// </summary>
+    /// <returns>A string that represents the providers in the provider list</returns>
     public override string ToString()
     {
         string providers = "";
 
-        foreach (Provider m in providerList)
+        foreach (Provider p in providerList)
         {
-            providers += m.ToString();
+            providers += p.ToString();
         }
 
         return providers;
