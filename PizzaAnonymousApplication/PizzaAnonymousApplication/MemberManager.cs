@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
+using System.IO;
 
 /// <summary>
 /// MemberManager Class: 
@@ -13,11 +15,14 @@ using System.Collections.Generic;
 /// </summary>
 public class MemberManager
 {
-
     private static MemberManager memberManager;
+
+    // This int is for generating new member IDs.
+    private static int nextId;
 
     private MemberManager()
     {
+        nextId = 100000000;
     }
 
     public static MemberManager instance()
@@ -35,8 +40,6 @@ public class MemberManager
     // This is the list of members.
     private List<Member> memberList = new List<Member>();
 
-    // This int is for generating new member IDs.
-    int nextId = 100000000;
 
     /// <summary>
     /// This adds a new member to the memberList based on passed arguments.  The member ID is generated from nextId.
@@ -62,7 +65,7 @@ public class MemberManager
     {
         // Get the member object using its ID
         Member member = getMemberById(id);
-        
+
         if (member != null)
         {
             member.Name = name;
@@ -99,7 +102,7 @@ public class MemberManager
     {
         // Get the member object using its ID
         Member member = getMemberById(id);
-        
+
         if (member != null)
         {
             memberList.Remove(member);
@@ -114,11 +117,11 @@ public class MemberManager
     public Member getMemberById(int id)
     {
         // Cycle through members until a match is found, then return that member.
-        foreach (Member m in memberList)
+        foreach (Member p in memberList)
         {
-            if (m.Id == id)
+            if (p.Id == id)
             {
-                return m;
+                return p;
             }
         }
 
@@ -142,13 +145,116 @@ public class MemberManager
         return false;
     }
 
+    public void save()
+    {
+        // Create an XmlWriterSettings object with the correct options. 
+        XmlWriterSettings settings = new XmlWriterSettings();
+        settings.Indent = true;
+        settings.IndentChars = ("\t");
+        settings.OmitXmlDeclaration = true;
+        settings.NewLineChars = "\r\n";
+        settings.NewLineHandling = NewLineHandling.Replace;
+
+        String file = "MemberManager.xml";
+
+        using (XmlWriter writer = XmlWriter.Create(file, settings))
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("MemberManager");
+            writer.WriteElementString("NextID", nextId.ToString());
+            writer.WriteStartElement("Members");
+
+            foreach (Member member in memberList)
+            {
+                writer.WriteStartElement("Member");
+                writer.WriteElementString("Name", member.Name);
+                writer.WriteElementString("ID", member.Id.ToString());
+                writer.WriteElementString("StreetAddress", member.StreetAddress);
+                writer.WriteElementString("City", member.City);
+                writer.WriteElementString("State", member.State);
+                writer.WriteElementString("ZIPCode", member.ZipCode.ToString());
+                writer.WriteEndElement();
+            }
+
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+        }
+    }
+
+    public void load()
+    {
+        String file = "MemberManager.xml";
+
+        if (!File.Exists(file))
+        {
+            return;
+        }
+
+        // Create an XML reader for this file.
+        using (XmlReader reader = XmlReader.Create(file))
+        {
+            String name = "Undefined Name";
+            int id = -1;
+            String streetAddress = "Undefined Street Address";
+            String city = "Undefined City";
+            String state = "Undefined State";
+            int zipCode = -1;
+
+            while (reader.Read())
+            {
+                if (reader.IsStartElement())
+                {
+                    // Get element name and switch on it.
+                    switch (reader.Name)
+                    {
+                        case "NextID":
+                            Console.Out.WriteLine("Here");
+                            nextId = reader.ReadElementContentAsInt();
+                            break;
+                        case "Name":
+                            name = reader.ReadElementContentAsString();
+                            break;
+                        case "ID":
+                            id = reader.ReadElementContentAsInt();
+                            break;
+                        case "StreetAddress":
+                            streetAddress = reader.ReadElementContentAsString();
+                            break;
+                        case "City":
+                            city = reader.ReadElementContentAsString();
+                            break;
+                        case "State":
+                            state = reader.ReadElementContentAsString();
+                            break;
+                        case "ZIPCode":
+                            zipCode = reader.ReadElementContentAsInt();
+                            break;
+                    }
+                }
+                else
+                {
+                    if (reader.Name == "Member")
+                    {
+                        Member member = new Member(name, id, streetAddress, city, state, zipCode);
+                        memberList.Add(member);
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public String toString()
     {
         String members = "";
 
-        foreach (Member m in memberList)
+        foreach (Member p in memberList)
         {
-            members = members + m.toString();
+            members = members + p.toString();
         }
 
         return members;

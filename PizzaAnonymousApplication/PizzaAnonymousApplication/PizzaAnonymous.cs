@@ -297,21 +297,14 @@ namespace PizzaAnonymousApplication
 
         public void save()
         {
+            memberManager.save();
             providerManager.save();
         }
 
         public void load()
         {
+            memberManager.load();
             providerManager.load();
-        }
-
-        public void retrieve()
-        {
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(MemberManager));
-
-            System.IO.StreamReader file = new System.IO.StreamReader("pizzaAnonymousData.xml");
-
-
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Reports
         private static Report _report = null;
         private static object lockThis = new object();
         string MEMBER_TYPE = "member_type";
-        string PROVIDER_TYPE = "provider_type";
+        string PROVIDER_TYPE = "member_type";
         XElement serviceDB;
 
         /// <summary>
@@ -107,58 +107,58 @@ namespace Reports
         }
 
         /// <summary>
-        /// Creates Weekly report for all providers who has given a service in the last  7 days
-        /// Function gets list of provider objects from pizza anonymous UI and CHECKS if any of the providers has given a service
+        /// Creates Weekly report for all members who has given a service in the last  7 days
+        /// Function gets list of member objects from pizza anonymous UI and CHECKS if any of the members has given a service
         /// </summary>
-        /// <param name="providerList"></param>
-        public void getWeeklyProvidersReport(List<Provider> providerList)
+        /// <param name="memberList"></param>
+        public void getWeeklyProvidersReport(List<Provider> memberList)
         {
             DateTime startdate = DateTime.Today.Date.AddDays(-7);
             DateTime enddate = DateTime.Today;
 
-            foreach (var provider in providerList)
+            foreach (var member in memberList)
             {
                 var services = serviceDB.Descendants("service")
                                .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate && ((DateTime)x.Element("serviceDate")) <= enddate)
-                               .Where(x => x.Element("providerID").Value == provider.Id.ToString());
+                               .Where(x => x.Element("memberID").Value == member.Id.ToString());
 
 
                 List<XElement> serviceList = new List<XElement>();
                 serviceList = services.ToList();
                 if (serviceList.Count > 0)
                 {
-                    MakeFile(null, provider, serviceList, PROVIDER_TYPE);
+                    MakeFile(null, member, serviceList, PROVIDER_TYPE);
 
                 }
             }
         }
 
         /// <summary>
-        /// Function is to create report for ALL the services a provider has given.
+        /// Function is to create report for ALL the services a member has given.
         /// Provider object of whom report should be generated, will be passed by Pizza Anonymous
         /// </summary>
-        /// <param name="provider"></param>
-        public void getProviderReport(Provider provider)
+        /// <param name="member"></param>
+        public void getProviderReport(Provider member)
         {
             var services = serviceDB.Descendants("service")
-                               .Where(x => x.Element("providerID").Value == provider.Id.ToString());
+                               .Where(x => x.Element("memberID").Value == member.Id.ToString());
 
 
             List<XElement> serviceList = new List<XElement>();
             serviceList = services.ToList();
             if (serviceList.Count > 0)
             {
-                MakeFile(null, provider, serviceList, PROVIDER_TYPE);
+                MakeFile(null, member, serviceList, PROVIDER_TYPE);
             }
         }
 
         /// <summary>
-        /// Creates summary report for all the providers who has given a service in the last 7 days
-        ///  Function accepts list of provider object that will be passed by Pizza Anonymous.
+        /// Creates summary report for all the members who has given a service in the last 7 days
+        ///  Function accepts list of member object that will be passed by Pizza Anonymous.
         /// The path for stream writer is where the summary will be saved to
         /// </summary>
-        /// <param name="providerList"></param>
-        public void getProviderSummary(List<Provider> providerList)
+        /// <param name="memberList"></param>
+        public void getProviderSummary(List<Provider> memberList)
         {
             DateTime startdate = DateTime.Today.Date.AddDays(-7);
             DateTime enddate = DateTime.Today;
@@ -178,7 +178,7 @@ namespace Reports
                 writer.WriteLine("Total fee".PadRight(15));
                 writer.WriteLine("----".PadRight(60, '-'));
                 writer.WriteLine();
-                foreach (var provider in providerList)
+                foreach (var member in memberList)
                 {
                     int fee = 0;
                     var services = serviceDB.Descendants("service")
@@ -186,7 +186,7 @@ namespace Reports
                             x =>
                                 ((DateTime) x.Element("serviceDate")) >= startdate &&
                                 ((DateTime) x.Element("serviceDate")) <= enddate)
-                        .Where(x => x.Element("providerID").Value == provider.Id.ToString());
+                        .Where(x => x.Element("memberID").Value == member.Id.ToString());
 
 
                     List<XElement> serviceList = new List<XElement>();
@@ -198,7 +198,7 @@ namespace Reports
                             fee += Convert.ToInt32(service.Element("serviceFee").Value);
                             totalFee += Convert.ToInt32(service.Element("serviceFee").Value);
                         }
-                        writer.Write(provider.Name.PadRight(20));
+                        writer.Write(member.Name.PadRight(20));
                         writer.Write(serviceList.Count.ToString().PadRight(30));
                         writer.Write(("$" + fee).PadRight(15));
                         writer.WriteLine();
@@ -206,7 +206,7 @@ namespace Reports
                     }
                 }
                 writer.WriteLine();
-                writer.Write("Total number of providers: ");
+                writer.Write("Total number of members: ");
                 writer.WriteLine(provCount);
                 writer.Write("Total fee to be paid: $");
                 writer.WriteLine(totalFee);
@@ -222,12 +222,12 @@ namespace Reports
         }
 
         /// <summary>
-        /// Function is to create EFT report of all providers who has given a service in the last 7 days
-        /// Function accepts list of provider objects from calling function.
+        /// Function is to create EFT report of all members who has given a service in the last 7 days
+        /// Function accepts list of member objects from calling function.
         /// If report creation is successfull, a path for created report file will be printed
         /// </summary>
-        /// <param name="providerList"></param>
-        public void createEFT(List<Provider> providerList) 
+        /// <param name="memberList"></param>
+        public void createEFT(List<Provider> memberList) 
         {
             DateTime startdate = DateTime.Today.Date.AddDays(-7);
             DateTime enddate = DateTime.Today;
@@ -247,13 +247,13 @@ namespace Reports
                 writer.WriteLine("---".PadRight(90, '-'));
                 writer.WriteLine();
 
-                foreach (var provider in providerList)
+                foreach (var member in memberList)
                 {
                     int fee = 0;
                     var services = serviceDB.Descendants("service")
                         .Where(x =>((DateTime) x.Element("serviceDate")) >= startdate &&
                                    ((DateTime) x.Element("serviceDate")) <= enddate)
-                        .Where(x => x.Element("providerID").Value == provider.Id.ToString());
+                        .Where(x => x.Element("memberID").Value == member.Id.ToString());
 
 
                     List<XElement> serviceList = new List<XElement>();
@@ -266,8 +266,8 @@ namespace Reports
                         {
                             fee += Convert.ToInt32(service.Element("serviceFee").Value);
                         }
-                        writer.Write(provider.Id.ToString().PadRight(20));
-                        writer.Write(provider.Name.PadRight(20));
+                        writer.Write(member.Id.ToString().PadRight(20));
+                        writer.Write(member.Name.PadRight(20));
                         writer.Write("#bank account number".PadRight(30));
                         writer.Write(("$" + fee).PadRight(15));
                         writer.WriteLine();
@@ -285,10 +285,10 @@ namespace Reports
         }
 
         /// <summary>
-        /// This is helper function to generate either provider or member reports. It will be called by
+        /// This is helper function to generate either member or member reports. It will be called by
         /// getWeeklyProvidersReport or getWeeklyMembersReport
         /// Entity could be either Member or Provider Object, serviceList is list of selected services 
-        /// that needs to be printed. Depending on entity type (provider or member) a report will be created. 
+        /// that needs to be printed. Depending on entity type (member or member) a report will be created. 
         /// </summary>
         /// <param name="member"></param>
         /// <param name="serviceList"></param>
@@ -316,7 +316,7 @@ namespace Reports
                 foreach (var service in serviceList)
                 {
                     writer.Write(service.Element("serviceDate").Value.PadRight(20));
-                    writer.Write(service.Element("providerID").Value.PadRight(15));
+                    writer.Write(service.Element("memberID").Value.PadRight(15));
                     writer.Write(("$" + service.Element("serviceFee").Value).PadRight(15));
                     writer.WriteLine();
                 }
@@ -327,7 +327,7 @@ namespace Reports
 
             else if (entityType == PROVIDER_TYPE)
             {
-                string path = "C://Users//Ruhshod//Desktop//Provider Report - " + provider.Id + ".txt";
+                string path = "C://Users//Ruhshod//Desktop//Provider Report - " + member.Id + ".txt";
                 int totalFee = 0;
                 StreamWriter writer = new StreamWriter(path);
                 writer.WriteLine("***************** Provider Weekly Report *****".PadRight(90, '*'));
@@ -361,7 +361,7 @@ namespace Reports
                 writer.Write("    " + "Total service fee: $");  writer.WriteLine(totalFee);
                 writer.Close();
 
-                Console.WriteLine("Report for provider {0} is saved to {1}", provider.Id, path);
+                Console.WriteLine("Report for member {0} is saved to {1}", member.Id, path);
             }
         }
     }
