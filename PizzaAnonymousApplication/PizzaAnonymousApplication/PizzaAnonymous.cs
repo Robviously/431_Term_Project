@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace PizzaAnonymousApplication
 {
@@ -15,9 +16,9 @@ namespace PizzaAnonymousApplication
 
         private PizzaAnonymous()
         {
-            providerManager = new ProviderManager();
-            memberManager = new MemberManager();
-            serviceManager = new ServiceManager();
+            providerManager = ProviderManager.instance();
+            memberManager = MemberManager.instance();
+            serviceManager = ServiceManager.instance();
         }
 
         public static PizzaAnonymous instance()
@@ -292,6 +293,25 @@ namespace PizzaAnonymousApplication
             {
                 Console.Out.WriteLine("Unable to find service");
             }
+        }
+
+        public void save()
+        {
+            providerManager.save();
+        }
+
+        public void load()
+        {
+            providerManager.load();
+        }
+
+        public void retrieve()
+        {
+            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(MemberManager));
+
+            System.IO.StreamReader file = new System.IO.StreamReader("pizzaAnonymousData.xml");
+
+
         }
     }
 }

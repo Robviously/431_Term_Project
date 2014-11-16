@@ -15,6 +15,13 @@ namespace PizzaAnonymousApplication
         private UserInterface()
         {
             pizzaAnonymous = PizzaAnonymous.instance();
+
+            if (yesOrNo("Do you want to load saved data?"))
+            {
+                pizzaAnonymous.load();
+            }
+
+            pizzaAnonymous = PizzaAnonymous.instance();
         }
 
         public static UserInterface instance()
@@ -44,6 +51,7 @@ namespace PizzaAnonymousApplication
                 Console.Out.WriteLine("        2. Display Provider Menu     ");
                 Console.Out.WriteLine("        3. Quit                      ");
                 Console.Out.WriteLine("                                     ");
+                Console.Out.WriteLine("        4. Save                      ");
 
                 choice = getInteger("Enter your choice: ");
 
@@ -56,6 +64,9 @@ namespace PizzaAnonymousApplication
                               break;
 
                     case 3:   done = true;
+                              break;
+
+                    case 4:   pizzaAnonymous.save();
                               break;
 
                     default:  Console.Out.WriteLine("Not a valid choice! Please try again.\n");

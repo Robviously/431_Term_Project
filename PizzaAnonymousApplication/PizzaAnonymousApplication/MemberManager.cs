@@ -13,6 +13,25 @@ using System.Collections.Generic;
 /// </summary>
 public class MemberManager
 {
+
+    private static MemberManager memberManager;
+
+    private MemberManager()
+    {
+    }
+
+    public static MemberManager instance()
+    {
+        if (memberManager == null)
+        {
+            return memberManager = new MemberManager();
+        }
+        else
+        {
+            return memberManager;
+        }
+    }
+
     // This is the list of members.
     private List<Member> memberList = new List<Member>();
 

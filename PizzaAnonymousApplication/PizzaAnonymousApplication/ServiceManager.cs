@@ -13,6 +13,24 @@ using System.Collections.Generic;
 /// </summary>
 public class ServiceManager
 {
+    private static ServiceManager serviceManager;
+
+    private ServiceManager()
+    {
+    }
+
+    public static ServiceManager instance()
+    {
+        if (serviceManager == null)
+        {
+            return serviceManager = new ServiceManager();
+        }
+        else
+        {
+            return serviceManager;
+        }
+    }
+
     // This is the list of services.
     private List<Service> serviceList = new List<Service>();
 
