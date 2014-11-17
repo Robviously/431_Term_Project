@@ -7,479 +7,578 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 
-namespace PizzaAnonymousApplication
+/// <summary>
+/// PizzaAnonymous Class: 
+/// The PizzaAnonymous class is responsible for interfacing between 
+/// the user interface and the rest of the system.
+///  
+/// Author: Rob Perpich
+/// Date Created: November 6, 2014
+/// Last Modified By: Rob Perpich
+/// Date Last Modified: November 16, 2014
+/// </summary>
+public class PizzaAnonymous
 {
-    public class PizzaAnonymous
+    private static PizzaAnonymous pizzaAnonymous;
+    private static MemberManager memberManager;
+    private static ProviderManager providerManager;
+    private static ServiceManager serviceManager;
+    private static Report report;
+
+    /// <summary>
+    /// Private singleton constructor
+    /// </summary>
+    private PizzaAnonymous()
     {
-        private static PizzaAnonymous pizzaAnonymous;
-        private static MemberManager memberManager;
-        private static ProviderManager providerManager;
-        private static ServiceManager serviceManager;
-        private static Report report;
+        memberManager = new MemberManager();
+        providerManager = new ProviderManager();
+        serviceManager = new ServiceManager();
+        report = Report.getInstance;
+    }
 
-        private PizzaAnonymous()
+    /// <summary>
+    /// Public singleton constructor
+    /// </summary>
+    /// <returns>Returns the reference to the only instance of PizzaAnonymous</returns>
+    public static PizzaAnonymous instance()
+    {
+        if (pizzaAnonymous == null)
         {
-            memberManager = new MemberManager();
-            providerManager = new ProviderManager();
-            serviceManager = new ServiceManager();
-            report = Report.getInstance;
+            return pizzaAnonymous = new PizzaAnonymous();
         }
-
-        public static PizzaAnonymous instance()
+        else
         {
-            if (pizzaAnonymous == null)
+            return pizzaAnonymous;
+        }
+    }
+
+    /// <summary>
+    /// Prompts the user for the parameters required to add a member to the system. Then
+    /// calls the member manager method that will create the member.
+    /// </summary>
+    public void addMember()
+    {
+        String name = UserInterface.getString("Enter the member's name: ", 1, 25);
+        String streetAddress = UserInterface.getString("Enter the member's street address: ", 1, 25);
+        String city = UserInterface.getString("Enter the member's city: ", 1, 14);
+        String state = UserInterface.getString("Enter the member's state: ", 2, 2);
+        int zipCode = UserInterface.getInteger("Enter the member's ZIP code: ", 5, 5);
+
+        // Add the member to the system with the given attributes
+        memberManager.addMember(name, streetAddress, city, state, zipCode);
+
+        Console.Out.WriteLine("Successfully added member.");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void editMember()
+    {
+        int memberId = UserInterface.getInteger("Enter provider ID: ");
+
+        if (memberManager.validateMember(memberId))
+        {
+            String choice = UserInterface.getString("Enter field to edit(name or address): ");
+
+            if (choice.ToLower().Equals("name"))
             {
-                return pizzaAnonymous = new PizzaAnonymous();
+                String name = UserInterface.getString("Enter new member name: ", 1, 25);
+
+                memberManager.editMemberName(memberId, name);
+                Console.Out.WriteLine("Successfully edited member name.");
+
+            }
+            else if (choice.ToLower().Equals("address"))
+            {
+                String streetAddress = UserInterface.getString("Enter member street address: ", 1, 25);
+                String city = UserInterface.getString("Enter member city: ", 1, 14);
+                String state = UserInterface.getString("Enter member state: ", 2, 2);
+                int zipCode = UserInterface.getInteger("Enter member ZIP code: ", 5, 5);
+
+                memberManager.editMemberAddress(memberId, streetAddress, city, state, zipCode);
+                Console.Out.WriteLine("Successfully edited member address.");
             }
             else
             {
-                return pizzaAnonymous;
+                Console.Out.WriteLine("Unknown field entered. Valid fields: name, address.");
             }
         }
-
-        public void addProvider()
+        else
         {
-            String name = UserInterface.getString("Enter the provider's name: ", 1, 25);
-            String streetAddress = UserInterface.getString("Enter the provider's street address: ", 1, 25);
-            String city = UserInterface.getString("Enter the provider's city: ", 1, 14);
-            String state = UserInterface.getString("Enter the provider's state: ", 2, 2);
-            int zipCode = UserInterface.getInteger("Enter the provider's ZIP code: ", 5, 5);
-
-            providerManager.addProvider(name, streetAddress, city, state, zipCode);
-
-            Console.Out.WriteLine("Successfully added provider.");
+            Console.Out.WriteLine("Unable to find member [" + memberId + "].");
         }
+    }
 
-        public void printProviders()
+    /// <summary>
+    /// 
+    /// </summary>
+    public void deleteMember()
+    {
+        int memberId = UserInterface.getInteger("Enter the member ID: ");
+
+        if (memberManager.validateMember(memberId))
         {
-            String providersString = providerManager.ToString();
-
-            if (providersString == "")
-            {
-                Console.Out.WriteLine("No providers in the database.");
-            }
-            else
-            {
-                Console.Out.WriteLine(providersString);
-            }
+            memberManager.deleteMember(memberId);
+            Console.Out.WriteLine("Successfully deleted member.");
         }
-
-        public void deleteProvider()
+        else
         {
-            int providerId = UserInterface.getInteger("Enter the provider ID: ");
-
-            if (providerManager.validateProvider(providerId))
-            {
-                providerManager.deleteProvider(providerId);
-                Console.Out.WriteLine("Successfully deleted provider.");
-            }
-            else
-            {
-                Console.Out.WriteLine("Unable to find provider [" + providerId + "].");
-            }
+            Console.Out.WriteLine("Unable to find member [" + memberId + "]");
         }
+    }
 
-        public void editProvider()
+    /// <summary>
+    /// 
+    /// </summary>
+    public void validateMember()
+    {
+        int memberId = UserInterface.getInteger("Enter the member's ID: ");
+        Member member = memberManager.getMemberById(memberId);
+
+        if (member != null)
         {
-            int providerId = UserInterface.getInteger("Enter provider ID: ");
-
-            if (providerManager.validateProvider(providerId))
+            if (member.Suspended)
             {
-                String choice = UserInterface.getString("Enter field to edit(name or address): ");
+                Console.Out.WriteLine("SUSPENDED - Member exists but is suspended.");
+            }
 
-                if (choice.ToLower().Equals("name"))
-                {
-                    String name = UserInterface.getString("Enter a new provider name: ", 1, 25);
+            Console.Out.WriteLine("VALID - Member exists and is not suspended.");
+        }
+        else
+        {
+            Console.Out.WriteLine("INVALID - Member does not exist.");
+        }
+    }
 
-                    providerManager.editProviderName(providerId, name);
-                    Console.Out.WriteLine("Successfully edited provider name.");
+    /// <summary>
+    /// 
+    /// </summary>
+    public void printMembers()
+    {
+        String membersString = memberManager.ToString();
+
+        if (membersString == "")
+        {
+            Console.Out.WriteLine("No members in the database.");
+        }
+        else
+        {
+            Console.Out.WriteLine(membersString);
+        }
+    }
+
+    /// <summary>
+    /// Prompts the user for the parameters required to add a provider to the system. Then
+    /// calls the provider manager method that will create the provider.
+    /// </summary>
+    public void addProvider()
+    {
+        String name = UserInterface.getString("Enter the provider's name: ", 1, 25);
+        String streetAddress = UserInterface.getString("Enter the provider's street address: ", 1, 25);
+        String city = UserInterface.getString("Enter the provider's city: ", 1, 14);
+        String state = UserInterface.getString("Enter the provider's state: ", 2, 2);
+        int zipCode = UserInterface.getInteger("Enter the provider's ZIP code: ", 5, 5);
+
+        providerManager.addProvider(name, streetAddress, city, state, zipCode);
+
+        Console.Out.WriteLine("Successfully added provider.");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void editProvider()
+    {
+        int providerId = UserInterface.getInteger("Enter provider ID: ");
+
+        if (providerManager.validateProvider(providerId))
+        {
+            String choice = UserInterface.getString("Enter field to edit(name or address): ");
+
+            if (choice.ToLower().Equals("name"))
+            {
+                String name = UserInterface.getString("Enter a new provider name: ", 1, 25);
+
+                providerManager.editProviderName(providerId, name);
+                Console.Out.WriteLine("Successfully edited provider name.");
        
-                }
-                else if (choice.ToLower().Equals("address"))
-                {
-                    String streetAddress = UserInterface.getString("Enter provider street address: ", 1, 25);
-                    String city = UserInterface.getString("Enter provider city: ", 1, 14);
-                    String state = UserInterface.getString("Enter provider state: ", 2, 2);
-                    int zipCode = UserInterface.getInteger("Enter provider ZIP code: ", 5, 5);
+            }
+            else if (choice.ToLower().Equals("address"))
+            {
+                String streetAddress = UserInterface.getString("Enter provider street address: ", 1, 25);
+                String city = UserInterface.getString("Enter provider city: ", 1, 14);
+                String state = UserInterface.getString("Enter provider state: ", 2, 2);
+                int zipCode = UserInterface.getInteger("Enter provider ZIP code: ", 5, 5);
 
-                    providerManager.editProviderAddress(providerId, streetAddress, city, state, zipCode);
-                    Console.Out.WriteLine("Successfully edited provider address.");
-                }
-                else
-                {
-                    Console.Out.WriteLine("Unknown field entered. Valid fields: name, address.");
-                }
+                providerManager.editProviderAddress(providerId, streetAddress, city, state, zipCode);
+                Console.Out.WriteLine("Successfully edited provider address.");
             }
             else
             {
-                Console.Out.WriteLine("Unable to find provider [" + providerId + "].");
+                Console.Out.WriteLine("Unknown field entered. Valid fields: name, address.");
             }
         }
-
-        public bool validateProviderId(int providerId)
+        else
         {
-            return providerManager.validateProvider(providerId);
+            Console.Out.WriteLine("Unable to find provider [" + providerId + "].");
         }
+    }
 
-        public void addServiceToProvider()
+    /// <summary>
+    /// 
+    /// </summary>
+    public void deleteProvider()
+    {
+        int providerId = UserInterface.getInteger("Enter the provider ID: ");
+
+        if (providerManager.validateProvider(providerId))
         {
-            int providerId = UserInterface.getInteger("Enter provider ID: ");
-
-            if (providerManager.validateProvider(providerId))
-            {
-                int serviceId = UserInterface.getInteger("Enter service ID: ");
-
-                if (serviceManager.validateService(serviceId))
-                {
-                    providerManager.addService(providerId, serviceId);
-                }
-                else
-                {
-                    Console.Out.WriteLine("Service ID [" + serviceId + "] is not valid.");
-                }
-            }
-            else
-            {
-                Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
-            }
+            providerManager.deleteProvider(providerId);
+            Console.Out.WriteLine("Successfully deleted provider.");
         }
-
-        public void deleteServiceFromProvider()
+        else
         {
-            int providerId = UserInterface.getInteger("Enter provider ID: ");
-
-            if (providerManager.validateProvider(providerId))
-            {
-                int serviceId = UserInterface.getInteger("Enter service ID: ");
-
-                if (serviceManager.validateService(serviceId))
-                {
-                    providerManager.deleteService(providerId, serviceId);
-                }
-                else
-                {
-                    Console.Out.WriteLine("Service ID [" + serviceId + "] is not valid.");
-                }
-            }
-            else
-            {
-                Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
-            }
+            Console.Out.WriteLine("Unable to find provider [" + providerId + "].");
         }
+    }
 
-        public void serviceLookup(int providerId)
-        {
-            Provider provider = providerManager.getProviderById(providerId);
-            List<int> providerServices = provider.getServiceList();
+    /// <summary>
+    /// 
+    /// </summary>
+    public void addServiceToProvider()
+    {
+        int providerId = UserInterface.getInteger("Enter provider ID: ");
 
-            if (providerServices.Count == 0)
-            {
-                Console.Out.WriteLine("This provider doesn't provide any services.");
-            } 
-
-            foreach (int service in providerServices)
-            {
-                Console.Out.WriteLine(service);
-            }
-        }
-
-        public void addMember()
-        {
-            String name = UserInterface.getString("Enter the member's name: ", 1, 25);
-            String streetAddress = UserInterface.getString("Enter the member's street address: ", 1, 25);
-            String city = UserInterface.getString("Enter the member's city: ", 1, 14);
-            String state = UserInterface.getString("Enter the member's state: ", 2, 2);
-            int zipCode = UserInterface.getInteger("Enter the member's ZIP code: ", 5, 5);
-
-            memberManager.addMember(name, streetAddress, city, state, zipCode);
-
-            Console.Out.WriteLine("Successfully added member.");
-        }
-
-        public void printMembers()
-        {
-            String membersString = memberManager.ToString();
-
-            if (membersString == "")
-            {
-                Console.Out.WriteLine("No members in the database.");
-            }
-            else
-            {
-                Console.Out.WriteLine(membersString);
-            }
-        }
-
-        public void deleteMember()
-        {
-            int memberId = UserInterface.getInteger("Enter the member ID: ");
-
-            if (memberManager.validateMember(memberId))
-            {
-                memberManager.deleteMember(memberId);
-                Console.Out.WriteLine("Successfully deleted member.");
-            }
-            else
-            {
-                Console.Out.WriteLine("Unable to find member [" + memberId +"]");
-            }
-        }
-
-        public void editMember()
-        {
-            int memberId = UserInterface.getInteger("Enter provider ID: ");
-
-            if (memberManager.validateMember(memberId))
-            {
-                String choice = UserInterface.getString("Enter field to edit(name or address): ");
-
-                if (choice.ToLower().Equals("name"))
-                {
-                    String name = UserInterface.getString("Enter new member name: ", 1, 25);
-
-                    memberManager.editMemberName(memberId, name);
-                    Console.Out.WriteLine("Successfully edited member name.");
-
-                }
-                else if (choice.ToLower().Equals("address"))
-                {
-                    String streetAddress = UserInterface.getString("Enter member street address: ", 1, 25);
-                    String city = UserInterface.getString("Enter member city: ", 1, 14);
-                    String state = UserInterface.getString("Enter member state: ", 2, 2);
-                    int zipCode = UserInterface.getInteger("Enter member ZIP code: ", 5, 5);
-
-                    memberManager.editMemberAddress(memberId, streetAddress, city, state, zipCode);
-                    Console.Out.WriteLine("Successfully edited member address.");
-                }
-                else
-                {
-                    Console.Out.WriteLine("Unknown field entered. Valid fields: name, address.");
-                }
-            }
-            else
-            {
-                Console.Out.WriteLine("Unable to find member [" + memberId + "].");
-            }
-        }
-
-        public void validateMember()
-        {
-            int memberId = UserInterface.getInteger("Enter the member's ID: ");
-            Member member = memberManager.getMemberById(memberId);
-
-            if (member != null)
-            {
-                if (member.Suspended)
-                {
-                    Console.Out.WriteLine("SUSPENDED - Member exists but is suspended.");
-                }
-
-                Console.Out.WriteLine("VALID - Member exists and is not suspended.");
-            }
-            else
-            {
-                Console.Out.WriteLine("INVALID - Member does not exist.");
-            }
-        }
-
-        public void addService()
-        {
-            String name = UserInterface.getString("Enter the service's name: ", 1, 25);
-            double fee = UserInterface.getDouble("Enter the service's fee: ", 0.0, 999.99, 2);
-            String description = UserInterface.getString("Enter the service's description: ", 1, 100);
-
-            serviceManager.addService(name, fee, description);
-            Console.Out.WriteLine("Successfully added service.");
-        }
-
-        public void printServices()
-        {
-            String servicesString = serviceManager.ToString();
-
-            if (servicesString == "")
-            {
-                Console.Out.WriteLine("No services in the database.");
-            }
-            else
-            {
-                Console.Out.WriteLine(servicesString);
-            }
-        }
-
-        public void deleteService()
-        {
-            int serviceId = UserInterface.getInteger("Enter the service ID: ");
-
-            if (serviceManager.validateService(serviceId))
-            {
-                foreach (Provider provider in providerManager.ProviderList)
-                {
-                    provider.removeService(serviceId);
-                }
-
-                serviceManager.deleteService(serviceId);
-                Console.Out.WriteLine("Service deleted.");
-            }
-            else
-            {
-                Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
-            }
-        }
-
-        public void editService()
+        if (providerManager.validateProvider(providerId))
         {
             int serviceId = UserInterface.getInteger("Enter service ID: ");
 
             if (serviceManager.validateService(serviceId))
             {
-                String choice = UserInterface.getString("Enter field to edit(name, fee, description): ");
-
-                if (choice.ToLower().Equals("name"))
-                {
-                    String name = UserInterface.getString("Enter new service name: ", 1, 25);
-
-                    serviceManager.editServiceName(serviceId, name);
-                    Console.Out.WriteLine("Successfully edited service name.");
-                }
-                else if (choice.ToLower().Equals("fee"))
-                {
-                    double fee = UserInterface.getDouble("Enter new service fee: ", 0.0, 999.99, 2);
-
-                    serviceManager.editServiceFee(serviceId, fee);
-                    Console.Out.WriteLine("Successfully edited service name.");
-                }
-                else if (choice.ToLower().Equals("description"))
-                {
-                    String description = UserInterface.getString("Enter new service description: ", 1, 100);
-
-                    serviceManager.editServiceDescription(serviceId, description);
-                    Console.Out.WriteLine("Successfully edited service description.");
-                }
-                else
-                {
-                    Console.Out.WriteLine("Unknown field entered. Valid fields: name, fee, description");
-                }
+                providerManager.addService(providerId, serviceId);
             }
             else
             {
-                Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
+                Console.Out.WriteLine("Service ID [" + serviceId + "] is not valid.");
             }
         }
-
-        public void save()
+        else
         {
-            memberManager.save();
-            providerManager.save();
-            serviceManager.save();
+            Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
         }
+    }
 
-        public void load()
+    /// <summary>
+    /// 
+    /// </summary>
+    public void deleteServiceFromProvider()
+    {
+        int providerId = UserInterface.getInteger("Enter provider ID: ");
+
+        if (providerManager.validateProvider(providerId))
         {
-            memberManager.load();
-            providerManager.load();
-            serviceManager.load();
-        }
+            int serviceId = UserInterface.getInteger("Enter service ID: ");
 
-        public void captureService(int providerId)
-        {
-            String file = "CapturedServices.xml";
-            XDocument doc;
-            XElement xmlRoot;
-            int memberId = UserInterface.getInteger("Enter the member's ID: ");
-
-            if (memberManager.validateMember(memberId))
+            if (serviceManager.validateService(serviceId))
             {
-                String dateOfService = UserInterface.getDate("Enter the date the service was provided (Format: MM-DD-YYYY): ");
-                int serviceId = UserInterface.getInteger("Enter the ID of the service provided: ");
+                providerManager.deleteService(providerId, serviceId);
+            }
+            else
+            {
+                Console.Out.WriteLine("Service ID [" + serviceId + "] is not valid.");
+            }
+        }
+        else
+        {
+            Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
+        }
+    }
 
-                if (providerManager.validateService(providerId, serviceId))
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="providerId"></param>
+    public void serviceLookup(int providerId)
+    {
+        Provider provider = providerManager.getProviderById(providerId);
+        List<int> providerServices = provider.getServiceList();
+
+        if (providerServices.Count == 0)
+        {
+            Console.Out.WriteLine("This provider doesn't provide any services.");
+        }
+
+        foreach (int service in providerServices)
+        {
+            Console.Out.WriteLine(service);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="providerId"></param>
+    public void captureService(int providerId)
+    {
+        String file = "CapturedServices.xml";
+        XDocument doc;
+        XElement xmlRoot;
+        int memberId = UserInterface.getInteger("Enter the member's ID: ");
+
+        if (memberManager.validateMember(memberId))
+        {
+            String dateOfService = UserInterface.getDate("Enter the date the service was provided (Format: MM-DD-YYYY): ");
+            int serviceId = UserInterface.getInteger("Enter the ID of the service provided: ");
+
+            if (providerManager.validateService(providerId, serviceId))
+            {
+                if (UserInterface.yesOrNo("Is [" + serviceManager.getServiceById(serviceId).Name + "] the correct service? "))
                 {
-                    if (UserInterface.yesOrNo("Is [" + serviceManager.getServiceById(serviceId).Name + "] the correct service? "))
+                    String comments = UserInterface.getString("Enter comments [optional]: ", 0, 100);
+                    String currentTime = DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Year.ToString() +
+                        " " + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
+
+                    if (File.Exists(file))
                     {
-                        String comments = UserInterface.getString("Enter comments [optional]: ", 0, 100);
-                        String currentTime = DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Year.ToString() +
-                            " " + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
+                        doc = XDocument.Load(file);
+                        xmlRoot = doc.Root;
 
-                        if (File.Exists(file))
-                        {
-                            doc = XDocument.Load(file);
-                            xmlRoot = doc.Root;
-
-                        }
-                        else
-                        {
-                            doc = new XDocument();
-                            xmlRoot = new XElement("services");
-                            doc.Add(xmlRoot);
-                        }
-
-                        Provider provider = providerManager.getProviderById(providerId);
-                        Member member = memberManager.getMemberById(memberId);
-                        Service service = serviceManager.getServiceById(serviceId);
-
-                        XElement capturedService =
-                            new XElement("service",
-                                new XElement("providerID", providerId),
-                                new XElement("memberID", memberId),
-                                new XElement("memberName", member.Name),
-                                new XElement("providerName", provider.Name),
-                                new XElement("serviceDate", dateOfService),
-                                new XElement("serviceCode", service.Id),
-                                new XElement("serviceFee", service.Fee),
-                                new XElement("serviceName", service.Name),
-                                new XElement("comments", comments),
-                                new XElement("currentDate", currentTime),
-                                new XElement("mStrtAddr", member.StreetAddress),
-                                new XElement("mState", member.State),
-                                new XElement("mCity", member.City),
-                                new XElement("mZip", member.ZipCode),
-                                new XElement("pStrtAddr", provider.StreetAddress),
-                                new XElement("pState", provider.State),
-                                new XElement("pCity", provider.City),
-                                new XElement("pZip", provider.ZipCode));
-
-                        xmlRoot.Add(capturedService);
-                        doc.Save(file);
                     }
                     else
                     {
-                        Console.Out.WriteLine("Exiting to menu. No service was captured.");
-                        return;
+                        doc = new XDocument();
+                        xmlRoot = new XElement("services");
+                        doc.Add(xmlRoot);
                     }
+
+                    Provider provider = providerManager.getProviderById(providerId);
+                    Member member = memberManager.getMemberById(memberId);
+                    Service service = serviceManager.getServiceById(serviceId);
+
+                    XElement capturedService =
+                        new XElement("service",
+                            new XElement("providerID", providerId),
+                            new XElement("memberID", memberId),
+                            new XElement("memberName", member.Name),
+                            new XElement("providerName", provider.Name),
+                            new XElement("serviceDate", dateOfService),
+                            new XElement("serviceCode", service.Id),
+                            new XElement("serviceFee", service.Fee),
+                            new XElement("serviceName", service.Name),
+                            new XElement("comments", comments),
+                            new XElement("currentDate", currentTime),
+                            new XElement("mStrtAddr", member.StreetAddress),
+                            new XElement("mState", member.State),
+                            new XElement("mCity", member.City),
+                            new XElement("mZip", member.ZipCode),
+                            new XElement("pStrtAddr", provider.StreetAddress),
+                            new XElement("pState", provider.State),
+                            new XElement("pCity", provider.City),
+                            new XElement("pZip", provider.ZipCode));
+
+                    xmlRoot.Add(capturedService);
+                    doc.Save(file);
                 }
                 else
                 {
-                    Console.Out.WriteLine("Service [" + serviceId + "] is not listed as a service provided by provider [" + providerId + "].");
+                    Console.Out.WriteLine("Exiting to menu. No service was captured.");
+                    return;
                 }
             }
             else
             {
-                Console.Out.WriteLine("That member doesn't exist.");
+                Console.Out.WriteLine("Service [" + serviceId + "] is not listed as a service provided by provider [" + providerId + "].");
             }
         }
-
-        public void printMemberReport()
+        else
         {
-            int memberId = UserInterface.getInteger("Enter the member's ID: ");
+            Console.Out.WriteLine("That member doesn't exist.");
+        }
+    }
 
-            report.getMemberReport(memberId);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="providerId"></param>
+    /// <returns></returns>
+    public bool validateProviderId(int providerId)
+    {
+        return providerManager.validateProvider(providerId);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void printProviders()
+    {
+        String providersString = providerManager.ToString();
+
+        if (providersString == "")
+        {
+            Console.Out.WriteLine("No providers in the database.");
+        }
+        else
+        {
+            Console.Out.WriteLine(providersString);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void addService()
+    {
+        String name = UserInterface.getString("Enter the service's name: ", 1, 25);
+        double fee = UserInterface.getDouble("Enter the service's fee: ", 0.0, 999.99, 2);
+        String description = UserInterface.getString("Enter the service's description: ", 1, 100);
+
+        serviceManager.addService(name, fee, description);
+        Console.Out.WriteLine("Successfully added service.");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void editService()
+    {
+        int serviceId = UserInterface.getInteger("Enter service ID: ");
+
+        if (serviceManager.validateService(serviceId))
+        {
+            String choice = UserInterface.getString("Enter field to edit(name, fee, description): ");
+
+            if (choice.ToLower().Equals("name"))
+            {
+                String name = UserInterface.getString("Enter new service name: ", 1, 25);
+
+                serviceManager.editServiceName(serviceId, name);
+                Console.Out.WriteLine("Successfully edited service name.");
+            }
+            else if (choice.ToLower().Equals("fee"))
+            {
+                double fee = UserInterface.getDouble("Enter new service fee: ", 0.0, 999.99, 2);
+
+                serviceManager.editServiceFee(serviceId, fee);
+                Console.Out.WriteLine("Successfully edited service name.");
+            }
+            else if (choice.ToLower().Equals("description"))
+            {
+                String description = UserInterface.getString("Enter new service description: ", 1, 100);
+
+                serviceManager.editServiceDescription(serviceId, description);
+                Console.Out.WriteLine("Successfully edited service description.");
+            }
+            else
+            {
+                Console.Out.WriteLine("Unknown field entered. Valid fields: name, fee, description");
+            }
+        }
+        else
+        {
+            Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void deleteService()
+    {
+        int serviceId = UserInterface.getInteger("Enter the service ID: ");
+
+        if (serviceManager.validateService(serviceId))
+        {
+            foreach (Provider provider in providerManager.ProviderList)
+            {
+                provider.removeService(serviceId);
+            }
+
+            serviceManager.deleteService(serviceId);
+            Console.Out.WriteLine("Service deleted.");
+        }
+        else
+        {
+            Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void printServices()
+    {
+        String servicesString = serviceManager.ToString();
+
+        if (servicesString == "")
+        {
+            Console.Out.WriteLine("No services in the database.");
+        }
+        else
+        {
+            Console.Out.WriteLine(servicesString);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void printMemberReport()
+    {
+        // ****ERROR CHECK
+        int memberId = UserInterface.getInteger("Enter the member's ID: ");
+
+        report.getMemberReport(memberId);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="providerId"></param>
+    public void printProviderReport(int providerId = -1)
+    {
+        // ****ERROR CHECK
+        if (providerId == -1)
+        {
+            providerId = UserInterface.getInteger("Enter the provider's ID: ");
         }
 
-        public void printProviderReport()
-        {
-            int providerId = UserInterface.getInteger("Enter the provider's ID: ");
+        report.getProviderReport(providerId);
+    }
 
-            report.getProviderReport(providerId);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    public void printSummaryReport()
+    {
+        report.getProviderSummary();
+    }
 
-        public void printSummaryReport()
-        {
-            report.getProviderSummary();
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    public void printEFTReport()
+    {
+        report.createEFT();
+    }
 
-        public void printEFTReport()
-        {
-            report.createEFT();
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    public void save()
+    {
+        memberManager.save();
+        providerManager.save();
+        serviceManager.save();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void load()
+    {
+        memberManager.load();
+        providerManager.load();
+        serviceManager.load();
     }
 }

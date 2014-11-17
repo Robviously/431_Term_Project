@@ -21,8 +21,7 @@ using System.Linq;
 using Reports.Interfaces;
 using System.Xml.Linq;
 using System.IO;
-namespace PizzaAnonymousApplication
-{
+
     class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTReport
     {
         private static Report _report = null;             //to implement singleton pattern
@@ -473,4 +472,4 @@ namespace PizzaAnonymousApplication
         }
 
     }
-}
+
