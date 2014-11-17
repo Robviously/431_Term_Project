@@ -20,5 +20,10 @@ namespace UnitTests
 
             Assert.AreSame(pizza1, pizza2);
         }
+
+        public void test2()
+        {
+            Service service1;
+        }
     }
 }
