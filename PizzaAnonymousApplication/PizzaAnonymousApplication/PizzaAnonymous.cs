@@ -71,11 +71,14 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for a member ID and a field to edit for that member. If the user enters
+    /// "name", the user can then input a new name for the member. If the user enters "address",
+    /// the user can then enter the components that will make up the member's new address. The
+    /// method will then update the member with the given ID to have the new name or address.
     /// </summary>
     public void editMember()
     {
-        int memberId = UserInterface.getInteger("Enter provider ID: ");
+        int memberId = UserInterface.getInteger("Enter member ID: ");
 
         if (memberManager.validateMember(memberId))
         {
@@ -111,7 +114,8 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for a member ID. If the member exists in the system,
+    /// the method will call the member manager method to delete the member.
     /// </summary>
     public void deleteMember()
     {
@@ -129,7 +133,9 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user to enter a member ID. If the member exists in the system,
+    /// the method will output whether the member is suspended or not. Otherwise,
+    /// the method will print that the member doesn't exist.
     /// </summary>
     public void validateMember()
     {
@@ -152,7 +158,7 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Displays all members in the system to the console in a nice format.
     /// </summary>
     public void printMembers()
     {
@@ -186,7 +192,10 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for a provider ID and a field to edit for that provider. If the user enters
+    /// "name", the user can then input a new name for the provider. If the user enters "address",
+    /// the user can then enter the components that will make up the provider's new address. The
+    /// method will then update the provider with the given ID to have the new name or address.
     /// </summary>
     public void editProvider()
     {
@@ -226,7 +235,8 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for a provider ID. If the provider exists in the system,
+    /// the method will call the provider manager method to delete the provider.
     /// </summary>
     public void deleteProvider()
     {
@@ -244,7 +254,10 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for a provider ID. If the provider exists, the
+    /// method will prompt the user for a service ID. If the service exists,
+    /// the method will then call the provider manager method that will
+    /// add the service to the list of services that the provider provides.
     /// </summary>
     public void addServiceToProvider()
     {
@@ -270,7 +283,11 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for a provider ID. If the provider exists, the
+    /// method will prompt the user for a service ID. If the service is
+    /// provided by that provider,the method will then call the provider 
+    /// manager method that will remove the service from the list of services 
+    /// that the provider provides.
     /// </summary>
     public void deleteServiceFromProvider()
     {
@@ -296,22 +313,24 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Displays the services codes of the 
     /// </summary>
-    /// <param name="providerId"></param>
+    /// <param name="providerId">Provider ID</param>
     public void serviceLookup(int providerId)
     {
         Provider provider = providerManager.getProviderById(providerId);
-        List<int> providerServices = provider.getServiceList();
+        List<int> providerServices = provider.getServiceList;
+        Service service;
 
         if (providerServices.Count == 0)
         {
             Console.Out.WriteLine("This provider doesn't provide any services.");
         }
 
-        foreach (int service in providerServices)
+        foreach (int serviceID in providerServices)
         {
-            Console.Out.WriteLine(service);
+            service = serviceManager.getServiceById(serviceID);
+            Console.Out.WriteLine(serviceID + "   " + service.Name);
         }
     }
 
@@ -408,7 +427,7 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Displays all providers in the system to the console in a nice format.
     /// </summary>
     public void printProviders()
     {
@@ -425,7 +444,8 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for the parameters required to add a service to the system. Then
+    /// calls the service manager method that will create the service.
     /// </summary>
     public void addService()
     {
@@ -438,7 +458,11 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for a service ID and a field to edit for that service. If the user enters
+    /// "name", the user can then input a new name for the service. If the user enters "fee",
+    /// the user can then input a new fee for the service. If the user enters "description", the
+    /// user can then input a new description for the service. The method will then update the 
+    /// service with the given ID to have the new name, fee, or description.
     /// </summary>
     public void editService()
     {
@@ -481,7 +505,8 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user for a service ID. If the service exists in the system,
+    /// the method will call the service manager method to delete the service.
     /// </summary>
     public void deleteService()
     {
@@ -504,7 +529,7 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Displays all services in the system to the console in a nice format.
     /// </summary>
     public void printServices()
     {

@@ -191,7 +191,7 @@ public class ProviderManager
             foreach (Provider p in providerList)
             {
                 if (p.Id == id)
-                    return p.getServiceList();
+                    return p.getServiceList;
             }
         }
 
@@ -299,6 +299,16 @@ public class ProviderManager
                 writer.WriteElementString("State", provider.State);
                 writer.WriteElementString("ZIPCode", provider.ZipCode.ToString());
                 writer.WriteEndElement();
+
+                writer.WriteStartElement("ServicesProvided");
+
+                foreach (int service in provider.getServiceList)
+                {
+                    writer.WriteElementString("ServiceID", service.ToString());
+                }
+
+                writer.WriteEndElement();
+                writer.WriteEndElement();
             }
 
             writer.WriteEndElement();
@@ -335,6 +345,7 @@ public class ProviderManager
             String city = "Undefined City";
             String state = "Undefined State";
             int zipCode = -1;
+            List<int> services = new List<int>();
 
             // While there is information to read in the file
             while (reader.Read())
@@ -376,6 +387,13 @@ public class ProviderManager
                         // Create the provider and add it to the list of providers
                         Provider provider = new Provider(name, id, streetAddress, city, state, zipCode);
                         providerList.Add(provider);
+
+                        foreach (int service in services)
+                        {
+                            addService(id, service);
+                        }
+
+                        services.Clear();
                     }
                 }
             }
