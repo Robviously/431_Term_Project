@@ -66,9 +66,9 @@ public class Provider
     /// This simply returns the entire service list.
     /// </summary>
     /// <returns>Full list of service codes</returns>
-    public List<int> getServiceList()
+    public List<int> getServiceList
     {
-        return serviceList;
+        get { return serviceList; }
     }
 
     /// <summary>

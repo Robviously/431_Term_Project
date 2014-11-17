@@ -21,8 +21,9 @@ using System.Linq;
 using Reports.Interfaces;
 using System.Xml.Linq;
 using System.IO;
-
-    class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTReport
+namespace PizzaAnonymousApplication
+{
+    public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTReport
     {
         private static Report _report = null;             //to implement singleton pattern
         private static object lockThis = new object();    //multi thread support
@@ -32,10 +33,10 @@ using System.IO;
         private readonly string PROVIDER_WEEKLY = "Provider Weekly Report";
         private readonly string MEMBER_ON_DEMAND = "Member Report";
         private readonly string PROVIDER_ON_DEMAND = "Provider Report";
-        //private readonly string PROVIDER_SUMMARY = "Provider Summary Report";
-        //private readonly string EFT_SUMMARY = "EFT Report";
+        private readonly string PROVIDER_SUMMARY = "Provider Summary Report";
+        private readonly string EFT_SUMMARY = "EFT Report";
 
-        XElement serviceDB;
+        XElement serviceXML = null;
 
         /// <summary>
         /// Loads the database file from user's desktop into serviceDB variable once the program is initiated. The path is where 
@@ -45,11 +46,11 @@ using System.IO;
         {
             try
             {
-                serviceDB = XElement.Load("CapturedServices.xml");
+                serviceXML = XElement.Load(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/ServicesXML.xml");
             }
-            catch (Exception e)
+            catch (FileNotFoundException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("ServicesXML.xml does not exist in your desktop directory. Please create a ServicesXML.xml in your desktop directory");
             }
         }
 
@@ -74,42 +75,59 @@ using System.IO;
         /// <param name="memberList"></param>
         public void getWeeklyMembersReport()
         {
-            //starting and ending date to work with
+            //starting and ending date to work withs
             DateTime startdate = DateTime.Today.Date.AddDays(-7);
             DateTime enddate = DateTime.Today;
 
-            //query to get list of members who has received a service in the last 7 days
-            var memberQuery = serviceDB.Descendants("service")
-                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime)x.Element("serviceDate")) <= enddate);
-
-            //extract unique member ids and export to list
-            List<string> memberList = memberQuery.Select(i => i.Element("memberID").Value).Distinct().ToList();
-
-            //make a report for each member in the list
-            foreach (var member in memberList)
+            if (!serviceXML.Descendants("service").Any())
+                Console.WriteLine("Service database has no services captured");
+            //ServicesXML.xml is not empty
+            else
             {
-                //query to get list of services in the last 7 days for particular member ID
-                var serviceQuery = serviceDB.Descendants("service")
-                    .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                               ((DateTime)x.Element("serviceDate")) <= enddate)
-                    .Where(x => x.Element("memberID").Value == member);
-
-                //export results of query to list
-                List<XElement> serviceList = serviceQuery.ToList();
-
-                //generate a report if a member received any service in the past week
-                if (serviceList.Count > 0)
+                try
                 {
-                    string id = serviceList[0].Element("memberID").Value;
-                    string name = serviceList[0].Element("memberName").Value;
-                    string strtAddr = serviceList[0].Element("mStrtAddr").Value;
-                    string city = serviceList[0].Element("mCity").Value;
-                    string state = serviceList[0].Element("mState").Value;
-                    string zip = serviceList[0].Element("mZip").Value;
+                    //query to get list of members who has received a service in the last 7 days
+                    var memberQuery = serviceXML.Descendants("service")
+                        .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
+                                    ((DateTime)x.Element("serviceDate")) <= enddate);
 
-                    //make a report .txt file
-                    MakeFile(id, name, strtAddr, city, state, zip, serviceList, MEMBER_WEEKLY);
+                    //extract unique member ids and export to list
+                    List<string> memberList = memberQuery.Select(i => i.Element("memberID").Value).Distinct().ToList();
+
+                    if (memberList.Count > 0)
+                    {
+                        //make a report for each member in the list
+                        foreach (var member in memberList)
+                        {
+                            //query to get list of services in the last 7 days for particular member ID
+                            var serviceQuery = serviceXML.Descendants("service")
+                                .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
+                                            ((DateTime)x.Element("serviceDate")) <= enddate)
+                                .Where(x => x.Element("memberID").Value == member);
+
+                            //export results of query to list
+                            List<XElement> serviceList = serviceQuery.ToList();
+
+                            //generate a report if a member received any service in the past week
+                            string id = serviceList[0].Element("memberID").Value;
+                            string name = serviceList[0].Element("memberName").Value;
+                            string strtAddr = serviceList[0].Element("mStrtAddr").Value;
+                            string city = serviceList[0].Element("mCity").Value;
+                            string state = serviceList[0].Element("mState").Value;
+                            string zip = serviceList[0].Element("mZip").Value;
+                            //make a report .txt file
+                            MakeFile(id, name, strtAddr, city, state, zip, serviceList, MEMBER_WEEKLY);
+
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("None of the members has receieved a service in the past 7 days");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
                 }
             }
         }
@@ -122,7 +140,7 @@ using System.IO;
         public void getMemberReport(int member)
         {
             //query to get list of services for particular member ID
-            var serviceQuery = serviceDB.Descendants("service")
+            var serviceQuery = serviceXML.Descendants("service")
                    .Where(x => x.Element("memberID").Value == member.ToString());
 
             //export query result into list
@@ -155,7 +173,7 @@ using System.IO;
             DateTime enddate = DateTime.Today;
 
             //query to get list of providers who has given a service in the last 7 days
-            var provQuery = serviceDB.Descendants("service")
+            var provQuery = serviceXML.Descendants("service")
                 .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
                             ((DateTime)x.Element("serviceDate")) <= enddate);
 
@@ -166,7 +184,7 @@ using System.IO;
             foreach (var provider in providerList)
             {
                 //query to get list of services for particular provider in the last 7 days
-                var serviceQuery = serviceDB.Descendants("service")
+                var serviceQuery = serviceXML.Descendants("service")
                     .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
                                ((DateTime)x.Element("serviceDate")) <= enddate)
                     .Where(x => x.Element("providerID").Value == provider);
@@ -199,7 +217,7 @@ using System.IO;
         public void getProviderReport(int provider)
         {
             //qeuery to get list of all services for particular provider
-            var serviceQuery = serviceDB.Descendants("service")
+            var serviceQuery = serviceXML.Descendants("service")
                    .Where(x => x.Element("providerID").Value == provider.ToString());
 
             //export result into list
@@ -239,7 +257,7 @@ using System.IO;
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Provider Report Summary.txt";
 
             //query to get list of providers who has given a service in the last 7 days
-            var provQuery = serviceDB.Descendants("service")
+            var provQuery = serviceXML.Descendants("service")
                 .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
                             ((DateTime)x.Element("serviceDate")) <= enddate);
 
@@ -262,7 +280,7 @@ using System.IO;
                     int fee = 0;
 
                     //query to get list of services for particular provider in the last 7 days
-                    var serviceQuery = serviceDB.Descendants("service")
+                    var serviceQuery = serviceXML.Descendants("service")
                         .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
                                     ((DateTime)x.Element("serviceDate")) <= enddate)
                         .Where(x => x.Element("providerID").Value == provider);
@@ -324,7 +342,7 @@ using System.IO;
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/EFT Report.txt";
 
             //query to get list of providers who has given a service in the last 7 days
-            var provQuery = serviceDB.Descendants("service")
+            var provQuery = serviceXML.Descendants("service")
                 .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
                             ((DateTime)x.Element("serviceDate")) <= enddate);
 
@@ -347,7 +365,7 @@ using System.IO;
                 {
                     int fee = 0;
                     //query to get list of services for particular provider in the last 7 days
-                    var serviceQuery = serviceDB.Descendants("service")
+                    var serviceQuery = serviceXML.Descendants("service")
                         .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
                                     ((DateTime)x.Element("serviceDate")) <= enddate)
                         .Where(x => x.Element("providerID").Value == provider);
@@ -472,4 +490,4 @@ using System.IO;
         }
 
     }
-
+}
