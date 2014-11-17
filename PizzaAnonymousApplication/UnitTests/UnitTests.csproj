@@ -43,14 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProviderManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PizzaAnonymousApplication\PizzaAnonymousApplication.csproj">
       <Project>{73d6794a-975a-420f-be90-851d1fcbe500}</Project>
       <Name>PizzaAnonymousApplication</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

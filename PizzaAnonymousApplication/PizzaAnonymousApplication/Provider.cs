@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Reports;
 
 /// <summary>
 /// Provider Class: 
@@ -9,9 +8,9 @@ using Reports;
 /// Author: Ryan Schwartz
 /// Date Created: November 6, 2014
 /// Last Modified By: Ryan Schwartz
-/// Date Last Modified: November 6, 2014
+/// Date Last Modified: November 16, 2014
 /// </summary>
-public class Provider : Entity
+public class Provider
 {
     // Provider's name with get/set properties.
     private String name;
@@ -67,9 +66,9 @@ public class Provider : Entity
     /// This simply returns the entire service list.
     /// </summary>
     /// <returns>Full list of service codes</returns>
-    public List<int> getServiceList()
+    public List<int> getServiceList
     {
-        return serviceList;
+        get { return serviceList; }
     }
 
     /// <summary>
@@ -90,8 +89,6 @@ public class Provider : Entity
     {
         if (!serviceList.Contains(code))
             serviceList.Add(code);
-        else
-            Console.Out.WriteLine("Service is already provided.");
     }
 
     /// <summary>
@@ -102,8 +99,6 @@ public class Provider : Entity
     {
         if (serviceList.Contains(code))
             serviceList.Remove(code);
-        else
-            Console.Out.WriteLine("Service not currently provided.");
     }
 
     /// <summary>
@@ -125,12 +120,11 @@ public class Provider : Entity
         zipCode = zc;
     }
 
-    public String toString()
+    public override string ToString()
     {
-        return "\n" +
-               "  Name:    " + name + "\n" +
+        return "  Name:    " + name + "\n" +
                "  ID:      " + id + "\n" +
                "  Address: " + streetAddress + "\n" +
-               "           " + city + ", " + state + " " + zipCode + "\n";
+               "           " + city + ", " + state + " " + zipCode + "\n\n";
     }
 }

@@ -8,6 +8,6 @@ namespace Reports.Interfaces
 {
     interface ISummaryReport
     {
-        void getProviderSummary(List<Provider> providerList);
+        void getProviderSummary();
     }
 }
