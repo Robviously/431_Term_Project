@@ -49,7 +49,7 @@ namespace PizzaAnonymousApplication
             }
             catch (FileNotFoundException e)
             {
-                Console.WriteLine("CapturedServices.xml does not exist in your desktop directory. Please create a ServicesXML.xml in your desktop directory");
+                Console.WriteLine("CapturedServices.xml does not exist in your project/bin/debug directory. Please create a ServicesXML.xml in your project/bin/debug directory");
             }
         }
 
