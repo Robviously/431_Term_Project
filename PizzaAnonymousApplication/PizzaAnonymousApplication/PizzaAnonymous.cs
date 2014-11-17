@@ -80,10 +80,12 @@ public class PizzaAnonymous
     {
         int memberId = UserInterface.getInteger("Enter member ID: ");
 
+        // Validate the member exists before proceeding
         if (memberManager.validateMember(memberId))
         {
             String choice = UserInterface.getString("Enter field to edit(name or address): ");
 
+            // If the user wants to edit the name
             if (choice.ToLower().Equals("name"))
             {
                 String name = UserInterface.getString("Enter new member name: ", 1, 25);
@@ -92,6 +94,7 @@ public class PizzaAnonymous
                 Console.Out.WriteLine("Successfully edited member name.");
 
             }
+            // If the user wants to edit the address
             else if (choice.ToLower().Equals("address"))
             {
                 String streetAddress = UserInterface.getString("Enter member street address: ", 1, 25);
@@ -102,6 +105,7 @@ public class PizzaAnonymous
                 memberManager.editMemberAddress(memberId, streetAddress, city, state, zipCode);
                 Console.Out.WriteLine("Successfully edited member address.");
             }
+            // If the user didn't enter "name" or "address"
             else
             {
                 Console.Out.WriteLine("Unknown field entered. Valid fields: name, address.");
@@ -121,6 +125,7 @@ public class PizzaAnonymous
     {
         int memberId = UserInterface.getInteger("Enter the member ID: ");
 
+        // Validate the member exists before proceeding
         if (memberManager.validateMember(memberId))
         {
             memberManager.deleteMember(memberId);
@@ -142,14 +147,18 @@ public class PizzaAnonymous
         int memberId = UserInterface.getInteger("Enter the member's ID: ");
         Member member = memberManager.getMemberById(memberId);
 
+        // If the member exists in the system
         if (member != null)
         {
+            // If the member is suspended
             if (member.Suspended)
             {
                 Console.Out.WriteLine("SUSPENDED - Member exists but is suspended.");
             }
-
-            Console.Out.WriteLine("VALID - Member exists and is not suspended.");
+            else
+            {
+                Console.Out.WriteLine("VALID - Member exists and is not suspended.");
+            }
         }
         else
         {
@@ -186,6 +195,7 @@ public class PizzaAnonymous
         String state = UserInterface.getString("Enter the provider's state: ", 2, 2);
         int zipCode = UserInterface.getInteger("Enter the provider's ZIP code: ", 5, 5);
 
+        // Add the provider to the system with the given attributes
         providerManager.addProvider(name, streetAddress, city, state, zipCode);
 
         Console.Out.WriteLine("Successfully added provider.");
@@ -201,10 +211,12 @@ public class PizzaAnonymous
     {
         int providerId = UserInterface.getInteger("Enter provider ID: ");
 
+        // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
             String choice = UserInterface.getString("Enter field to edit(name or address): ");
 
+            // If the user wants to edit the name
             if (choice.ToLower().Equals("name"))
             {
                 String name = UserInterface.getString("Enter a new provider name: ", 1, 25);
@@ -213,6 +225,7 @@ public class PizzaAnonymous
                 Console.Out.WriteLine("Successfully edited provider name.");
        
             }
+            // If the user wants to edit the address
             else if (choice.ToLower().Equals("address"))
             {
                 String streetAddress = UserInterface.getString("Enter provider street address: ", 1, 25);
@@ -223,6 +236,7 @@ public class PizzaAnonymous
                 providerManager.editProviderAddress(providerId, streetAddress, city, state, zipCode);
                 Console.Out.WriteLine("Successfully edited provider address.");
             }
+            // If the user didn't enter "name" or "address"
             else
             {
                 Console.Out.WriteLine("Unknown field entered. Valid fields: name, address.");
@@ -242,6 +256,7 @@ public class PizzaAnonymous
     {
         int providerId = UserInterface.getInteger("Enter the provider ID: ");
 
+        // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
             providerManager.deleteProvider(providerId);
@@ -263,10 +278,12 @@ public class PizzaAnonymous
     {
         int providerId = UserInterface.getInteger("Enter provider ID: ");
 
+        // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
             int serviceId = UserInterface.getInteger("Enter service ID: ");
 
+            // Validate the service exists before adding it to the provider
             if (serviceManager.validateService(serviceId))
             {
                 providerManager.addService(providerId, serviceId);
@@ -293,10 +310,12 @@ public class PizzaAnonymous
     {
         int providerId = UserInterface.getInteger("Enter provider ID: ");
 
+        // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
             int serviceId = UserInterface.getInteger("Enter service ID: ");
 
+            // Validate the service is provided by the provider before deleting it
             if (serviceManager.validateService(serviceId))
             {
                 providerManager.deleteService(providerId, serviceId);
@@ -323,11 +342,13 @@ public class PizzaAnonymous
         List<int> providerServices = provider.getServiceList;
         Service service;
 
+        // If the provider doesn't provide any services
         if (providerServices.Count == 0)
         {
             Console.Out.WriteLine("This provider doesn't provide any services.");
         }
 
+        // Display each service ID and name foreach service provided by the provider
         foreach (int serviceID in providerServices)
         {
             service = serviceManager.getServiceById(serviceID);
@@ -347,19 +368,25 @@ public class PizzaAnonymous
         XElement xmlRoot;
         int memberId = UserInterface.getInteger("Enter the member's ID: ");
 
+        // Validate the member exists before proceeding
         if (memberManager.validateMember(memberId))
         {
             String dateOfService = UserInterface.getDate("Enter the date the service was provided (Format: MM-DD-YYYY): ");
             int serviceId = UserInterface.getInteger("Enter the ID of the service provided: ");
 
+            // Validate the service is provided by the provider before proceeding
             if (providerManager.validateService(providerId, serviceId))
             {
+                // Verify with the user that the service is the correct one
                 if (UserInterface.yesOrNo("Is [" + serviceManager.getServiceById(serviceId).Name + "] the correct service? "))
                 {
+                    // Allow the user to enter an optional comment about the service provided
                     String comments = UserInterface.getString("Enter comments [optional]: ", 0, 100);
-                    String currentTime = DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Year.ToString() +
-                        " " + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
 
+                    String currentTime = DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Year.ToString() +
+                     " " + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
+
+                    // Check to make sure the captured services file exists before loading it. If not, create it
                     if (File.Exists(file))
                     {
                         doc = XDocument.Load(file);
@@ -372,6 +399,7 @@ public class PizzaAnonymous
                         doc.Add(xmlRoot);
                     }
 
+                    // Get the entity object associated with this capture
                     Provider provider = providerManager.getProviderById(providerId);
                     Member member = memberManager.getMemberById(memberId);
                     Service service = serviceManager.getServiceById(serviceId);
@@ -400,6 +428,7 @@ public class PizzaAnonymous
                     xmlRoot.Add(capturedService);
                     doc.Save(file);
                 }
+                // If the user selects no when prompted if the service is correct
                 else
                 {
                     Console.Out.WriteLine("Exiting to menu. No service was captured.");
@@ -413,15 +442,15 @@ public class PizzaAnonymous
         }
         else
         {
-            Console.Out.WriteLine("That member doesn't exist.");
+            Console.Out.WriteLine("Member [" + memberId + "] doesn't exist in the system.");
         }
     }
 
     /// <summary>
-    /// 
+    /// Determines whether a provider with the given provider ID exists in the system
     /// </summary>
     /// <param name="providerId"></param>
-    /// <returns></returns>
+    /// <returns>True if the provider exists, False otherwise</returns>
     public bool validateProviderId(int providerId)
     {
         return providerManager.validateProvider(providerId);
@@ -454,7 +483,9 @@ public class PizzaAnonymous
         double fee = UserInterface.getDouble("Enter the service's fee: ", 0.0, 999.99, 2);
         String description = UserInterface.getString("Enter the service's description: ", 1, 100);
 
+        // Add the service to the system with the given attributes
         serviceManager.addService(name, fee, description);
+
         Console.Out.WriteLine("Successfully added service.");
     }
 
@@ -469,10 +500,12 @@ public class PizzaAnonymous
     {
         int serviceId = UserInterface.getInteger("Enter service ID: ");
 
+        // Verify the service exists before proceeding
         if (serviceManager.validateService(serviceId))
         {
             String choice = UserInterface.getString("Enter field to edit(name, fee, description): ");
 
+            // If the user wants to edit the name
             if (choice.ToLower().Equals("name"))
             {
                 String name = UserInterface.getString("Enter new service name: ", 1, 25);
@@ -480,6 +513,7 @@ public class PizzaAnonymous
                 serviceManager.editServiceName(serviceId, name);
                 Console.Out.WriteLine("Successfully edited service name.");
             }
+            // If the user wants to edit the fee
             else if (choice.ToLower().Equals("fee"))
             {
                 double fee = UserInterface.getDouble("Enter new service fee: ", 0.0, 999.99, 2);
@@ -487,6 +521,7 @@ public class PizzaAnonymous
                 serviceManager.editServiceFee(serviceId, fee);
                 Console.Out.WriteLine("Successfully edited service name.");
             }
+            // If the user wants to edit the description
             else if (choice.ToLower().Equals("description"))
             {
                 String description = UserInterface.getString("Enter new service description: ", 1, 100);
@@ -494,6 +529,7 @@ public class PizzaAnonymous
                 serviceManager.editServiceDescription(serviceId, description);
                 Console.Out.WriteLine("Successfully edited service description.");
             }
+            // If the user didn't enter name, fee, or description
             else
             {
                 Console.Out.WriteLine("Unknown field entered. Valid fields: name, fee, description");
@@ -513,16 +549,20 @@ public class PizzaAnonymous
     {
         int serviceId = UserInterface.getInteger("Enter the service ID: ");
 
+        // Validate the service exists before deleting it
         if (serviceManager.validateService(serviceId))
         {
+            // Delete the service from each provider that provides it
             foreach (Provider provider in providerManager.ProviderList)
             {
                 provider.removeService(serviceId);
             }
 
+            // Delete the service from the complete list of services
             serviceManager.deleteService(serviceId);
             Console.Out.WriteLine("Service deleted.");
         }
+        // 
         else
         {
             Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
