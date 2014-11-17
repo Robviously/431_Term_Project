@@ -313,7 +313,8 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// Displays the services codes of the 
+    /// Displays the services codes and names of the services provided by
+    /// the provider with the given provider ID.
     /// </summary>
     /// <param name="providerId">Provider ID</param>
     public void serviceLookup(int providerId)
@@ -335,7 +336,8 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Records a service being provided by a provider for a member. The information
+    /// captured will be stored in a file of similar records. 
     /// </summary>
     /// <param name="providerId"></param>
     public void captureService(int providerId)
@@ -362,7 +364,6 @@ public class PizzaAnonymous
                     {
                         doc = XDocument.Load(file);
                         xmlRoot = doc.Root;
-
                     }
                     else
                     {
