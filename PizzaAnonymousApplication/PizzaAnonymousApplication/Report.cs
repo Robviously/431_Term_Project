@@ -46,7 +46,8 @@ namespace PizzaAnonymousApplication
         {
             try
             {
-                serviceXML = XElement.Load(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/ServicesXML.xml");
+                Console.WriteLine(Environment.CurrentDirectory);
+                serviceXML = XElement.Load(Environment.CurrentDirectory + "/XML/CapturedServices.xml");
             }
             catch (FileNotFoundException e)
             {
@@ -254,7 +255,7 @@ namespace PizzaAnonymousApplication
             int provCount = 0;
             int totalConsultCount = 0;
             //this is where report text file is created
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Provider Report Summary.txt";
+            string path = Environment.CurrentDirectory + "/Reports/"+"/Provider Report Summary.txt";
 
             //query to get list of providers who has given a service in the last 7 days
             var provQuery = serviceXML.Descendants("service")
@@ -339,7 +340,7 @@ namespace PizzaAnonymousApplication
             DateTime startdate = DateTime.Today.Date.AddDays(-7);
             DateTime enddate = DateTime.Today;
             //this is where a report will be saved
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/EFT Report.txt";
+            string path = Environment.CurrentDirectory + "/Reports" +"/EFT Report.txt";
 
             //query to get list of providers who has given a service in the last 7 days
             var provQuery = serviceXML.Descendants("service")
@@ -414,8 +415,8 @@ namespace PizzaAnonymousApplication
                               String entityCity, String entityState, String entityZip,
                               List<XElement> serviceList, string report_type)
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            path += "\\" + report_type + " - " + entityID + ".txt";
+            string path = Environment.CurrentDirectory + "/Reports/";
+            path += "/" + report_type + " - " + entityID + ".txt";
 
             StreamWriter writer = new StreamWriter(path);
 

@@ -170,7 +170,7 @@ namespace PizzaAnonymousApplication
         public void serviceLookup(int providerId)
         {
             Provider provider = providerManager.getProviderById(providerId);
-            List<int> providerServices = provider.getServiceList();
+            List<int> providerServices = provider.getServiceList;
 
             if (providerServices.Count == 0)
             {

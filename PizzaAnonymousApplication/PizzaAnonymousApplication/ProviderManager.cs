@@ -191,7 +191,7 @@ public class ProviderManager
             foreach (Provider p in providerList)
             {
                 if (p.Id == id)
-                    return p.getServiceList();
+                    return p.getServiceList;
             }
         }
 
