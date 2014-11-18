@@ -50,6 +50,10 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         {
             Console.WriteLine(e.Message);
         }
+        catch (DirectoryNotFoundException e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
 
     //method to implement singleton pattern

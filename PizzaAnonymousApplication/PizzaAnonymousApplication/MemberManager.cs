@@ -49,7 +49,7 @@ public class MemberManager
     {
         // Ensure member exists in the system.
         if (!validateMember(id))
-            Console.Out.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through members until a match is found, then replace the member's name.
@@ -76,7 +76,7 @@ public class MemberManager
     {
         // Ensure the member exists in the system
         if (!validateMember(id))
-            Console.Out.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through members until a match is found, then replace address elements.
@@ -102,7 +102,7 @@ public class MemberManager
     {
         // Ensure member exists in the system.
         if (!validateMember(id))
-            Console.Out.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through members until a match is found and then remove the member from memberList.
@@ -126,7 +126,7 @@ public class MemberManager
     {
         // Ensure the member exists in the system.
         if (!validateMember(id))
-            Console.Out.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through members until a match is found, then return that member.
@@ -217,7 +217,7 @@ public class MemberManager
         }
         else
         {
-            Console.Out.WriteLine("Reading data in to MemberManager from file [" + file + "].");
+            Console.WriteLine("Reading data in to MemberManager from file [" + file + "].");
         }
 
         // Create an XML reader for this file.

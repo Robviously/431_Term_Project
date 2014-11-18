@@ -67,7 +67,7 @@ public class PizzaAnonymous
         // Add the member to the system with the given attributes
         memberManager.addMember(name, streetAddress, city, state, zipCode);
 
-        Console.Out.WriteLine("Successfully added member.");
+        Console.WriteLine("Successfully added member.");
     }
 
     /// <summary>
@@ -80,18 +80,21 @@ public class PizzaAnonymous
     {
         int memberId = UserInterface.getInteger("Enter member ID: ");
 
+        // Validate the member exists before proceeding
         if (memberManager.validateMember(memberId))
         {
             String choice = UserInterface.getString("Enter field to edit(name or address): ");
 
+            // If the user wants to edit the name
             if (choice.ToLower().Equals("name"))
             {
                 String name = UserInterface.getString("Enter new member name: ", 1, 25);
 
                 memberManager.editMemberName(memberId, name);
-                Console.Out.WriteLine("Successfully edited member name.");
+                Console.WriteLine("Successfully edited member name.");
 
             }
+            // If the user wants to edit the address
             else if (choice.ToLower().Equals("address"))
             {
                 String streetAddress = UserInterface.getString("Enter member street address: ", 1, 25);
@@ -100,16 +103,17 @@ public class PizzaAnonymous
                 int zipCode = UserInterface.getInteger("Enter member ZIP code: ", 5, 5);
 
                 memberManager.editMemberAddress(memberId, streetAddress, city, state, zipCode);
-                Console.Out.WriteLine("Successfully edited member address.");
+                Console.WriteLine("Successfully edited member address.");
             }
+            // If the user didn't enter "name" or "address"
             else
             {
-                Console.Out.WriteLine("Unknown field entered. Valid fields: name, address.");
+                Console.WriteLine("Unknown field entered. Valid fields: name, address.");
             }
         }
         else
         {
-            Console.Out.WriteLine("Unable to find member [" + memberId + "].");
+            Console.WriteLine("Unable to find member [" + memberId + "].");
         }
     }
 
@@ -121,14 +125,15 @@ public class PizzaAnonymous
     {
         int memberId = UserInterface.getInteger("Enter the member ID: ");
 
+        // Validate the member exists before proceeding
         if (memberManager.validateMember(memberId))
         {
             memberManager.deleteMember(memberId);
-            Console.Out.WriteLine("Successfully deleted member.");
+            Console.WriteLine("Successfully deleted member.");
         }
         else
         {
-            Console.Out.WriteLine("Unable to find member [" + memberId + "]");
+            Console.WriteLine("Unable to find member [" + memberId + "]");
         }
     }
 
@@ -142,18 +147,22 @@ public class PizzaAnonymous
         int memberId = UserInterface.getInteger("Enter the member's ID: ");
         Member member = memberManager.getMemberById(memberId);
 
+        // If the member exists in the system
         if (member != null)
         {
+            // If the member is suspended
             if (member.Suspended)
             {
-                Console.Out.WriteLine("SUSPENDED - Member exists but is suspended.");
+                Console.WriteLine("SUSPENDED - Member exists but is suspended.");
             }
-
-            Console.Out.WriteLine("VALID - Member exists and is not suspended.");
+            else
+            {
+                Console.WriteLine("VALID - Member exists and is not suspended.");
+            }
         }
         else
         {
-            Console.Out.WriteLine("INVALID - Member does not exist.");
+            Console.WriteLine("INVALID - Member does not exist.");
         }
     }
 
@@ -166,11 +175,11 @@ public class PizzaAnonymous
 
         if (membersString == "")
         {
-            Console.Out.WriteLine("No members in the database.");
+            Console.WriteLine("No members in the database.");
         }
         else
         {
-            Console.Out.WriteLine(membersString);
+            Console.WriteLine(membersString);
         }
     }
 
@@ -186,9 +195,10 @@ public class PizzaAnonymous
         String state = UserInterface.getString("Enter the provider's state: ", 2, 2);
         int zipCode = UserInterface.getInteger("Enter the provider's ZIP code: ", 5, 5);
 
+        // Add the provider to the system with the given attributes
         providerManager.addProvider(name, streetAddress, city, state, zipCode);
 
-        Console.Out.WriteLine("Successfully added provider.");
+        Console.WriteLine("Successfully added provider.");
     }
 
     /// <summary>
@@ -201,18 +211,21 @@ public class PizzaAnonymous
     {
         int providerId = UserInterface.getInteger("Enter provider ID: ");
 
+        // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
             String choice = UserInterface.getString("Enter field to edit(name or address): ");
 
+            // If the user wants to edit the name
             if (choice.ToLower().Equals("name"))
             {
                 String name = UserInterface.getString("Enter a new provider name: ", 1, 25);
 
                 providerManager.editProviderName(providerId, name);
-                Console.Out.WriteLine("Successfully edited provider name.");
+                Console.WriteLine("Successfully edited provider name.");
        
             }
+            // If the user wants to edit the address
             else if (choice.ToLower().Equals("address"))
             {
                 String streetAddress = UserInterface.getString("Enter provider street address: ", 1, 25);
@@ -221,16 +234,17 @@ public class PizzaAnonymous
                 int zipCode = UserInterface.getInteger("Enter provider ZIP code: ", 5, 5);
 
                 providerManager.editProviderAddress(providerId, streetAddress, city, state, zipCode);
-                Console.Out.WriteLine("Successfully edited provider address.");
+                Console.WriteLine("Successfully edited provider address.");
             }
+            // If the user didn't enter "name" or "address"
             else
             {
-                Console.Out.WriteLine("Unknown field entered. Valid fields: name, address.");
+                Console.WriteLine("Unknown field entered. Valid fields: name, address.");
             }
         }
         else
         {
-            Console.Out.WriteLine("Unable to find provider [" + providerId + "].");
+            Console.WriteLine("Unable to find provider [" + providerId + "].");
         }
     }
 
@@ -242,14 +256,15 @@ public class PizzaAnonymous
     {
         int providerId = UserInterface.getInteger("Enter the provider ID: ");
 
+        // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
             providerManager.deleteProvider(providerId);
-            Console.Out.WriteLine("Successfully deleted provider.");
+            Console.WriteLine("Successfully deleted provider.");
         }
         else
         {
-            Console.Out.WriteLine("Unable to find provider [" + providerId + "].");
+            Console.WriteLine("Unable to find provider [" + providerId + "].");
         }
     }
 
@@ -263,22 +278,24 @@ public class PizzaAnonymous
     {
         int providerId = UserInterface.getInteger("Enter provider ID: ");
 
+        // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
             int serviceId = UserInterface.getInteger("Enter service ID: ");
 
+            // Validate the service exists before adding it to the provider
             if (serviceManager.validateService(serviceId))
             {
                 providerManager.addService(providerId, serviceId);
             }
             else
             {
-                Console.Out.WriteLine("Service ID [" + serviceId + "] is not valid.");
+                Console.WriteLine("Service ID [" + serviceId + "] is not valid.");
             }
         }
         else
         {
-            Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
+            Console.WriteLine("Provider ID [" + providerId + "] is not valid.");
         }
     }
 
@@ -293,22 +310,24 @@ public class PizzaAnonymous
     {
         int providerId = UserInterface.getInteger("Enter provider ID: ");
 
+        // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
             int serviceId = UserInterface.getInteger("Enter service ID: ");
 
+            // Validate the service is provided by the provider before deleting it
             if (serviceManager.validateService(serviceId))
             {
                 providerManager.deleteService(providerId, serviceId);
             }
             else
             {
-                Console.Out.WriteLine("Service ID [" + serviceId + "] is not valid.");
+                Console.WriteLine("Service ID [" + serviceId + "] is not valid.");
             }
         }
         else
         {
-            Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
+            Console.WriteLine("Provider ID [" + providerId + "] is not valid.");
         }
     }
 
@@ -323,15 +342,17 @@ public class PizzaAnonymous
         List<int> providerServices = provider.getServiceList;
         Service service;
 
+        // If the provider doesn't provide any services
         if (providerServices.Count == 0)
         {
-            Console.Out.WriteLine("This provider doesn't provide any services.");
+            Console.WriteLine("This provider doesn't provide any services.");
         }
 
+        // Display each service ID and name foreach service provided by the provider
         foreach (int serviceID in providerServices)
         {
             service = serviceManager.getServiceById(serviceID);
-            Console.Out.WriteLine(serviceID + "   " + service.Name);
+            Console.WriteLine(serviceID + "   " + service.Name);
         }
     }
 
@@ -347,19 +368,25 @@ public class PizzaAnonymous
         XElement xmlRoot;
         int memberId = UserInterface.getInteger("Enter the member's ID: ");
 
+        // Validate the member exists before proceeding
         if (memberManager.validateMember(memberId))
         {
             String dateOfService = UserInterface.getDate("Enter the date the service was provided (Format: MM-DD-YYYY): ");
             int serviceId = UserInterface.getInteger("Enter the ID of the service provided: ");
 
+            // Validate the service is provided by the provider before proceeding
             if (providerManager.validateService(providerId, serviceId))
             {
+                // Verify with the user that the service is the correct one
                 if (UserInterface.yesOrNo("Is [" + serviceManager.getServiceById(serviceId).Name + "] the correct service? "))
                 {
+                    // Allow the user to enter an optional comment about the service provided
                     String comments = UserInterface.getString("Enter comments [optional]: ", 0, 100);
-                    String currentTime = DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Year.ToString() +
-                        " " + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
 
+                    String currentTime = DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "-" + DateTime.Now.Year.ToString() +
+                     " " + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString() + ":" + DateTime.Now.Second.ToString();
+
+                    // Check to make sure the captured services file exists before loading it. If not, create it
                     if (File.Exists(file))
                     {
                         doc = XDocument.Load(file);
@@ -372,6 +399,7 @@ public class PizzaAnonymous
                         doc.Add(xmlRoot);
                     }
 
+                    // Get the entity object associated with this capture
                     Provider provider = providerManager.getProviderById(providerId);
                     Member member = memberManager.getMemberById(memberId);
                     Service service = serviceManager.getServiceById(serviceId);
@@ -400,28 +428,29 @@ public class PizzaAnonymous
                     xmlRoot.Add(capturedService);
                     doc.Save(file);
                 }
+                // If the user selects no when prompted if the service is correct
                 else
                 {
-                    Console.Out.WriteLine("Exiting to menu. No service was captured.");
+                    Console.WriteLine("Exiting to menu. No service was captured.");
                     return;
                 }
             }
             else
             {
-                Console.Out.WriteLine("Service [" + serviceId + "] is not listed as a service provided by provider [" + providerId + "].");
+                Console.WriteLine("Service [" + serviceId + "] is not listed as a service provided by provider [" + providerId + "].");
             }
         }
         else
         {
-            Console.Out.WriteLine("That member doesn't exist.");
+            Console.WriteLine("Member [" + memberId + "] doesn't exist in the system.");
         }
     }
 
     /// <summary>
-    /// 
+    /// Determines whether a provider with the given provider ID exists in the system
     /// </summary>
     /// <param name="providerId"></param>
-    /// <returns></returns>
+    /// <returns>True if the provider exists, False otherwise</returns>
     public bool validateProviderId(int providerId)
     {
         return providerManager.validateProvider(providerId);
@@ -436,11 +465,11 @@ public class PizzaAnonymous
 
         if (providersString == "")
         {
-            Console.Out.WriteLine("No providers in the database.");
+            Console.WriteLine("No providers in the database.");
         }
         else
         {
-            Console.Out.WriteLine(providersString);
+            Console.WriteLine(providersString);
         }
     }
 
@@ -454,8 +483,10 @@ public class PizzaAnonymous
         double fee = UserInterface.getDouble("Enter the service's fee: ", 0.0, 999.99, 2);
         String description = UserInterface.getString("Enter the service's description: ", 1, 100);
 
+        // Add the service to the system with the given attributes
         serviceManager.addService(name, fee, description);
-        Console.Out.WriteLine("Successfully added service.");
+
+        Console.WriteLine("Successfully added service.");
     }
 
     /// <summary>
@@ -469,39 +500,44 @@ public class PizzaAnonymous
     {
         int serviceId = UserInterface.getInteger("Enter service ID: ");
 
+        // Verify the service exists before proceeding
         if (serviceManager.validateService(serviceId))
         {
             String choice = UserInterface.getString("Enter field to edit(name, fee, description): ");
 
+            // If the user wants to edit the name
             if (choice.ToLower().Equals("name"))
             {
                 String name = UserInterface.getString("Enter new service name: ", 1, 25);
 
                 serviceManager.editServiceName(serviceId, name);
-                Console.Out.WriteLine("Successfully edited service name.");
+                Console.WriteLine("Successfully edited service name.");
             }
+            // If the user wants to edit the fee
             else if (choice.ToLower().Equals("fee"))
             {
                 double fee = UserInterface.getDouble("Enter new service fee: ", 0.0, 999.99, 2);
 
                 serviceManager.editServiceFee(serviceId, fee);
-                Console.Out.WriteLine("Successfully edited service name.");
+                Console.WriteLine("Successfully edited service name.");
             }
+            // If the user wants to edit the description
             else if (choice.ToLower().Equals("description"))
             {
                 String description = UserInterface.getString("Enter new service description: ", 1, 100);
 
                 serviceManager.editServiceDescription(serviceId, description);
-                Console.Out.WriteLine("Successfully edited service description.");
+                Console.WriteLine("Successfully edited service description.");
             }
+            // If the user didn't enter name, fee, or description
             else
             {
-                Console.Out.WriteLine("Unknown field entered. Valid fields: name, fee, description");
+                Console.WriteLine("Unknown field entered. Valid fields: name, fee, description");
             }
         }
         else
         {
-            Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
+            Console.WriteLine("Unable to find service [" + serviceId + "].");
         }
     }
 
@@ -513,19 +549,23 @@ public class PizzaAnonymous
     {
         int serviceId = UserInterface.getInteger("Enter the service ID: ");
 
+        // Validate the service exists before deleting it
         if (serviceManager.validateService(serviceId))
         {
+            // Delete the service from each provider that provides it
             foreach (Provider provider in providerManager.ProviderList)
             {
                 provider.removeService(serviceId);
             }
 
+            // Delete the service from the complete list of services
             serviceManager.deleteService(serviceId);
-            Console.Out.WriteLine("Service deleted.");
+            Console.WriteLine("Service deleted.");
         }
+        // 
         else
         {
-            Console.Out.WriteLine("Unable to find service [" + serviceId + "].");
+            Console.WriteLine("Unable to find service [" + serviceId + "].");
         }
     }
 
@@ -538,42 +578,57 @@ public class PizzaAnonymous
 
         if (servicesString == "")
         {
-            Console.Out.WriteLine("No services in the database.");
+            Console.WriteLine("No services in the database.");
         }
         else
         {
-            Console.Out.WriteLine(servicesString);
+            Console.WriteLine(servicesString);
         }
     }
 
     /// <summary>
-    /// 
+    /// Prompts the user to enter a member ID and asks the report class to run a report for that member.
     /// </summary>
     public void printMemberReport()
     {
-        // ****ERROR CHECK
-        int memberId = UserInterface.getInteger("Enter the member's ID: ");
+        int memberId = UserInterface.getInteger("Enter the member's ID: ", 9, 9);
 
         report.getMemberReport(memberId);
     }
 
     /// <summary>
-    /// 
+    /// Asks the report class to generate a report for each member in the system.
     /// </summary>
-    /// <param name="providerId"></param>
+    public void printWeeklyMembersReport()
+    {
+        report.getWeeklyMembersReport();
+    }
+
+    /// <summary>
+    /// Prompts the user to enter a provider ID and asks the report class to run a report for that provider.
+    /// If the optional parameter is not specified, the user will be prompted to enter a provider ID.
+    /// </summary>
+    /// <param name="providerId">Optional parameter that specifies the provider to run the report on</param>
     public void printProviderReport(int providerId = -1)
     {
-        // ****ERROR CHECK
         if (providerId == -1)
         {
-            providerId = UserInterface.getInteger("Enter the provider's ID: ");
+            providerId = UserInterface.getInteger("Enter the provider's ID: ", 9, 9);
         }
 
         report.getProviderReport(providerId);
     }
 
     /// <summary>
-    /// 
+    /// Asks the report class to generate a report for each provider in the system.
+    /// </summary>
+    public void printWeeklyProvidersReport()
+    {
+        report.getWeeklyProvidersReport();
+    }
+
+    /// <summary>
+    /// Asks the report class to generate a summary of all the provider reports
     /// </summary>
     public void printSummaryReport()
     {
@@ -581,7 +636,7 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Asks the report class to generate an Electronic Funds Transfer file of all providers for the account manager
     /// </summary>
     public void printEFTReport()
     {
@@ -589,7 +644,7 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Saves the current member, provider, and service manager's information into separate files
     /// </summary>
     public void save()
     {
@@ -599,7 +654,7 @@ public class PizzaAnonymous
     }
 
     /// <summary>
-    /// 
+    /// Loads the stored member, provider, and service manager's information into memory
     /// </summary>
     public void load()
     {

@@ -47,7 +47,7 @@ public class ServiceManager
     {
         // Ensure service exists in the system.
         if (!validateService(id))
-            Console.Out.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through services until a match is found, then replace the service's name.
@@ -71,7 +71,7 @@ public class ServiceManager
     {
         // Ensure the service exists in the system
         if (!validateService(id))
-            Console.Out.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through services until a match is found, then replace the service's fee.
@@ -95,7 +95,7 @@ public class ServiceManager
     {
         // Ensure the service exists in the system
         if (!validateService(id))
-            Console.Out.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through services until a match is found, then replace the service's description.
@@ -118,7 +118,7 @@ public class ServiceManager
     {
         // Ensure service exists in the system.
         if (!validateService(id))
-            Console.Out.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through services until a match is found and then remove the service from serviceList.
@@ -142,7 +142,7 @@ public class ServiceManager
     {
         // Ensure the service exists in the system.
         if (!validateService(id))
-            Console.Out.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Service with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through services until a match is found, then return that service.
@@ -231,7 +231,7 @@ public class ServiceManager
         }
         else
         {
-            Console.Out.WriteLine("Reading data in to ServiceManager from file [" + file + "].");
+            Console.WriteLine("Reading data in to ServiceManager from file [" + file + "].");
         }
 
         // Create an XML reader for this file.

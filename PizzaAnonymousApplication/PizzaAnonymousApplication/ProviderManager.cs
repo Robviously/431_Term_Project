@@ -49,7 +49,7 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found, then replace the provider's name.
@@ -76,7 +76,7 @@ public class ProviderManager
     {
         // Ensure the provider exists in the system
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found, then replace address elements.
@@ -102,7 +102,7 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found and then remove the provider from providerList.
@@ -126,11 +126,11 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             if (validateService(id, code))
-                Console.Out.WriteLine("Service with code [" + code + "] already exists in system.");
+                Console.WriteLine("Service with code [" + code + "] already exists in system.");
             else
             {
                 // Cycle through providers until a match is found and then add the service to that provider.
@@ -155,11 +155,11 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             if (!validateService(id, code))
-                Console.Out.WriteLine("Service with code [" + code + "] is not currently provided.");
+                Console.WriteLine("Service with code [" + code + "] is not currently provided.");
             else
             {
                 // Cycle through providers until a match is found and then remove the service from the provider.
@@ -184,7 +184,7 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found and then return service list.
@@ -207,7 +207,7 @@ public class ProviderManager
     {
         // Ensure provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found and then check for service.
@@ -231,7 +231,7 @@ public class ProviderManager
     {
         // Ensure the provider exists in the system.
         if (!validateProvider(id))
-            Console.Out.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
+            Console.WriteLine("Provider with ID [" + id + "] doesn't exist in system.");
         else
         {
             // Cycle through providers until a match is found, then return that provider.
@@ -332,7 +332,7 @@ public class ProviderManager
         }
         else
         {
-            Console.Out.WriteLine("Reading data in to ProviderManager from file [" + file + "].");
+            Console.WriteLine("Reading data in to ProviderManager from file [" + file + "].");
         }
 
         // Create an XML reader for this file.
