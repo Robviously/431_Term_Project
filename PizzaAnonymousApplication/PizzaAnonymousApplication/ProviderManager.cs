@@ -25,6 +25,27 @@ public class ProviderManager
     // This int is for generating new unique provider IDs.
     int nextID = 100000000;
 
+    public int NextID
+    {
+        get { return nextID; }
+        set { nextID = value; }
+    }
+
+    private static ProviderManager providerManager;
+
+    private ProviderManager()
+    {
+    }
+
+    public static ProviderManager instance()
+    {
+        if (providerManager == null)
+        {
+            return providerManager = new ProviderManager();
+        }
+
+        return providerManager;
+    }
     /// <summary>
     /// This adds a new provider to the providerList based on passed arguments. The provider ID is generated from nextID.
     /// </summary>

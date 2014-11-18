@@ -31,7 +31,7 @@ public class PizzaAnonymous
     private PizzaAnonymous()
     {
         memberManager = new MemberManager();
-        providerManager = new ProviderManager();
+        providerManager = ProviderManager.instance();
         serviceManager = new ServiceManager();
         report = Report.getInstance;
     }
