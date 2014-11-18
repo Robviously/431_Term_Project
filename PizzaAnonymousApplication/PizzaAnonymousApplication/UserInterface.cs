@@ -64,17 +64,17 @@ public class UserInterface
         
         while (!done)
         {
-            Console.Out.WriteLine("                                         ");
-            Console.Out.WriteLine("        MAIN MENU                        ");
-            Console.Out.WriteLine("        Pizza-anonymous                  ");
-            Console.Out.WriteLine("                                         ");
-            Console.Out.WriteLine("        1. Display Manager Menu          ");
-            Console.Out.WriteLine("        2. Display Provider Menu         ");
-            Console.Out.WriteLine("        3. Quit                          ");
-            Console.Out.WriteLine("                                         ");
+            Console.WriteLine("                                         ");
+            Console.WriteLine("        MAIN MENU                        ");
+            Console.WriteLine("        Pizza-anonymous                  ");
+            Console.WriteLine("                                         ");
+            Console.WriteLine("        1. Display Manager Menu          ");
+            Console.WriteLine("        2. Display Provider Menu         ");
+            Console.WriteLine("        3. Quit                          ");
+            Console.WriteLine("                                         ");
 
             choice = getInteger("Enter your choice: ");
-            Console.Out.WriteLine();
+            Console.WriteLine();
 
             switch (choice)
             {
@@ -84,7 +84,7 @@ public class UserInterface
                             break;
                 case  3:    done = true;
                             break;
-                default:    Console.Out.WriteLine("Not a valid choice! Please try again.\n");
+                default:    Console.WriteLine("Not a valid choice! Please try again.\n");
                             break;     
             } 
         }   
@@ -101,38 +101,40 @@ public class UserInterface
         
         while (!done)
         {
-            Console.Out.WriteLine("                                         ");
-        	Console.Out.WriteLine("        MANAGER MENU                     ");
-        	Console.Out.WriteLine("        Pizza-anonymous                  ");
-        	Console.Out.WriteLine("                                         ");
-        	Console.Out.WriteLine("         1. Add Member                   ");
-        	Console.Out.WriteLine("         2. Edit Member                  ");
-        	Console.Out.WriteLine("         3. Delete Member                ");
-            Console.Out.WriteLine("         4. Print All Members            ");
-            Console.Out.WriteLine("                                         ");
-        	Console.Out.WriteLine("         5. Add Provider                 ");
-            Console.Out.WriteLine("         6. Edit Provider                ");
-            Console.Out.WriteLine("         7. Delete Provider              ");
-            Console.Out.WriteLine("         8. Add Service To Provider      ");
-            Console.Out.WriteLine("         9. Delete Service From Provider ");
-            Console.Out.WriteLine("        10. Print All Providers          ");
-            Console.Out.WriteLine("                                         ");
-            Console.Out.WriteLine("        11. Add Service                  ");
-            Console.Out.WriteLine("        12. Edit Service                 ");
-            Console.Out.WriteLine("        13. Delete Service               ");  
-            Console.Out.WriteLine("        14. Print All Services           ");
-            Console.Out.WriteLine("                                         ");
-            Console.Out.WriteLine("        15. Print Member Report          ");
-            Console.Out.WriteLine("        16. Print Provider Report        ");
-            Console.Out.WriteLine("        17. Print Summary Report         ");
-            Console.Out.WriteLine("        18. Print EFT Report             ");
-            Console.Out.WriteLine("                                         ");
-            Console.Out.WriteLine("        19. Save                         ");
-            Console.Out.WriteLine("        20. Display Main Menu            ");
-            Console.Out.WriteLine("                                         ");
+            Console.WriteLine("                                         ");
+        	Console.WriteLine("        MANAGER MENU                     ");
+        	Console.WriteLine("        Pizza-anonymous                  ");
+        	Console.WriteLine("                                         ");
+        	Console.WriteLine("         1. Add Member                   ");
+        	Console.WriteLine("         2. Edit Member                  ");
+        	Console.WriteLine("         3. Delete Member                ");
+            Console.WriteLine("         4. Print All Members            ");
+            Console.WriteLine("                                         ");
+        	Console.WriteLine("         5. Add Provider                 ");
+            Console.WriteLine("         6. Edit Provider                ");
+            Console.WriteLine("         7. Delete Provider              ");
+            Console.WriteLine("         8. Add Service To Provider      ");
+            Console.WriteLine("         9. Delete Service From Provider ");
+            Console.WriteLine("        10. Print All Providers          ");
+            Console.WriteLine("                                         ");
+            Console.WriteLine("        11. Add Service                  ");
+            Console.WriteLine("        12. Edit Service                 ");
+            Console.WriteLine("        13. Delete Service               ");  
+            Console.WriteLine("        14. Print All Services           ");
+            Console.WriteLine("                                         ");
+            Console.WriteLine("        15. Print Member Report          ");
+            Console.WriteLine("        16. Print Weekly Members Report  ");
+            Console.WriteLine("        17. Print Provider Report        ");
+            Console.WriteLine("        18. Print Weekly Providers Report");
+            Console.WriteLine("        19. Print Summary Report         ");
+            Console.WriteLine("        20. Print EFT Report             ");
+            Console.WriteLine("                                         ");
+            Console.WriteLine("        21. Save                         ");
+            Console.WriteLine("        22. Display Main Menu            ");
+            Console.WriteLine("                                         ");
 
             choice = getInteger("Enter your choice: ");
-            Console.Out.WriteLine();
+            Console.WriteLine();
          
             switch (choice)
             {
@@ -166,17 +168,25 @@ public class UserInterface
                             break;
                 case 15:    pizzaAnonymous.printMemberReport();
                             break;
-                case 16:    pizzaAnonymous.printProviderReport();
+                case 16:    pizzaAnonymous.printWeeklyMembersReport();
                             break;
-                case 17:    pizzaAnonymous.printSummaryReport();
+                case 17:    pizzaAnonymous.printProviderReport();
                             break;
-                case 18:    pizzaAnonymous.printEFTReport();
+                case 18:    pizzaAnonymous.printWeeklyProvidersReport();
                             break;
-                case 19:    pizzaAnonymous.save();
+                case 19:    pizzaAnonymous.printSummaryReport();
+                            break;
+                case 20:    pizzaAnonymous.printEFTReport();
+                            break;
+                case 21:    pizzaAnonymous.save();
                             break;        
-                case 20:   	done = true;
+                case 22:   	done = true;
+                            if (yesOrNo("Do you want to save? "))
+                            {
+                                pizzaAnonymous.save();
+                            }
      		   				break;
-                default:   	Console.Out.WriteLine("Not a valid choice! Please try again.\n");
+                default:   	Console.WriteLine("Not a valid choice! Please try again.\n");
                            	break;     
             }     
         }  
@@ -195,25 +205,25 @@ public class UserInterface
 
         if (!pizzaAnonymous.validateProviderId(providerId))
         {
-            Console.Out.WriteLine("Provider ID [" + providerId + "] is not valid.");
+            Console.WriteLine("Provider ID [" + providerId + "] is not valid.");
             return;
         }
 
         while (!done)
         {
-            Console.Out.WriteLine("                                         ");
-        	Console.Out.WriteLine("        PROVIDER MENU                    ");
-        	Console.Out.WriteLine("        Pizza-anonymous                  ");
-        	Console.Out.WriteLine("                                         ");
-        	Console.Out.WriteLine("        1. Authenticate Member           ");
-        	Console.Out.WriteLine("        2. Provide Service               ");
-        	Console.Out.WriteLine("        3. Generate Report               ");
-            Console.Out.WriteLine("        4. Service Lookup                ");
-        	Console.Out.WriteLine("        5. Display Main Menu             ");
-            Console.Out.WriteLine("                                         ");
+            Console.WriteLine("                                         ");
+        	Console.WriteLine("        PROVIDER MENU                    ");
+        	Console.WriteLine("        Pizza-anonymous                  ");
+        	Console.WriteLine("                                         ");
+        	Console.WriteLine("        1. Authenticate Member           ");
+        	Console.WriteLine("        2. Provide Service               ");
+        	Console.WriteLine("        3. Generate Report               ");
+            Console.WriteLine("        4. Service Lookup                ");
+        	Console.WriteLine("        5. Display Main Menu             ");
+            Console.WriteLine("                                         ");
 
             choice = getInteger("Enter your choice: ");
-            Console.Out.WriteLine();
+            Console.WriteLine();
          
             switch (choice)
             {
@@ -227,7 +237,7 @@ public class UserInterface
                             break;
                 case  5:    done = true;
                             break;
-                default:    Console.Out.WriteLine("Not a valid choice! Please try again.\n");
+                default:    Console.WriteLine("Not a valid choice! Please try again.\n");
                             break;     
             }    
         }  
@@ -242,13 +252,13 @@ public class UserInterface
     /// <returns>The string input by the user</returns>
     public static String getString(String prompt, int min = 1, int max = 1000)
 	{
-        Console.Out.Write(prompt);
+        Console.Write(prompt);
         String input = Console.In.ReadLine(); 
 
         // While the string isn't in the desired range
         while (input.Length < min || input.Length > max)
         {
-            Console.Out.Write("Please input a string with length between [" + min + "] and [" + max + "] characters: ");
+            Console.Write("Please input a string with length between [" + min + "] and [" + max + "] characters: ");
             input = Console.In.ReadLine(); 
         }
 
@@ -266,13 +276,13 @@ public class UserInterface
 	{
         int number;
 
-        Console.Out.Write(prompt);
+        Console.Write(prompt);
         String input = Console.ReadLine();
 
         // While the input isn't an integer or isn't in the desired range
         while (!Int32.TryParse(input, out number) || input.Length < min || input.Length > max)
         {
-            Console.Out.Write("Please input an integer with length between [" + min + "] and [" + max + "] digits: ");
+            Console.Write("Please input an integer with length between [" + min + "] and [" + max + "] digits: ");
             input = Console.In.ReadLine();
 
         }
@@ -292,7 +302,7 @@ public class UserInterface
 	{
         double number;
 
-        Console.Out.Write(prompt);
+        Console.Write(prompt);
         String input = Console.ReadLine();
 
         // While the input is not a double or isn't within the desired range
@@ -318,14 +328,14 @@ public class UserInterface
         // Regular expression. Matches as string in the form MM-DD-YYYY where M,D, and Y are digits
         Regex regex = new Regex(@"\d{2}-\d{2}-\d{4}");
 
-        Console.Out.Write(prompt);
+        Console.Write(prompt);
         String input = Console.In.ReadLine();
         Match match = regex.Match(input);
 
         // While the user input doesn't match the date format
         while (!match.Success)
         {
-            Console.Out.Write("Please enter a date in the format MM-DD-YYYY: ");
+            Console.Write("Please enter a date in the format MM-DD-YYYY: ");
             input = Console.In.ReadLine();
             match = regex.Match(input);
         }
