@@ -44,7 +44,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     {
         try
         {
-            serviceXML = XElement.Load(projectDir + "\\XML\\CapturedServices");
+            serviceXML = XElement.Load(projectDir + "/XML/CapturedServices.xml");
         }
         catch (FileNotFoundException e)
         {

@@ -58,7 +58,7 @@ public class Service
         description = d;
     }
 
-    public String toString()
+    public override String ToString()
     {
         return "  Name:       " + name + "\n" +
                "  ID:         " + id + "\n" +
