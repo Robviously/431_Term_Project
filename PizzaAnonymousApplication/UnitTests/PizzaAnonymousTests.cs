@@ -12,25 +12,63 @@ namespace UnitTests
     [TestFixture]
     class PizzaAnonymousTests
     {
-        [Test]
-        public void testAddMember()
+        MemberManager memberManager;
+        ProviderManager providerManager;
+        ServiceManager serviceManager;
+        PizzaAnonymous pizzaAnonymous;
+
+        [SetUp]
+        public void setup()
         {
-            PizzaAnonymous pizzaAnonymous = PizzaAnonymous.instance();
-            MemberManager memberManager = new MemberManager();
-            int beforeCount = memberManager.MemberList.Count;
+            memberManager = new MemberManager();    
+            providerManager = new ProviderManager();    
+            serviceManager = new ServiceManager();
+            pizzaAnonymous = new PizzaAnonymous(memberManager, providerManager, serviceManager);
 
-            StringReader reader = new StringReader("Name"   + Environment.NewLine +
-                                                   "Street" + Environment.NewLine +
-                                                   "City"   + Environment.NewLine +
-                                                   "AB"     + Environment.NewLine +
-                                                   "12345"  + Environment.NewLine);
-            Console.SetIn(reader);
+            String memberString = "Member One" + Environment.NewLine +
+                                  "M1 Street"  + Environment.NewLine +
+                                  "M1 City"    + Environment.NewLine +
+                                  "M1"         + Environment.NewLine +
+                                  "11111"      + Environment.NewLine;
 
+            String providerString = "Provider One" + Environment.NewLine +
+                                    "P1 Street"    + Environment.NewLine +
+                                    "P1 City"      + Environment.NewLine +
+                                    "P1"           + Environment.NewLine +
+                                    "11111"        + Environment.NewLine;
+
+            String serviceString = "Service One" + Environment.NewLine +
+                                   "9.99"        + Environment.NewLine +
+                                   "Description Goes Here" + Environment.NewLine;
+
+            StringReader mReader = new StringReader(memberString);
+            Console.SetIn(mReader);
             pizzaAnonymous.addMember();
-            int afterCount = memberManager.MemberList.Count;
-            Console.WriteLine(beforeCount + ", " + afterCount);
-            Assert.AreEqual(afterCount, beforeCount + 1);
 
+            StringReader pReader = new StringReader(providerString);
+            Console.SetIn(pReader);
+            pizzaAnonymous.addProvider();
+
+            StringReader sReader = new StringReader(serviceString);
+            Console.SetIn(sReader);
+            pizzaAnonymous.addService();
+
+            Console.SetIn(Console.In);
+        }
+
+        [Test]
+        public void testEditMember()
+        {
+            pizzaAnonymous.printMembers();
+            pizzaAnonymous.printProviders();
+            pizzaAnonymous.printServices();
+            /*
+            StringReader reader2 = new StringReader(memberManager.MemberList.ElementAt(0).Id + Environment.NewLine +
+                                                    "name" + Environment.NewLine +
+                                                    "NewName" + Environment.NewLine);
+            Console.SetIn(reader2);
+            pizzaAnonymous.editMember();
+            Assert.AreEqual(memberManager.MemberList.ElementAt(0).Name, "NewName"); */
         }
     }
 }

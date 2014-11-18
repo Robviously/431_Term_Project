@@ -31,7 +31,7 @@ public class PizzaAnonymous
     private PizzaAnonymous()
     {
         memberManager = new MemberManager();
-        providerManager = ProviderManager.instance();
+        providerManager = new ProviderManager();
         serviceManager = new ServiceManager();
         report = Report.getInstance;
     }
@@ -50,6 +50,20 @@ public class PizzaAnonymous
         {
             return pizzaAnonymous;
         }
+    }
+
+    /// <summary>
+    /// This constructor is used for Testing Purposes Only
+    /// </summary>
+    /// <param name="mm">Member Manager Object</param>
+    /// <param name="pm">Provider Manager Object</param>
+    /// <param name="sm">Service Manager Object</param>
+    public PizzaAnonymous(MemberManager mm = null, ProviderManager pm = null, ServiceManager sm = null)
+    {
+        memberManager = mm;
+        providerManager = pm;
+        serviceManager = sm;
+        report = Report.getInstance;
     }
 
     /// <summary>
