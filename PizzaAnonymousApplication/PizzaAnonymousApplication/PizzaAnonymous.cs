@@ -53,6 +53,20 @@ public class PizzaAnonymous
     }
 
     /// <summary>
+    /// This constructor is used for Testing Purposes Only
+    /// </summary>
+    /// <param name="mm">Member Manager Object</param>
+    /// <param name="pm">Provider Manager Object</param>
+    /// <param name="sm">Service Manager Object</param>
+    public PizzaAnonymous(MemberManager mm = null, ProviderManager pm = null, ServiceManager sm = null)
+    {
+        memberManager = mm;
+        providerManager = pm;
+        serviceManager = sm;
+        report = Report.getInstance;
+    }
+
+    /// <summary>
     /// Prompts the user for the parameters required to add a member to the system. Then
     /// calls the member manager method that will create the member.
     /// </summary>

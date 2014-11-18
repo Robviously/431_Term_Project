@@ -291,9 +291,9 @@ public class ServiceManager
     {
         string services = "";
 
-        foreach (Service m in serviceList)
+        foreach (Service s in serviceList)
         {
-            services += m.ToString();
+            services += s.ToString();
         }
 
         return services;

@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ServiceManagerTests.cs" />
+    <Compile Include="MemberManagerTest.cs" />
+    <Compile Include="PizzaAnonymousTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderManagerTests.cs" />
   </ItemGroup>

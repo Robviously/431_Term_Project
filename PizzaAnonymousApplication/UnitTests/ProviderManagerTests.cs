@@ -28,7 +28,7 @@ namespace UnitTests
         public void testGetProviderById()
         {
             Console.Out.WriteLine("*** Attempting getProviderById with valid Provider ID number ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             Console.Out.WriteLine(pm.getProviderById(100000000));
 
@@ -39,7 +39,7 @@ namespace UnitTests
         public void testInvalidGetProviderById()
         {
             Console.Out.WriteLine("*** Attempting getProviderById with invalid Provider ID number ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
 
             Assert.IsNull(pm.getProviderById(100000001));
@@ -49,7 +49,7 @@ namespace UnitTests
         public void testValidateProvder()
         {
             Console.Out.WriteLine("*** Test PM.validateProvider for existing Provider ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
 
             Assert.IsTrue(pm.validateProvider(100000000));
@@ -59,7 +59,7 @@ namespace UnitTests
         public void testInvalidValidateProvider()
         {
             Console.Out.WriteLine("*** Test PM.validateProvider for non-existing Provider ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
 
             Assert.IsFalse(pm.validateProvider(100000001));
@@ -69,7 +69,7 @@ namespace UnitTests
         public void testEditProviderName()
         {
             Console.Out.WriteLine("*** Test PM.editProviderName method ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
 
             string oldName = pm.getProviderById(100000000).Name;
@@ -85,7 +85,7 @@ namespace UnitTests
         public void testEditProviderAddress()
         {
             Console.Out.WriteLine("*** Test PM.editProviderAddress method ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
 
             string oldSA = pm.getProviderById(100000000).StreetAddress;
@@ -107,7 +107,7 @@ namespace UnitTests
         public void testDeleteProvider()
         {
             Console.Out.WriteLine("*** Test PM.deleteProvider, deleting ID 100000001 ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addProvider("Pizza = Terrible Clinic", "123 ABC St", "St. Cloud", "MN", 55555);
 
@@ -122,7 +122,7 @@ namespace UnitTests
         public void testInvalidDeleteProvider()
         {
             Console.Out.WriteLine("*** Test PM.deleteProvider, deleting invalid provider ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
 
             pm.deleteProvider(100000001);
@@ -134,7 +134,7 @@ namespace UnitTests
         public void testAddService()
         {
             Console.Out.WriteLine("*** Add Services through PM.addService and test PM.getAllServices ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             
             pm.addService(100000000, 123456);
@@ -157,7 +157,7 @@ namespace UnitTests
         public void testInvalidProviderGetAllServices()
         {
             Console.Out.WriteLine("*** Test PM.getAllServices with invalid provider ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
 
             Assert.IsNull(pm.getAllServices(100000001));
@@ -167,7 +167,7 @@ namespace UnitTests
         public void testInvalidServiceAddService()
         {
             Console.Out.WriteLine("*** Add duplicate service 123456 to Provider 100000000 ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addService(100000000, 123456);
             pm.addService(100000000, 123456);
@@ -179,7 +179,7 @@ namespace UnitTests
         public void testInvalidProviderAddService()
         {
             Console.Out.WriteLine("*** Add service 123456 to invalid provider ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addService(100000001, 123456);
 
@@ -190,7 +190,7 @@ namespace UnitTests
         public void testValidateService()
         {
             Console.Out.WriteLine("*** Test PM.validateService for existing Service in Provider 100000000 ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addService(100000000, 123456);
 
@@ -201,7 +201,7 @@ namespace UnitTests
         public void testInvalidServiceValidateService()
         {
             Console.Out.WriteLine("*** Test PM.validateService for non-existing Service in Provider 100000000 ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addService(100000000, 123456);
 
@@ -212,7 +212,7 @@ namespace UnitTests
         public void testInvalidProviderValidateService()
         {
             Console.Out.WriteLine("*** Test PM.validateService for non-existing Provider ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addService(100000000, 123456);
 
@@ -223,7 +223,7 @@ namespace UnitTests
         public void testDeleteService()
         {
             Console.Out.WriteLine("*** Delete Service 123456 ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addService(100000000, 123456);
             pm.addService(100000000, 234567);
@@ -251,7 +251,7 @@ namespace UnitTests
         public void testInvalidServiceDeleteService()
         {
             Console.Out.WriteLine("*** Delete invalid service ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addService(100000000, 123456);
             pm.deleteService(100000000, 654321);
@@ -263,7 +263,7 @@ namespace UnitTests
         public void testInvalidProviderDeleteService()
         {
             Console.Out.WriteLine("*** Delete service 123456 from invalid provider ***");
-            ProviderManager pm = new ProviderManager();
+           ProviderManager pm = new ProviderManager();
             pm.addProvider("This Is Why You're Fat Clinic", "15452 Zodiac St NE", "Forest Lake", "MN", 55025);
             pm.addService(100000000, 123456);
 
