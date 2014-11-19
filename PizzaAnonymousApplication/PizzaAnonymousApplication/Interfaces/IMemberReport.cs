@@ -9,6 +9,6 @@ namespace Reports.Interfaces
     interface IMemberReport
     {
         void getWeeklyMembersReport();
-        void getMemberReport(int member);
+        string getMemberReport(int member);
     }
 }

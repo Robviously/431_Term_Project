@@ -1,4 +1,11 @@
 ﻿
+using System;
+using System.CodeDom;
+using System.Collections.Generic;
+using System.Linq;
+using Reports.Interfaces;
+using System.Xml.Linq;
+using System.IO;
 ﻿/*
  * Reports program is responsible to generate all kind of reports. It is a singleton
  * class, meaning it only needs to be created once through out the program.
@@ -14,14 +21,6 @@
   * Modified date: 11/17/2014
   * Modified by: Rukhshod Abdullaev
  */
-using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
-using Reports.Interfaces;
-using System.Xml.Linq;
-using System.IO;
-
 public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTReport
 {
     private static Report _report = null;             //to implement singleton pattern
@@ -34,7 +33,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     private readonly string MEMBER_ON_DEMAND = "Member Report";
     private readonly string PROVIDER_ON_DEMAND = "Provider Report";
 
-    XElement serviceXML = null;
+    XDocument serviceXML = null;
 
     /// <summary>
     /// Loads the database file from user's desktop into serviceDB variable once the program is initiated. The path is where 
@@ -44,7 +43,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     {
         try
         {
-            serviceXML = XElement.Load(projectDir + "/XML/CapturedServices.xml");
+            serviceXML = XDocument.Load(projectDir + "/XML/CapturedServices.xml");
         }
         catch (FileNotFoundException e)
         {
@@ -139,45 +138,47 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// Member object of whom report should be generated, will be passed by Pizza Anonymous
     /// </summary>
     /// <param name="member"></param>
-    public void getMemberReport(int member)
+    public string getMemberReport(int member)
     {
+        string filePath = null;
         if (!serviceXML.Descendants("service").Any())
-            Console.WriteLine("Captured Services database is empty");
-            //ServicesXML.xml is not empty
-        else
         {
-            try
+            Console.WriteLine("Captured Services database is empty");
+            return filePath;
+        }
+        //ServicesXML.xml is not empty
+        try
+        {
+            //query to get list of services for particular member ID
+            var serviceQuery = serviceXML.Descendants("service")
+                .Where(x => x.Element("memberID").Value == member.ToString());
+
+            //export query result into list
+            List<XElement> serviceList = serviceQuery.ToList();
+
+            //generate a report if a member received any service in the past week
+            if (serviceList.Count > 0)
             {
-                //query to get list of services for particular member ID
-                var serviceQuery = serviceXML.Descendants("service")
-                    .Where(x => x.Element("memberID").Value == member.ToString());
+                string id = serviceList[0].Element("memberID").Value;
+                string name = serviceList[0].Element("memberName").Value;
+                string strtAddr = serviceList[0].Element("mStrtAddr").Value;
+                string city = serviceList[0].Element("mCity").Value;
+                string state = serviceList[0].Element("mState").Value;
+                string zip = serviceList[0].Element("mZip").Value;
 
-                //export query result into list
-                List<XElement> serviceList = serviceQuery.ToList();
-
-                //generate a report if a member received any service in the past week
-                if (serviceList.Count > 0)
-                {
-                    string id = serviceList[0].Element("memberID").Value;
-                    string name = serviceList[0].Element("memberName").Value;
-                    string strtAddr = serviceList[0].Element("mStrtAddr").Value;
-                    string city = serviceList[0].Element("mCity").Value;
-                    string state = serviceList[0].Element("mState").Value;
-                    string zip = serviceList[0].Element("mZip").Value;
-
-                    //make a report .txt file
-                    MakeFile(id, name, strtAddr, city, state, zip, serviceList, MEMBER_ON_DEMAND);
-                }
-                else
-                {
-                    Console.WriteLine(string.Format("Member with ID - {0} has not received any service yet", member));
-                }
+                //make a report .txt file
+                filePath = MakeFile(id, name, strtAddr, city, state, zip, serviceList, MEMBER_ON_DEMAND);
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(string.Format("Member with ID - {0} has not received any service yet", member));
             }
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        return filePath;
     }
 
     /// <summary>
@@ -193,15 +194,15 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
 
         if (!serviceXML.Descendants("service").Any())
             Console.WriteLine("Captured Services database is empty");
-            //ServicesXML.xml is not empty
+        //ServicesXML.xml is not empty
         else
         {
             try
             {
                 //query to get list of providers who has given a service in the last 7 days
                 var provQuery = serviceXML.Descendants("service")
-                    .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
-                                ((DateTime) x.Element("serviceDate")) <= enddate);
+                    .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
+                                ((DateTime)x.Element("serviceDate")) <= enddate);
 
                 //export results into list, get only unique provider ids
                 List<string> providerList = provQuery.Select(i => i.Element("providerID").Value).Distinct().ToList();
@@ -213,8 +214,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                     {
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
-                            .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime) x.Element("serviceDate")) <= enddate)
+                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
+                                        ((DateTime)x.Element("serviceDate")) <= enddate)
                             .Where(x => x.Element("providerID").Value == provider);
 
 
@@ -255,7 +256,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     {
         if (!serviceXML.Descendants("service").Any())
             Console.WriteLine("Captured Services database is empty");
-            //ServicesXML.xml is not empty
+        //ServicesXML.xml is not empty
         else
         {
             try
@@ -306,17 +307,17 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         int provCount = 0;
         int totalConsultCount = 0;
         //this is where report text file is created
-        string path = projectDir + "\\Reports"+"\\Provider Report Summary.txt";
+        string path = projectDir + "\\Reports" + "\\Provider Report Summary.txt";
 
         if (!serviceXML.Descendants("service").Any())
             Console.WriteLine("Captured Services database is empty");
-            //ServicesXML.xml is not empty
+        //ServicesXML.xml is not empty
         else
         {
             //query to get list of providers who has given a service in the last 7 days
             var provQuery = serviceXML.Descendants("service")
-                .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
-                            ((DateTime) x.Element("serviceDate")) <= enddate);
+                .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
+                            ((DateTime)x.Element("serviceDate")) <= enddate);
 
             //export results into list, get only unique provider ids
             List<string> providerList = provQuery.Select(i => i.Element("providerID").Value).Distinct().ToList();
@@ -340,8 +341,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
 
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
-                            .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime) x.Element("serviceDate")) <= enddate)
+                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
+                                        ((DateTime)x.Element("serviceDate")) <= enddate)
                             .Where(x => x.Element("providerID").Value == provider);
 
                         //export results into list
@@ -403,17 +404,17 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
         DateTime enddate = DateTime.Today;
         //this is where a report will be saved
-        string path = projectDir + "\\Reports" +"\\EFT Report.txt";
+        string path = projectDir + "\\Reports" + "\\EFT Report.txt";
 
         if (!serviceXML.Descendants("service").Any())
             Console.WriteLine("Captured Services database is empty");
-            //ServicesXML.xml is not empty
+        //ServicesXML.xml is not empty
         else
         {
             //query to get list of providers who has given a service in the last 7 days
             var provQuery = serviceXML.Descendants("service")
-                .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
-                            ((DateTime) x.Element("serviceDate")) <= enddate);
+                .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
+                            ((DateTime)x.Element("serviceDate")) <= enddate);
 
             //export results into list, get only unique provider ids
             List<string> providerList = provQuery.Select(i => i.Element("providerID").Value).Distinct().ToList();
@@ -437,8 +438,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                         int fee = 0;
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
-                            .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime) x.Element("serviceDate")) <= enddate)
+                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
+                                        ((DateTime)x.Element("serviceDate")) <= enddate)
                             .Where(x => x.Element("providerID").Value == provider);
 
                         //export query result into list
@@ -485,12 +486,12 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// <param name="entity"></param>
     /// <param name="serviceList"></param>
     /// <param name="entityType"></param>
-    private void MakeFile(String entityID, String entityName, String entityStrtAddr,
+    private string MakeFile(String entityID, String entityName, String entityStrtAddr,
                             String entityCity, String entityState, String entityZip,
                             List<XElement> serviceList, string report_type)
     {
         string path = projectDir + "\\Reports\\";
-        path += "\\" + report_type + " - " + entityID + ".txt";
+        path += report_type + " - " + entityID + ".txt";
 
         StreamWriter writer = new StreamWriter(path);
         try
@@ -561,6 +562,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         {
             writer.Close();
         }
+        return path;
     }
 
 }
