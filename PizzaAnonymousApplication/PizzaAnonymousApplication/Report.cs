@@ -74,23 +74,25 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// Function gets LIST of member objects from pizza anonymous UI and CHECKS if any of the members received a service
     /// </summary>
     /// <param name="memberList"></param>
-    public void getWeeklyMembersReport()
+    public List<string> getWeeklyMembersReport()
     {
+        List<string> createdPaths = new List<string>();
         //starting and ending date to work withs
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
         DateTime enddate = DateTime.Today;
 
         if (!serviceXML.Descendants("service").Any())
-            Console.WriteLine("Captured Services database is empty");
-        //ServicesXML.xml is not empty
-        else
         {
+            Console.WriteLine("Captured Services database is empty");
+            return createdPaths;
+        }
+            //ServicesXML.xml is not empty
             try
             {
                 //query to get list of members who has received a service in the last 7 days
                 var memberQuery = serviceXML.Descendants("service")
-                    .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                                ((DateTime)x.Element("serviceDate")) <= enddate);
+                    .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
+                                ((DateTime) x.Element("serviceDate")) <= enddate);
 
                 //extract unique member ids and export to list
                 List<string> memberList = memberQuery.Select(i => i.Element("memberID").Value).Distinct().ToList();
@@ -102,8 +104,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                     {
                         //query to get list of services in the last 7 days for particular member ID
                         var serviceQuery = serviceXML.Descendants("service")
-                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime)x.Element("serviceDate")) <= enddate)
+                            .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
+                                        ((DateTime) x.Element("serviceDate")) <= enddate)
                             .Where(x => x.Element("memberID").Value == member);
 
                         //export results of query to list
@@ -117,8 +119,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                         string state = serviceList[0].Element("mState").Value;
                         string zip = serviceList[0].Element("mZip").Value;
                         //make a report .txt file
-                        MakeFile(id, name, strtAddr, city, state, zip, serviceList, MEMBER_WEEKLY);
-
+                        string path = MakeFile(id, name, strtAddr, city, state, zip, serviceList, MEMBER_WEEKLY);
+                        createdPaths.Add(path);
                     }
                 }
                 else
@@ -130,7 +132,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
             {
                 Console.WriteLine(e.Message);
             }
-        }
+        return createdPaths;
     }
 
     /// <summary>
@@ -171,7 +173,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
             }
             else
             {
-                Console.WriteLine(string.Format("Member with ID - {0} has not received any service yet", member));
+                Console.WriteLine(string.Format("Member [{0}] has not received any service yet", member));
             }
         }
         catch (Exception e)
@@ -186,23 +188,26 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// Function gets list of provider objects from pizza anonymous UI and CHECKS if any of the providers has given a service
     /// </summary>
     /// <param name="providerList"></param>
-    public void getWeeklyProvidersReport()
+    public List<string> getWeeklyProvidersReport()
     {
+        List<string> createdPaths = new List<string>();
         //date range for the past 7 days
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
         DateTime enddate = DateTime.Today;
 
         if (!serviceXML.Descendants("service").Any())
+        {
             Console.WriteLine("Captured Services database is empty");
-        //ServicesXML.xml is not empty
+        }
+         //ServicesXML.xml is not empty
         else
         {
             try
             {
                 //query to get list of providers who has given a service in the last 7 days
                 var provQuery = serviceXML.Descendants("service")
-                    .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                                ((DateTime)x.Element("serviceDate")) <= enddate);
+                    .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
+                                ((DateTime) x.Element("serviceDate")) <= enddate);
 
                 //export results into list, get only unique provider ids
                 List<string> providerList = provQuery.Select(i => i.Element("providerID").Value).Distinct().ToList();
@@ -214,8 +219,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                     {
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
-                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime)x.Element("serviceDate")) <= enddate)
+                            .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
+                                        ((DateTime) x.Element("serviceDate")) <= enddate)
                             .Where(x => x.Element("providerID").Value == provider);
 
 
@@ -223,8 +228,6 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                         List<XElement> serviceList = serviceQuery.ToList();
 
                         //generate a report if a provider received any service in the past week
-                        if (serviceList.Count > 0)
-                        {
                             string id = serviceList[0].Element("providerID").Value;
                             string name = serviceList[0].Element("providerName").Value;
                             string strtAddr = serviceList[0].Element("pStrtAddr").Value;
@@ -233,8 +236,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                             string zip = serviceList[0].Element("pZip").Value;
 
                             //make a report .txt file
-                            MakeFile(id, name, strtAddr, city, state, zip, serviceList, PROVIDER_WEEKLY);
-                        }
+                            string path = MakeFile(id, name, strtAddr, city, state, zip, serviceList, PROVIDER_WEEKLY);
+                            createdPaths.Add(path);
                     }
                 }
                 else
@@ -245,6 +248,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                 Console.WriteLine(e.Message);
             }
         }
+        return createdPaths;
     }
 
     /// <summary>
@@ -252,43 +256,47 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// Provider object of whom report should be generated, will be passed by Pizza Anonymous
     /// </summary>
     /// <param name="provider"></param>
-    public void getProviderReport(int provider)
+    public string getProviderReport(int provider)
     {
+        string filePath = null;
         if (!serviceXML.Descendants("service").Any())
-            Console.WriteLine("Captured Services database is empty");
-        //ServicesXML.xml is not empty
-        else
         {
-            try
+            Console.WriteLine("Captured Services database is empty");
+            return filePath;
+        }
+        //ServicesXML.xml is not empty
+        try
+        {
+            //query to get list of services for particular member ID
+            var serviceQuery = serviceXML.Descendants("service")
+                .Where(x => x.Element("providerID").Value == provider.ToString());
+
+            //export query result into list
+            List<XElement> serviceList = serviceQuery.ToList();
+
+            //generate a report if a member received any service in the past week
+            if (serviceList.Count > 0)
             {
-                //qeuery to get list of all services for particular provider
-                var serviceQuery = serviceXML.Descendants("service")
-                    .Where(x => x.Element("providerID").Value == provider.ToString());
+                string id = serviceList[0].Element("providerID").Value;
+                string name = serviceList[0].Element("providerName").Value;
+                string strtAddr = serviceList[0].Element("pStrtAddr").Value;
+                string city = serviceList[0].Element("pCity").Value;
+                string state = serviceList[0].Element("pState").Value;
+                string zip = serviceList[0].Element("pZip").Value;
 
-                //export result into list
-                List<XElement> serviceList = serviceQuery.ToList();
-
-                //generate a report if a member received any service in the past week
-                if (serviceList.Count > 0)
-                {
-                    string id = serviceList[0].Element("providerID").Value;
-                    string name = serviceList[0].Element("providerName").Value;
-                    string strtAddr = serviceList[0].Element("pStrtAddr").Value;
-                    string city = serviceList[0].Element("pCity").Value;
-                    string state = serviceList[0].Element("pState").Value;
-                    string zip = serviceList[0].Element("pZip").Value;
-
-                    //make a report text file
-                    MakeFile(id, name, strtAddr, city, state, zip, serviceList, PROVIDER_ON_DEMAND);
-                }
-                else
-                    Console.WriteLine(string.Format("Provider with ID - {0} has not provided any service yet", provider));
+                //make a report .txt file
+                filePath = MakeFile(id, name, strtAddr, city, state, zip, serviceList, PROVIDER_ON_DEMAND);
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(string.Format("Provider [{0}] has not received any service yet", provider));
             }
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        return filePath;
     }
 
     /// <summary>
@@ -297,7 +305,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// The path for stream writer is where the summary will be saved to
     /// </summary>
     /// <param name="providerList"></param>
-    public void getProviderSummary()
+    public string getProviderSummary()
     {
         //date range
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
@@ -307,24 +315,26 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         int provCount = 0;
         int totalConsultCount = 0;
         //this is where report text file is created
-        string path = projectDir + "\\Reports" + "\\Provider Report Summary.txt";
+        string filePath = "";
 
         if (!serviceXML.Descendants("service").Any())
+        {
             Console.WriteLine("Captured Services database is empty");
-        //ServicesXML.xml is not empty
+        }
+            //ServicesXML.xml is not empty
         else
         {
             //query to get list of providers who has given a service in the last 7 days
             var provQuery = serviceXML.Descendants("service")
-                .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                            ((DateTime)x.Element("serviceDate")) <= enddate);
+                .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
+                            ((DateTime) x.Element("serviceDate")) <= enddate);
 
             //export results into list, get only unique provider ids
             List<string> providerList = provQuery.Select(i => i.Element("providerID").Value).Distinct().ToList();
-            StreamWriter writer = new StreamWriter(path);
-
             if (providerList.Count > 0)
             {
+                filePath = projectDir + "\\Reports" + "\\Provider Report Summary.txt";
+                StreamWriter writer = new StreamWriter(filePath);
                 try
                 {
                     writer.WriteLine("********** Provider Weekly Summary Report ****".PadRight(60, '*'));
@@ -341,31 +351,28 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
 
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
-                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime)x.Element("serviceDate")) <= enddate)
+                            .Where(x => ((DateTime) x.Element("serviceDate")) >= startdate &&
+                                        ((DateTime) x.Element("serviceDate")) <= enddate)
                             .Where(x => x.Element("providerID").Value == provider);
 
                         //export results into list
                         List<XElement> serviceList = serviceQuery.ToList();
-
-                        //if service list for provider is not empty make a report
-                        if (serviceList.Count > 0)
+                        //loop through each service to calculat
+                        foreach (var service in serviceList)
                         {
-                            //loop through each service to calculat
-                            foreach (var service in serviceList)
-                            {
-                                fee += Convert.ToInt32(service.Element("serviceFee").Value);
-                                totalFee += Convert.ToInt32(service.Element("serviceFee").Value);
-                                totalConsultCount++;
-                            }
-                            //since each node in xml contains all information, we can extract provider name from it
-                            writer.Write(serviceList[0].Element("providerName").Value.PadRight(20));
-                            writer.Write(serviceList.Count.ToString().PadRight(30));
-                            writer.Write(("$" + fee).PadRight(15));
-                            writer.WriteLine();
-                            provCount++;
+                            fee += Convert.ToInt32(service.Element("serviceFee").Value);
+                            totalFee += Convert.ToInt32(service.Element("serviceFee").Value);
+                            totalConsultCount++;
                         }
+                        //since each node in xml contains all information, we can extract provider name from it
+                        writer.Write(serviceList[0].Element("providerName").Value.PadRight(20));
+                        writer.Write(serviceList.Count.ToString().PadRight(30));
+                        writer.Write(("$" + fee).PadRight(15));
+                        writer.WriteLine();
+                        provCount++;
+
                     }
+                    
                     writer.WriteLine();
                     writer.Write("Total number of providers: ".PadRight(35));
                     writer.WriteLine(provCount);
@@ -374,7 +381,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                     writer.Write("Total fee to be paid: ".PadRight(35));
                     writer.WriteLine("$" + totalFee);
 
-                    Console.WriteLine("Provider summary report was created successfully, and it was saved to: {0}", path);
+                    Console.WriteLine("Provider summary report was created successfully, and it was saved to: {0}", filePath);
                 }
                 catch (Exception e)
                 {
@@ -387,9 +394,10 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
             }
             else
             {
-                Console.WriteLine("There are services provided in the last 7 days");
+                Console.WriteLine("There are no services provided in the last 7 days");
             }
         }
+        return filePath;
     }
 
     /// <summary>
@@ -398,13 +406,13 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// If report creation is successfull, a path for created report file will be printed
     /// </summary>
     /// <param name="providerList"></param>
-    public void createEFT()
+    public string createEFT()
     {
         //date range
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
         DateTime enddate = DateTime.Today;
         //this is where a report will be saved
-        string path = projectDir + "\\Reports" + "\\EFT Report.txt";
+        string filePath = "";
 
         if (!serviceXML.Descendants("service").Any())
             Console.WriteLine("Captured Services database is empty");
@@ -421,7 +429,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
 
             if (providerList.Count > 0)
             {
-                StreamWriter writer = new StreamWriter(path);
+                filePath = projectDir + "\\Reports" + "\\EFT Report.txt";
+                StreamWriter writer = new StreamWriter(filePath);
                 try
                 {
                     writer.WriteLine("********** Provider EFT Report **********".PadRight(90, '*'));
@@ -445,23 +454,20 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                         //export query result into list
                         List<XElement> serviceList = serviceQuery.ToList();
 
-                        //if service list is not empty for particular provider, go through services and calculate fee for provider
-                        if (serviceList.Count > 0)
+                        foreach (var service in serviceList)
                         {
-                            foreach (var service in serviceList)
-                            {
-                                fee += Convert.ToInt32(service.Element("serviceFee").Value);
-                            }
-                            //since each node in xml contains all information, we can extract provider id and name from it
-                            writer.Write(serviceList[0].Element("providerID").Value.PadRight(20));
-                            writer.Write(serviceList[0].Element("providerName").Value.PadRight(20));
-                            writer.Write("#bank account number".PadRight(30));
-                            writer.Write(("$" + fee).PadRight(15));
-                            writer.WriteLine();
+                            fee += Convert.ToInt32(service.Element("serviceFee").Value);
                         }
+                        //since each node in xml contains all information, we can extract provider id and name from it
+                        writer.Write(serviceList[0].Element("providerID").Value.PadRight(20));
+                        writer.Write(serviceList[0].Element("providerName").Value.PadRight(20));
+                        writer.Write("#bank account number".PadRight(30));
+                        writer.Write(("$" + fee).PadRight(15));
+                        writer.WriteLine();
                     }
+                    
                     writer.WriteLine();
-                    Console.WriteLine("EFT Report was created successfully and it was saved to {0}", path);
+                    Console.WriteLine("EFT Report was created successfully and it was saved to {0}", filePath);
                 }
                 catch (Exception e)
                 {
@@ -475,6 +481,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
             else
                 Console.WriteLine("There are no services provided in the last 7 days");
         }
+
+        return filePath;
     }
 
     /// <summary>

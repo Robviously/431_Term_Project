@@ -8,7 +8,7 @@ namespace Reports.Interfaces
 {
     interface IProviderReport
     {
-        void getWeeklyProvidersReport();
-        void getProviderReport(int provider);
+        List<string> getWeeklyProvidersReport();
+        string getProviderReport(int provider);
     }
 }

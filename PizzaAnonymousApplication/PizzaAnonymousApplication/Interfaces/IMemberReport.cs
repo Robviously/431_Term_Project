@@ -8,7 +8,7 @@ namespace Reports.Interfaces
 {
     interface IMemberReport
     {
-        void getWeeklyMembersReport();
+        List<string> getWeeklyMembersReport();
         string getMemberReport(int member);
     }
 }

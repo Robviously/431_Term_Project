@@ -8,6 +8,6 @@ namespace Reports.Interfaces
 {
     interface I_EFTReport
     {
-        void createEFT();
+        string createEFT();
     }
 }
