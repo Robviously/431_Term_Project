@@ -17,7 +17,7 @@ namespace UnitTests
         ServiceManager serviceManager;
         PizzaAnonymous pizzaAnonymous;
 
-        [SetUp]
+        [SetUp] // This runs before each test, creating an instance of each manager class and creating an entity in each
         public void setup()
         {
             memberManager = new MemberManager();    
@@ -59,7 +59,7 @@ namespace UnitTests
             Console.SetIn(Console.In);
         }
 
-        [Test]
+        [Test] // Positive test of editing a member's name
         public void editMemberName()
         {
             Member onlyMember = memberManager.MemberList.ElementAt(0);
@@ -73,7 +73,7 @@ namespace UnitTests
             Assert.AreEqual("New Name", onlyMember.Name);
         }
 
-        [Test]
+        [Test] // Positive test of editing a member's address
         public void editMemberAddress()
         {
             Member onlyMember = memberManager.MemberList.ElementAt(0);
@@ -93,7 +93,7 @@ namespace UnitTests
             Assert.AreEqual("99999", onlyMember.ZipCode.ToString());
         }
 
-        [Test]
+        [Test] // Negative test of edit member that provides an invalid member ID
         public void editMemberInvalidId()
         {
             StringReader reader = new StringReader("999999999"  + Environment.NewLine +
@@ -106,8 +106,27 @@ namespace UnitTests
             pizzaAnonymous.editMember();
         }
 
-        [Test]
+        [Test] // Negative test of edit member that provides an invalid field to edit
         public void editMemberInvalidField()
+        {
+            Member onlyMember = memberManager.MemberList.ElementAt(0);
+
+            StringReader reader = new StringReader(onlyMember.Id + Environment.NewLine +
+                                                   "ID"          + Environment.NewLine);
+
+            Console.SetIn(reader);
+            pizzaAnonymous.editMember();
+
+            Assert.AreEqual("Member One", onlyMember.Name);
+            Assert.AreEqual("100000000", onlyMember.Id.ToString());
+            Assert.AreEqual("M1 Street", onlyMember.StreetAddress);
+            Assert.AreEqual("M1 City", onlyMember.City);
+            Assert.AreEqual("M1", onlyMember.State);
+            Assert.AreEqual("11111", onlyMember.ZipCode.ToString());
+        }
+
+        [Test]
+        public void deleteMemberValidID()
         {
             Member onlyMember = memberManager.MemberList.ElementAt(0);
 
