@@ -41,14 +41,17 @@ namespace UnitTests
                                    "9.99"        + Environment.NewLine +
                                    "Description Goes Here" + Environment.NewLine;
 
+            // Create a member in the system
             StringReader mReader = new StringReader(memberString);
             Console.SetIn(mReader);
             pizzaAnonymous.addMember();
 
+            // Create a provider in the system
             StringReader pReader = new StringReader(providerString);
             Console.SetIn(pReader);
             pizzaAnonymous.addProvider();
 
+            // Create a service in the system
             StringReader sReader = new StringReader(serviceString);
             Console.SetIn(sReader);
             pizzaAnonymous.addService();
@@ -57,18 +60,69 @@ namespace UnitTests
         }
 
         [Test]
-        public void testEditMember()
+        public void editMemberName()
         {
-            pizzaAnonymous.printMembers();
-            pizzaAnonymous.printProviders();
-            pizzaAnonymous.printServices();
-            /*
-            StringReader reader2 = new StringReader(memberManager.MemberList.ElementAt(0).Id + Environment.NewLine +
-                                                    "name" + Environment.NewLine +
-                                                    "NewName" + Environment.NewLine);
-            Console.SetIn(reader2);
+            Member onlyMember = memberManager.MemberList.ElementAt(0);
+
+            StringReader reader = new StringReader(onlyMember.Id + Environment.NewLine +
+                                                   "name"        + Environment.NewLine +
+                                                   "New Name"    + Environment.NewLine);
+            Console.SetIn(reader);
             pizzaAnonymous.editMember();
-            Assert.AreEqual(memberManager.MemberList.ElementAt(0).Name, "NewName"); */
+
+            Assert.AreEqual("New Name", onlyMember.Name);
+        }
+
+        [Test]
+        public void editMemberAddress()
+        {
+            Member onlyMember = memberManager.MemberList.ElementAt(0);
+
+            StringReader reader = new StringReader(onlyMember.Id + Environment.NewLine +
+                                                   "address"     + Environment.NewLine +
+                                                   "New Street"  + Environment.NewLine +
+                                                   "New City"    + Environment.NewLine +
+                                                   "ZZ"          + Environment.NewLine +
+                                                   "99999"       + Environment.NewLine);
+            Console.SetIn(reader);
+            pizzaAnonymous.editMember();
+
+            Assert.AreEqual("New Street", onlyMember.StreetAddress);
+            Assert.AreEqual("New City", onlyMember.City);
+            Assert.AreEqual("ZZ", onlyMember.State);
+            Assert.AreEqual("99999", onlyMember.ZipCode.ToString());
+        }
+
+        [Test]
+        public void editMemberInvalidId()
+        {
+            StringReader reader = new StringReader("999999999"  + Environment.NewLine +
+                                                   "address"    + Environment.NewLine +
+                                                   "New Street" + Environment.NewLine +
+                                                   "New City"   + Environment.NewLine +
+                                                   "ZZ"         + Environment.NewLine +
+                                                   "99999"      + Environment.NewLine);
+            Console.SetIn(reader);
+            pizzaAnonymous.editMember();
+        }
+
+        [Test]
+        public void editMemberInvalidField()
+        {
+            Member onlyMember = memberManager.MemberList.ElementAt(0);
+
+            StringReader reader = new StringReader(onlyMember.Id + Environment.NewLine +
+                                                   "ID"          + Environment.NewLine);
+
+            Console.SetIn(reader);
+            pizzaAnonymous.editMember();
+
+            Assert.AreEqual("Member One", onlyMember.Name);
+            Assert.AreEqual("100000000", onlyMember.Id.ToString());
+            Assert.AreEqual("M1 Street", onlyMember.StreetAddress);
+            Assert.AreEqual("M1 City", onlyMember.City);
+            Assert.AreEqual("M1", onlyMember.State);
+            Assert.AreEqual("11111", onlyMember.ZipCode.ToString());
         }
     }
 }
