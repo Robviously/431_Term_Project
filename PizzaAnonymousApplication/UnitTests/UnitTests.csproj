@@ -49,6 +49,7 @@
     <Compile Include="ProviderManagerTests.cs" />
     <Compile Include="ReportTest.cs" />
     <Compile Include="ServiceManagerTests.cs" />
+    <Compile Include="UserInterfaceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PizzaAnonymousApplication\PizzaAnonymousApplication.csproj">

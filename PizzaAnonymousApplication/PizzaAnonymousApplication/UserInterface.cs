@@ -326,7 +326,7 @@ public class UserInterface
     public static String getDate(String prompt)
     {
         // Regular expression. Matches as string in the form MM-DD-YYYY where M,D, and Y are digits
-        Regex regex = new Regex(@"\d{2}-\d{2}-\d{4}");
+        Regex regex = new Regex(@"^\d{2}-\d{2}-\d{4}$");
 
         Console.Write(prompt);
         String input = Console.In.ReadLine();

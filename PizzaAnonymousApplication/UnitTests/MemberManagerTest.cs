@@ -133,12 +133,7 @@ namespace UnitTests
             mm.deleteMember(100000001);
 
             Assert.AreEqual(mm.MemberList.Count, 1);
-        }
-
-        
-
-        
-
+        } 
     }
 }
 
