@@ -181,10 +181,6 @@ public class UserInterface
                 case 21:    pizzaAnonymous.save();
                             break;        
                 case 22:   	done = true;
-                            if (yesOrNo("Do you want to save? "))
-                            {
-                                pizzaAnonymous.save();
-                            }
      		   				break;
                 default:   	Console.WriteLine("Not a valid choice! Please try again.\n");
                            	break;     
