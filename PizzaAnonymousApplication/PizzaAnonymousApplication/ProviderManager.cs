@@ -298,7 +298,6 @@ public class ProviderManager
                 writer.WriteElementString("City", provider.City);
                 writer.WriteElementString("State", provider.State);
                 writer.WriteElementString("ZIPCode", provider.ZipCode.ToString());
-                writer.WriteEndElement();
 
                 writer.WriteStartElement("ServicesProvided");
 

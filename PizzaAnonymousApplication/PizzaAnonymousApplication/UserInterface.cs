@@ -197,13 +197,15 @@ public class UserInterface
         bool done = false;
         int choice;
 
-        int providerId = getInteger("Enter Provider ID: ");
+        int providerId = getInteger("Login. Enter Provider ID: ");
 
         if (!pizzaAnonymous.validateProviderId(providerId))
         {
             Console.WriteLine("Provider ID [" + providerId + "] is not valid.");
             return;
         }
+
+        Console.WriteLine("Login Success.");
 
         while (!done)
         {
