@@ -376,6 +376,9 @@ public class ProviderManager
                         case "ZIPCode":
                             zipCode = reader.ReadElementContentAsInt();
                             break;
+                        case "ServiceID":
+                            services.Add(reader.ReadElementContentAsInt());
+                            break;
                     }
                 }
                 else

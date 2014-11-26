@@ -445,6 +445,8 @@ public class PizzaAnonymous
 
                     xmlRoot.Add(capturedService);
                     doc.Save(file);
+
+                    Console.WriteLine("Successfully captured service.");
                 }
                 // If the user selects no when prompted if the service is correct
                 else
