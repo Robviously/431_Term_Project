@@ -301,6 +301,8 @@ public class PizzaAnonymous
             if (serviceManager.validateService(serviceId))
             {
                 providerManager.addService(providerId, serviceId);
+
+                Console.WriteLine("Successfully added service to provider.");
             }
             else
             {
@@ -333,6 +335,8 @@ public class PizzaAnonymous
             if (serviceManager.validateService(serviceId))
             {
                 providerManager.deleteService(providerId, serviceId);
+
+                Console.WriteLine("Successfully deleted service from provider.");
             }
             else
             {
