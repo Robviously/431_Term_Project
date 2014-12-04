@@ -197,7 +197,7 @@ public class UserInterface
         bool done = false;
         int choice;
 
-        int providerId = getInteger("Login. Enter Provider ID: ");
+        int providerId = getInteger("Login. Enter Provider ID: ", 9, 9);
 
         if (!pizzaAnonymous.validateProviderId(providerId))
         {

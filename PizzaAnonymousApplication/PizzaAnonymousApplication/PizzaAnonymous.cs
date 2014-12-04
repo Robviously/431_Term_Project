@@ -671,6 +671,8 @@ public class PizzaAnonymous
         memberManager.save();
         providerManager.save();
         serviceManager.save();
+
+        Console.WriteLine("Saved member, provider, and service information to disk.");
     }
 
     /// <summary>
