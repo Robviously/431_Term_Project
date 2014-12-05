@@ -108,32 +108,33 @@ public class UserInterface
         	Console.WriteLine("         1. Add Member                   ");
         	Console.WriteLine("         2. Edit Member                  ");
         	Console.WriteLine("         3. Delete Member                ");
-            Console.WriteLine("         4. Print All Members            ");
+        	Console.WriteLine("         4. Suspend Member               ");
+            Console.WriteLine("         5. Print All Members            ");
             Console.WriteLine("                                         ");
-        	Console.WriteLine("         5. Add Provider                 ");
-            Console.WriteLine("         6. Edit Provider                ");
-            Console.WriteLine("         7. Delete Provider              ");
-            Console.WriteLine("         8. Add Service To Provider      ");
-            Console.WriteLine("         9. Delete Service From Provider ");
-            Console.WriteLine("        10. Print All Providers          ");
+        	Console.WriteLine("         6. Add Provider                 ");
+            Console.WriteLine("         7. Edit Provider                ");
+            Console.WriteLine("         8. Delete Provider              ");
+            Console.WriteLine("         9. Add Service To Provider      ");
+            Console.WriteLine("        10. Delete Service From Provider ");
+            Console.WriteLine("        11. Print All Providers          ");
             Console.WriteLine("                                         ");
-            Console.WriteLine("        11. Add Service                  ");
-            Console.WriteLine("        12. Edit Service                 ");
-            Console.WriteLine("        13. Delete Service               ");  
-            Console.WriteLine("        14. Print All Services           ");
+            Console.WriteLine("        12. Add Service                  ");
+            Console.WriteLine("        13. Edit Service                 ");
+            Console.WriteLine("        14. Delete Service               ");  
+            Console.WriteLine("        15. Print All Services           ");
             Console.WriteLine("                                         ");
-            Console.WriteLine("        15. Print Member Report          ");
-            Console.WriteLine("        16. Print Weekly Members Report  ");
-            Console.WriteLine("        17. Print Provider Report        ");
-            Console.WriteLine("        18. Print Weekly Providers Report");
-            Console.WriteLine("        19. Print Summary Report         ");
-            Console.WriteLine("        20. Print EFT Report             ");
+            Console.WriteLine("        16. Print Member Report          ");
+            Console.WriteLine("        17. Print Weekly Members Report  ");
+            Console.WriteLine("        18. Print Provider Report        ");
+            Console.WriteLine("        19. Print Weekly Providers Report");
+            Console.WriteLine("        20. Print Summary Report         ");
+            Console.WriteLine("        21. Print EFT Report             ");
             Console.WriteLine("                                         ");
-            Console.WriteLine("        21. Save                         ");
-            Console.WriteLine("        22. Display Main Menu            ");
+            Console.WriteLine("        22. Save                         ");
+            Console.WriteLine("        23. Display Main Menu            ");
             Console.WriteLine("                                         ");
 
-            choice = getInteger("Enter your choice: ");
+            choice = getInteger("Enter your choice: ", 1, 2);
             Console.WriteLine();
          
             switch (choice)
@@ -144,43 +145,45 @@ public class UserInterface
                            	break;
                 case  3:   	pizzaAnonymous.deleteMember();
                            	break;
-                case  4:    pizzaAnonymous.printMembers();
+                case  4:   	pizzaAnonymous.suspendMember();
                            	break;
-                case  5:    pizzaAnonymous.addProvider(); 
+                case  5:    pizzaAnonymous.printMembers();
                            	break;
-                case  6:    pizzaAnonymous.editProvider(); 
+                case  6:    pizzaAnonymous.addProvider(); 
                            	break;
-                case  7:    pizzaAnonymous.deleteProvider();
+                case  7:    pizzaAnonymous.editProvider(); 
                            	break;
-                case  8:    pizzaAnonymous.addServiceToProvider(); 
+                case  8:    pizzaAnonymous.deleteProvider();
                            	break;
-                case  9:    pizzaAnonymous.deleteServiceFromProvider(); 
+                case  9:    pizzaAnonymous.addServiceToProvider(); 
                            	break;
-                case 10:    pizzaAnonymous.printProviders(); 
+                case 10:    pizzaAnonymous.deleteServiceFromProvider(); 
+                           	break;
+                case 11:    pizzaAnonymous.printProviders(); 
                 			break;
-                case 11:    pizzaAnonymous.addService();
+                case 12:    pizzaAnonymous.addService();
     						break;
-                case 12:    pizzaAnonymous.editService(); 
+                case 13:    pizzaAnonymous.editService(); 
     						break;
-                case 13:    pizzaAnonymous.deleteService();
+                case 14:    pizzaAnonymous.deleteService();
                             break;
-                case 14:    pizzaAnonymous.printServices();
+                case 15:    pizzaAnonymous.printServices();
                             break;
-                case 15:    pizzaAnonymous.printMemberReport();
+                case 16:    pizzaAnonymous.printMemberReport();
                             break;
-                case 16:    pizzaAnonymous.printWeeklyMembersReport();
+                case 17:    pizzaAnonymous.printWeeklyMembersReport();
                             break;
-                case 17:    pizzaAnonymous.printProviderReport();
+                case 18:    pizzaAnonymous.printProviderReport();
                             break;
-                case 18:    pizzaAnonymous.printWeeklyProvidersReport();
+                case 19:    pizzaAnonymous.printWeeklyProvidersReport();
                             break;
-                case 19:    pizzaAnonymous.printSummaryReport();
+                case 20:    pizzaAnonymous.printSummaryReport();
                             break;
-                case 20:    pizzaAnonymous.printEFTReport();
+                case 21:    pizzaAnonymous.printEFTReport();
                             break;
-                case 21:    pizzaAnonymous.save();
+                case 22:    pizzaAnonymous.save();
                             break;        
-                case 22:   	done = true;
+                case 23:   	done = true;
      		   				break;
                 default:   	Console.WriteLine("Not a valid choice! Please try again.\n");
                            	break;     
@@ -320,8 +323,9 @@ public class UserInterface
     /// Prompts the user to enter a date into the console.
     /// </summary>
     /// <param name="prompt">The string that will prompt the user with what they should enter</param>
+    /// <param name="allowFuture">Determines whether the function will accept a future date as input</param>
     /// <returns>The date entered by the user in the form of a string (MM-DD-YYYY)</returns>
-    public static String getDate(String prompt)
+    public static String getDate(String prompt, bool allowFuture = false)
     {
         // Regular expression. Matches as string in the form MM-DD-YYYY where M,D, and Y are digits
         Regex regex = new Regex(@"^\d{2}-\d{2}-\d{4}$");
@@ -330,10 +334,24 @@ public class UserInterface
         String input = Console.In.ReadLine();
         Match match = regex.Match(input);
 
+        bool done = false;
+
         // While the user input doesn't match the date format
-        while (!match.Success)
+        while (!done)
         {
-            Console.Write("Please enter a date in the format MM-DD-YYYY: ");
+            if (match.Success && (Convert.ToDateTime(input) > DateTime.Today && allowFuture == false))
+            {
+                Console.Write("Please enter a date that isn't in the future: ");
+            }
+            else if (!match.Success)
+            {
+                Console.Write("Please enter a date in the format MM-DD-YYYY: ");
+            }
+            else
+            {
+                break;
+            }
+
             input = Console.In.ReadLine();
             match = regex.Match(input);
         }
