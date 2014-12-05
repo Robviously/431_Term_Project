@@ -25,7 +25,14 @@ namespace UnitTests
                 }
             }
         }
-    
+
+        [SetUp]
+        public void setup()
+        {
+            File.Copy("C:\\working\\431_Term_Project\\PizzaAnonymousApplication\\UnitTests\\bin\\Debug\\ExtraCopy\\CapturedServices.xml",
+            "C:\\working\\431_Term_Project\\PizzaAnonymousApplication\\UnitTests\\bin\\Debug\\XML\\CapturedServices.xml", true);
+        }
+
         [TestCase(100000001, "C:\\working\\431_Term_Project\\PizzaAnonymousApplication\\UnitTests\\bin\\Debug\\ExpectedResults\\Member Report - 100000001.txt")]
         [TestCase(100000002, "C:\\working\\431_Term_Project\\PizzaAnonymousApplication\\UnitTests\\bin\\Debug\\ExpectedResults\\Member Report - 100000002.txt")]
         [TestCase(100000003, "C:\\working\\431_Term_Project\\PizzaAnonymousApplication\\UnitTests\\bin\\Debug\\ExpectedResults\\Member Report - 100000003.txt")]
