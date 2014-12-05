@@ -89,9 +89,10 @@ public class Member
 
     public override string ToString()
     {
-        return "  Name:    " + name + "\n" +
-               "  ID:      " + id + "\n" +
-               "  Address: " + streetAddress + "\n" +
-               "           " + city + ", " + state + " " + zipCode + "\n\n";
+        return "  Name:      " + name + "\n" +
+               "  ID:        " + id + "\n" +
+               "  Suspended: " + suspended + "\n" +
+               "  Address:   " + streetAddress + "\n" +
+               "             " + city + ", " + state + " " + zipCode + "\n\n";
     }
 }

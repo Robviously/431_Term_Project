@@ -118,6 +118,29 @@ public class MemberManager
     }
 
     /// <summary>
+    /// This method suspends a member in the memberList
+    /// </summary>
+    /// <param name="id">Member ID</param>
+    public void suspendMember(int id)
+    {
+        // Ensure member exists in the system.
+        if (!validateMember(id))
+            Console.WriteLine("Member with ID [" + id + "] doesn't exist in system.");
+        else
+        {
+            // Cycle through members until a match is found and then remove the member from memberList.
+            foreach (Member m in memberList)
+            {
+                if (m.Id == id)
+                {
+                    m.Suspended = true;
+                    return;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// This returns an actual member object from the memberList.
     /// </summary>
     /// <param name="id">Member ID</param>

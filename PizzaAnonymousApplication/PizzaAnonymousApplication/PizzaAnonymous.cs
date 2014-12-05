@@ -137,7 +137,7 @@ public class PizzaAnonymous
     /// </summary>
     public void deleteMember()
     {
-        int memberId = UserInterface.getInteger("Enter the member ID: ");
+        int memberId = UserInterface.getInteger("Enter the member ID: ", 9, 9);
 
         // Validate the member exists before proceeding
         if (memberManager.validateMember(memberId))
@@ -152,13 +152,33 @@ public class PizzaAnonymous
     }
 
     /// <summary>
+    /// Prompts the user for a member ID. If the member exists in the system,
+    /// the method will call the member manager method to suspend the member.
+    /// </summary>
+    public void suspendMember()
+    {
+        int memberId = UserInterface.getInteger("Enter the member ID: ", 9, 9);
+
+        // Validate the member exists before proceeding
+        if (memberManager.validateMember(memberId))
+        {
+            memberManager.suspendMember(memberId);
+            Console.WriteLine("Successfully suspended member.");
+        }
+        else
+        {
+            Console.WriteLine("Unable to find member [" + memberId + "]");
+        }
+    }
+
+    /// <summary>
     /// Prompts the user to enter a member ID. If the member exists in the system,
     /// the method will output whether the member is suspended or not. Otherwise,
     /// the method will print that the member doesn't exist.
     /// </summary>
     public void validateMember()
     {
-        int memberId = UserInterface.getInteger("Enter the member's ID: ");
+        int memberId = UserInterface.getInteger("Enter the member's ID: ", 9, 9);
         Member member = memberManager.getMemberById(memberId);
 
         // If the member exists in the system
@@ -223,7 +243,7 @@ public class PizzaAnonymous
     /// </summary>
     public void editProvider()
     {
-        int providerId = UserInterface.getInteger("Enter provider ID: ");
+        int providerId = UserInterface.getInteger("Enter provider ID: ", 9, 9);
 
         // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
@@ -268,7 +288,7 @@ public class PizzaAnonymous
     /// </summary>
     public void deleteProvider()
     {
-        int providerId = UserInterface.getInteger("Enter the provider ID: ");
+        int providerId = UserInterface.getInteger("Enter the provider ID: ", 9, 9);
 
         // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
@@ -290,17 +310,19 @@ public class PizzaAnonymous
     /// </summary>
     public void addServiceToProvider()
     {
-        int providerId = UserInterface.getInteger("Enter provider ID: ");
+        int providerId = UserInterface.getInteger("Enter provider ID: ", 9, 9);
 
         // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
-            int serviceId = UserInterface.getInteger("Enter service ID: ");
+            int serviceId = UserInterface.getInteger("Enter service ID: ", 6, 6);
 
             // Validate the service exists before adding it to the provider
             if (serviceManager.validateService(serviceId))
             {
                 providerManager.addService(providerId, serviceId);
+
+                Console.WriteLine("Successfully added service to provider.");
             }
             else
             {
@@ -322,17 +344,19 @@ public class PizzaAnonymous
     /// </summary>
     public void deleteServiceFromProvider()
     {
-        int providerId = UserInterface.getInteger("Enter provider ID: ");
+        int providerId = UserInterface.getInteger("Enter provider ID: ", 9, 9);
 
         // Validate the provider exists before proceeding
         if (providerManager.validateProvider(providerId))
         {
-            int serviceId = UserInterface.getInteger("Enter service ID: ");
+            int serviceId = UserInterface.getInteger("Enter service ID: ", 6, 6);
 
             // Validate the service is provided by the provider before deleting it
             if (serviceManager.validateService(serviceId))
             {
                 providerManager.deleteService(providerId, serviceId);
+
+                Console.WriteLine("Successfully deleted service from provider.");
             }
             else
             {
@@ -380,10 +404,11 @@ public class PizzaAnonymous
         String file = "CapturedServices.xml";
         XDocument doc;
         XElement xmlRoot;
-        int memberId = UserInterface.getInteger("Enter the member's ID: ");
+        int memberId = UserInterface.getInteger("Enter the member's ID: ", 9, 9);
+        Member member = memberManager.getMemberById(memberId);
 
         // Validate the member exists before proceeding
-        if (memberManager.validateMember(memberId))
+        if (member != null && member.Suspended == false)
         {
             String dateOfService = UserInterface.getDate("Enter the date the service was provided (Format: MM-DD-YYYY): ");
             int serviceId = UserInterface.getInteger("Enter the ID of the service provided: ");
@@ -415,7 +440,6 @@ public class PizzaAnonymous
 
                     // Get the entity object associated with this capture
                     Provider provider = providerManager.getProviderById(providerId);
-                    Member member = memberManager.getMemberById(memberId);
                     Service service = serviceManager.getServiceById(serviceId);
 
                     XElement capturedService =
@@ -441,6 +465,8 @@ public class PizzaAnonymous
 
                     xmlRoot.Add(capturedService);
                     doc.Save(file);
+
+                    Console.WriteLine("Successfully captured service.");
                 }
                 // If the user selects no when prompted if the service is correct
                 else
@@ -453,6 +479,10 @@ public class PizzaAnonymous
             {
                 Console.WriteLine("Service [" + serviceId + "] is not listed as a service provided by provider [" + providerId + "].");
             }
+        }
+        else if (member != null && member.Suspended == true)
+        {
+            Console.WriteLine("Member [" + memberId + "] is suspended. Cannot provide a service to a suspended member.");
         }
         else
         {
@@ -512,7 +542,7 @@ public class PizzaAnonymous
     /// </summary>
     public void editService()
     {
-        int serviceId = UserInterface.getInteger("Enter service ID: ");
+        int serviceId = UserInterface.getInteger("Enter service ID: ", 6, 6);
 
         // Verify the service exists before proceeding
         if (serviceManager.validateService(serviceId))
@@ -561,7 +591,7 @@ public class PizzaAnonymous
     /// </summary>
     public void deleteService()
     {
-        int serviceId = UserInterface.getInteger("Enter the service ID: ");
+        int serviceId = UserInterface.getInteger("Enter the service ID: ", 6, 6);
 
         // Validate the service exists before deleting it
         if (serviceManager.validateService(serviceId))
@@ -665,6 +695,8 @@ public class PizzaAnonymous
         memberManager.save();
         providerManager.save();
         serviceManager.save();
+
+        Console.WriteLine("Saved member, provider, and service information to disk.");
     }
 
     /// <summary>

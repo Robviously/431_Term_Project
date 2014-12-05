@@ -41,9 +41,19 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// </summary>
     private Report()
     {
-       loadCapturedServices();
+        try
+        {
+            serviceXML = XDocument.Load(projectDir + "/CapturedServices.xml");
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
-    
 
     //method to implement singleton pattern
     public static Report getInstance
@@ -59,22 +69,6 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         }
     }
 
-    public void loadCapturedServices()
-    {
-        try
-        {
-            serviceXML = XDocument.Load(projectDir + "/CapturedServices.xml");
-        }
-        catch (FileNotFoundException e)
-        {
-            Console.WriteLine(e.Message);
-        }
-        catch (DirectoryNotFoundException e)
-        {
-            Console.WriteLine(e.Message);
-        }
-    }
-
     /// <summary>
     /// Creates Weekly report for all members who has received a service in the last 7 days
     /// Function gets LIST of member objects from pizza anonymous UI and CHECKS if any of the members received a service
@@ -82,7 +76,6 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// <param name="memberList"></param>
     public List<string> getWeeklyMembersReport()
     {
-        loadCapturedServices();
         List<string> createdPaths = new List<string>();
         //starting and ending date to work withs
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
@@ -149,7 +142,6 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// <param name="member"></param>
     public string getMemberReport(int member)
     {
-        loadCapturedServices();
         string filePath = null;
         if (!serviceXML.Descendants("service").Any())
         {
@@ -198,7 +190,6 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// <param name="providerList"></param>
     public List<string> getWeeklyProvidersReport()
     {
-        loadCapturedServices();
         List<string> createdPaths = new List<string>();
         //date range for the past 7 days
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
@@ -267,7 +258,6 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// <param name="provider"></param>
     public string getProviderReport(int provider)
     {
-        loadCapturedServices();
         string filePath = null;
         if (!serviceXML.Descendants("service").Any())
         {
@@ -317,7 +307,6 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// <param name="providerList"></param>
     public string getProviderSummary()
     {
-        loadCapturedServices();
         //date range
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
         DateTime enddate = DateTime.Today;
@@ -419,7 +408,6 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     /// <param name="providerList"></param>
     public string createEFT()
     {
-        loadCapturedServices();
         //date range
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
         DateTime enddate = DateTime.Today;
