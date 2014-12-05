@@ -547,7 +547,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
 
             else if (report_type == PROVIDER_WEEKLY || report_type == PROVIDER_ON_DEMAND)
             {
-                int totalFee = 0;
+                double totalFee = 0;
                 writer.WriteLine();
                 writer.Write(("Received Date").PadRight(23));
                 writer.Write(("Service Date").PadRight(20));
@@ -562,7 +562,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                     writer.Write(service.Element("memberID").Value.PadRight(15));
                     writer.Write(service.Element("serviceCode").Value.PadRight(15));
                     writer.Write(("$ " + service.Element("serviceFee").Value).PadRight(15));
-                    totalFee += Convert.ToInt32(service.Element("serviceFee").Value);
+                    totalFee += Convert.ToDouble(service.Element("serviceFee").Value);
                     writer.WriteLine();
                 }
                 writer.WriteLine();
