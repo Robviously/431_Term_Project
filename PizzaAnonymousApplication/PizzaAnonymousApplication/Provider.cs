@@ -59,6 +59,14 @@ public class Provider
         set { zipCode = value; }
     }
 
+    // Provider's bank account number with get/set properties.
+    private int bankAccountNumber;
+    public int BankAccountNumber
+    {
+        get { return bankAccountNumber; }
+        set { bankAccountNumber = value; }
+    }
+
     // Provider's list of services provided (by code number).
     private List<int> serviceList = new List<int>();
 
@@ -110,7 +118,8 @@ public class Provider
     /// <param name="c">Provider city</param>
     /// <param name="s">Provider state</param>
     /// <param name="zc">Provider zip code</param>
-    public Provider(String n, int i, String sa, String c, String s, int zc)
+    /// <param name="ban">Provider bank account number</param>
+    public Provider(String n, int i, String sa, String c, String s, int zc, int ban)
     {
         name = n;
         id = i;
@@ -118,6 +127,7 @@ public class Provider
         city = c;
         state = s;
         zipCode = zc;
+        bankAccountNumber = ban;
     }
 
     public override string ToString()

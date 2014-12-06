@@ -228,9 +228,10 @@ public class PizzaAnonymous
         String city = UserInterface.getString("Enter the provider's city: ", 1, 14);
         String state = UserInterface.getString("Enter the provider's state: ", 2, 2);
         int zipCode = UserInterface.getInteger("Enter the provider's ZIP code: ", 5, 5);
+        int bankAccountNumber = UserInterface.getInteger("Enter the provider's bank account number: ", 10, 10);
 
         // Add the provider to the system with the given attributes
-        providerManager.addProvider(name, streetAddress, city, state, zipCode);
+        providerManager.addProvider(name, streetAddress, city, state, zipCode, bankAccountNumber);
 
         Console.WriteLine("Successfully added provider.");
     }
@@ -461,7 +462,8 @@ public class PizzaAnonymous
                             new XElement("pStrtAddr", provider.StreetAddress),
                             new XElement("pState", provider.State),
                             new XElement("pCity", provider.City),
-                            new XElement("pZip", provider.ZipCode));
+                            new XElement("pZip", provider.ZipCode),
+                            new XElement("pBnkAcctNum", provider.BankAccountNumber));
 
                     xmlRoot.Add(capturedService);
                     doc.Save(file);

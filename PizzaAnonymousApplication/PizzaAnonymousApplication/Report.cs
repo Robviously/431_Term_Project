@@ -322,7 +322,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         DateTime startdate = DateTime.Today.Date.AddDays(-7);
         DateTime enddate = DateTime.Today;
 
-        int totalFee = 0;      //total fee for all providers
+        double totalFee = 0.0;      //total fee for all providers
         int provCount = 0;
         int totalConsultCount = 0;
         //this is where report text file is created
@@ -358,7 +358,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                     foreach (var provider in providerList)
                     {
                         //fee for particular provider
-                        int fee = 0;
+                        double fee = 0.0;
 
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
@@ -371,8 +371,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                         //loop through each service to calculat
                         foreach (var service in serviceList)
                         {
-                            fee += Convert.ToInt32(service.Element("serviceFee").Value);
-                            totalFee += Convert.ToInt32(service.Element("serviceFee").Value);
+                            fee += Convert.ToDouble(service.Element("serviceFee").Value);
+                            totalFee += Convert.ToDouble(service.Element("serviceFee").Value);
                             totalConsultCount++;
                         }
                         //since each node in xml contains all information, we can extract provider name from it
@@ -456,7 +456,7 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
 
                     foreach (var provider in providerList)
                     {
-                        int fee = 0;
+                        double fee = 0.0;
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
                             .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
@@ -468,12 +468,12 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
 
                         foreach (var service in serviceList)
                         {
-                            fee += Convert.ToInt32(service.Element("serviceFee").Value);
+                            fee += Convert.ToDouble(service.Element("serviceFee").Value);
                         }
                         //since each node in xml contains all information, we can extract provider id and name from it
                         writer.Write(serviceList[0].Element("providerID").Value.PadRight(20));
                         writer.Write(serviceList[0].Element("providerName").Value.PadRight(20));
-                        writer.Write("#bank account number".PadRight(30));
+                        writer.Write(serviceList[0].Element("pBnkAcctNum").Value.PadRight(30));
                         writer.Write(("$" + fee).PadRight(15));
                         writer.WriteLine();
                     }

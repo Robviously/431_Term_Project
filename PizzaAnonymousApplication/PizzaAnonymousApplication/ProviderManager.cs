@@ -33,10 +33,11 @@ public class ProviderManager
     /// <param name="city">Provider City</param>
     /// <param name="state">Provider State</param>
     /// <param name="zipCode">Provider Zip Code</param>
-    public void addProvider(String name, String streetAddress, String city, String state, int zipCode)
+    /// <param name="bankAccountNumber">Bank Account Number</param>
+    public void addProvider(String name, String streetAddress, String city, String state, int zipCode, int bankAccountNumber)
     {
         // Creates a new provider to add to the system.  Note: nextID is incremented.
-        Provider provider = new Provider(name, nextID++, streetAddress, city, state, zipCode);
+        Provider provider = new Provider(name, nextID++, streetAddress, city, state, zipCode, bankAccountNumber);
         providerList.Add(provider);
     }
     
@@ -298,6 +299,7 @@ public class ProviderManager
                 writer.WriteElementString("City", provider.City);
                 writer.WriteElementString("State", provider.State);
                 writer.WriteElementString("ZIPCode", provider.ZipCode.ToString());
+                writer.WriteElementString("BankAccountNumber", provider.BankAccountNumber.ToString());
 
                 writer.WriteStartElement("ServicesProvided");
 
@@ -344,6 +346,7 @@ public class ProviderManager
             String city = "Undefined City";
             String state = "Undefined State";
             int zipCode = -1;
+            int bankAccountNumber = -1;
             List<int> services = new List<int>();
 
             // While there is information to read in the file
@@ -375,6 +378,9 @@ public class ProviderManager
                             break;
                         case "ZIPCode":
                             zipCode = reader.ReadElementContentAsInt();
+                            break;                        
+                        case "BankAccountNumber":
+                            bankAccountNumber = reader.ReadElementContentAsInt();
                             break;
                         case "ServiceID":
                             services.Add(reader.ReadElementContentAsInt());
@@ -387,7 +393,7 @@ public class ProviderManager
                     if (reader.Name == "Provider")
                     {
                         // Create the provider and add it to the list of providers
-                        Provider provider = new Provider(name, id, streetAddress, city, state, zipCode);
+                        Provider provider = new Provider(name, id, streetAddress, city, state, zipCode, bankAccountNumber);
                         providerList.Add(provider);
 
                         foreach (int service in services)
