@@ -319,8 +319,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     {
         loadCapturedServices();
         //date range
-        DateTime startdate = DateTime.Today.Date.AddDays(-7);
-        DateTime enddate = DateTime.Today;
+        DateTime startdate = DateTime.Now.Date.AddDays(-7);
+        DateTime enddate = DateTime.Now;
 
         double totalFee = 0.0;      //total fee for all providers
         int provCount = 0;
@@ -337,8 +337,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         {
             //query to get list of providers who has given a service in the last 7 days
             var provQuery = serviceXML.Descendants("service")
-                .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                            ((DateTime)x.Element("serviceDate")) <= enddate);
+                .Where(x => ((DateTime)x.Element("currentDate")) >= startdate &&
+                            ((DateTime)x.Element("currentDate")) <= enddate);
 
             //export results into list, get only unique provider ids
             List<string> providerList = provQuery.Select(i => i.Element("providerID").Value).Distinct().ToList();
@@ -363,8 +363,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
 
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
-                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime)x.Element("serviceDate")) <= enddate)
+                            .Where(x => ((DateTime)x.Element("currentDate")) >= startdate &&
+                                        ((DateTime)x.Element("currentDate")) <= enddate)
                             .Where(x => x.Element("providerID").Value == provider);
 
                         //export results into list
@@ -420,8 +420,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
     {
         loadCapturedServices();
         //date range
-        DateTime startdate = DateTime.Today.Date.AddDays(-7);
-        DateTime enddate = DateTime.Today;
+        DateTime startdate = DateTime.Now.Date.AddDays(-7);
+        DateTime enddate = DateTime.Now;
         //this is where a report will be saved
         string filePath = "";
 
@@ -432,8 +432,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         {
             //query to get list of providers who has given a service in the last 7 days
             var provQuery = serviceXML.Descendants("service")
-                .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                            ((DateTime)x.Element("serviceDate")) <= enddate);
+                .Where(x => ((DateTime)x.Element("currentDate")) >= startdate &&
+                            ((DateTime)x.Element("currentDate")) <= enddate);
 
             //export results into list, get only unique provider ids
             List<string> providerList = provQuery.Select(i => i.Element("providerID").Value).Distinct().ToList();
@@ -459,8 +459,8 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                         double fee = 0.0;
                         //query to get list of services for particular provider in the last 7 days
                         var serviceQuery = serviceXML.Descendants("service")
-                            .Where(x => ((DateTime)x.Element("serviceDate")) >= startdate &&
-                                        ((DateTime)x.Element("serviceDate")) <= enddate)
+                            .Where(x => ((DateTime)x.Element("currentDate")) >= startdate &&
+                                        ((DateTime)x.Element("currentDate")) <= enddate)
                             .Where(x => x.Element("providerID").Value == provider);
 
                         //export query result into list
