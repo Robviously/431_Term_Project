@@ -348,13 +348,14 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                 StreamWriter writer = new StreamWriter(filePath);
                 try
                 {
-                    writer.WriteLine("********** Provider Weekly Summary Report ****".PadRight(60, '*'));
+                    writer.WriteLine("".PadRight(25, '*') + "  Provider Weekly Summary Report   "+"".PadRight(20, '*'));
                     writer.WriteLine();
-                    writer.Write("Provider Name".PadRight(20));
-                    writer.Write("Total # of consultations".PadRight(30));
+                    writer.WriteLine();
+                    writer.WriteLine("".PadRight(80, '-'));
+                    writer.Write("  "+"Provider Name".PadRight(30) + "|   ");
+                    writer.Write("Total # of consultations".PadRight(30)+"|   ");
                     writer.WriteLine("Total fee".PadRight(15));
-                    writer.WriteLine("----".PadRight(60, '-'));
-                    writer.WriteLine();
+                    writer.WriteLine("".PadRight(80, '-'));
                     foreach (var provider in providerList)
                     {
                         //fee for particular provider
@@ -376,21 +377,19 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                             totalConsultCount++;
                         }
                         //since each node in xml contains all information, we can extract provider name from it
-                        writer.Write(serviceList[0].Element("providerName").Value.PadRight(20));
-                        writer.Write(serviceList.Count.ToString().PadRight(30));
+                        writer.Write("  "+serviceList[0].Element("providerName").Value.PadRight(30)+"|   ");
+                        writer.Write(serviceList.Count.ToString().PadRight(30)+"|   ");
                         writer.Write(("$" + fee).PadRight(15));
                         writer.WriteLine();
                         provCount++;
 
                     }
+                    writer.WriteLine("".PadRight(80, '-'));
 
                     writer.WriteLine();
-                    writer.Write("Total number of providers: ".PadRight(35));
-                    writer.WriteLine(provCount);
-                    writer.Write("Total number of consultations: ".PadRight(35));
-                    writer.WriteLine(totalConsultCount);
-                    writer.Write("Total fee to be paid: ".PadRight(35));
-                    writer.WriteLine("$" + totalFee);
+                    writer.Write("   Total number of providers: ".PadRight(35)); writer.WriteLine(provCount);
+                    writer.Write("   Total number of consultations: ".PadRight(35)); writer.WriteLine(totalConsultCount);
+                    writer.Write("   Total fee to be paid: ".PadRight(35)); writer.WriteLine("$" + totalFee);
 
                     Console.WriteLine("Provider summary report was created successfully, and it was saved to: {0}", filePath);
                 }
@@ -445,14 +444,15 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                 StreamWriter writer = new StreamWriter(filePath);
                 try
                 {
-                    writer.WriteLine("********** Provider EFT Report **********".PadRight(90, '*'));
-                    writer.WriteLine();
-                    writer.Write("Provider ID".PadRight(20));
-                    writer.Write("Provider Name".PadRight(20));
-                    writer.Write("Provider Bank Account #".PadRight(30));
+                    writer.WriteLine("".PadRight(40, '*') + "   Provider EFT Report   " + "".PadRight(40, '*'));
+                    writer.WriteLine();writer.WriteLine();
+
+                    writer.WriteLine("".PadRight(105, '-'));
+                    writer.Write("  "+"Provider ID".PadRight(20) + "|   ");
+                    writer.Write("Provider Name".PadRight(30)+"|   ");
+                    writer.Write("Provider Bank Account #".PadRight(30)+"|   ");
                     writer.WriteLine("Total fee".PadRight(15));
-                    writer.WriteLine("---".PadRight(90, '-'));
-                    writer.WriteLine();
+                    writer.WriteLine("".PadRight(105, '-'));
 
                     foreach (var provider in providerList)
                     {
@@ -471,14 +471,14 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
                             fee += Convert.ToDouble(service.Element("serviceFee").Value);
                         }
                         //since each node in xml contains all information, we can extract provider id and name from it
-                        writer.Write(serviceList[0].Element("providerID").Value.PadRight(20));
-                        writer.Write(serviceList[0].Element("providerName").Value.PadRight(20));
-                        writer.Write(serviceList[0].Element("pBnkAcctNum").Value.PadRight(30));
+                        writer.Write("  "+serviceList[0].Element("providerID").Value.PadRight(20)+"|   ");
+                        writer.Write(serviceList[0].Element("providerName").Value.PadRight(30)+"|   ");
+                        writer.Write(serviceList[0].Element("pBnkAcctNum").Value.PadRight(30)+"|   ");
                         writer.Write(("$" + fee).PadRight(15));
                         writer.WriteLine();
                     }
+                    writer.WriteLine("".PadRight(105, '-'));
 
-                    writer.WriteLine();
                     Console.WriteLine("EFT Report was created successfully and it was saved to {0}", filePath);
                 }
                 catch (Exception e)
@@ -516,62 +516,77 @@ public class Report : IMemberReport, IProviderReport, ISummaryReport, I_EFTRepor
         StreamWriter writer = new StreamWriter(path);
         try
         {
-            //report header
-            writer.WriteLine("********** " + report_type + " *".PadRight(50, '*'));
-            writer.WriteLine();
-            writer.WriteLine(entityID);
-            writer.WriteLine(entityName);
-            writer.WriteLine(entityStrtAddr);
-            writer.WriteLine(entityCity);
-            writer.WriteLine(entityState);
-            writer.WriteLine(entityZip);
-            writer.WriteLine();
-
             //generate report file according to type of report
             if (report_type == MEMBER_WEEKLY || report_type == MEMBER_ON_DEMAND)
             {
+                //report header
+                writer.WriteLine("".PadRight((86-report_type.Length) / 2, '*') + "  "+report_type+"  " + "".PadRight((86 - report_type.Length) / 2, '*'));
                 writer.WriteLine();
-                writer.Write("Service Date".PadRight(20));
-                writer.Write("Provider Name".PadRight(15));
-                writer.WriteLine("Service Name".PadRight(15));
-                writer.WriteLine("-".PadRight(50, '-'));
+                writer.Write(" Member ID: ".PadRight(15)); writer.WriteLine(entityID);
+                writer.Write(" Member Name: ".PadRight(15)); writer.WriteLine(entityName);
+                writer.Write(" Address: ".PadRight(15)); writer.WriteLine(entityStrtAddr);
+                writer.Write("".PadRight(15)); writer.WriteLine(entityCity);
+                writer.Write("".PadRight(15)); writer.WriteLine(entityState);
+                writer.Write("".PadRight(15)); writer.WriteLine(entityZip);
+                writer.WriteLine();
+
+                writer.WriteLine("  Received Service(s)");
+                writer.WriteLine("-".PadRight(90, '-'));
+                writer.Write("  "+"Service Date".PadRight(20)+"|   ");
+                writer.Write("Provider Name".PadRight(30)+"|   ");
+                writer.WriteLine("Service Name".PadRight(40));
+                writer.WriteLine("-".PadRight(90, '-'));
                 foreach (var service in serviceList)
                 {
-                    writer.Write(service.Element("serviceDate").Value.PadRight(20));
-                    writer.Write(service.Element("providerName").Value.PadRight(15));
-                    writer.Write(service.Element("serviceName").Value.PadRight(15));
+                    writer.Write("  "+service.Element("serviceDate").Value.PadRight(20)+"|   ");
+                    writer.Write(service.Element("providerName").Value.PadRight(30)+"|   ");
+                    writer.Write(service.Element("serviceName").Value.PadRight(40));
                     writer.WriteLine();
                 }
-                Console.WriteLine("Report for member {0} was created successfully, and it was saved to {1}", entityID, path);
+                writer.WriteLine("-".PadRight(90, '-'));
+
+                Console.WriteLine("Report for member [{0}] was created successfully, and it was saved to {1}", entityID, path);
             }
 
             else if (report_type == PROVIDER_WEEKLY || report_type == PROVIDER_ON_DEMAND)
             {
-                double totalFee = 0;
+                //report header
+                writer.WriteLine("".PadRight((100 - report_type.Length) / 2, '*') + "   " + report_type + "   " + "".PadRight((100 - report_type.Length) / 2, '*'));
                 writer.WriteLine();
-                writer.Write(("Received Date").PadRight(23));
-                writer.Write(("Service Date").PadRight(20));
-                writer.Write(("Member ID").PadRight(15));
-                writer.Write(("Service Code").PadRight(15));
+                writer.Write(" Provider ID: ".PadRight(17)); writer.WriteLine(entityID);
+                writer.Write(" Provider Name: ".PadRight(17)); writer.WriteLine(entityName);
+                writer.Write(" Address: ".PadRight(17)); writer.WriteLine(entityStrtAddr);
+                writer.Write("".PadRight(17)); writer.WriteLine(entityCity);
+                writer.Write("".PadRight(17)); writer.WriteLine(entityState);
+                writer.Write("".PadRight(17)); writer.WriteLine(entityZip);
+                writer.WriteLine();
+
+                double totalFee = 0;
+                writer.WriteLine("  Submitted Service(s)");
+                writer.WriteLine("-".PadRight(105, '-'));
+                writer.Write(("  "+"Received Date").PadRight(25)+"|   ");
+                writer.Write(("Service Date").PadRight(20)+"|   ");
+                writer.Write(("Member ID").PadRight(15)+"|   ");
+                writer.Write(("Service Code").PadRight(15)+"|   ");
                 writer.WriteLine(("Service Fee").PadRight(15));
-                writer.WriteLine("--".PadRight(90, '-'));
+                writer.WriteLine("-".PadRight(105, '-'));
                 foreach (var service in serviceList)
                 {
-                    writer.Write(service.Element("currentDate").Value.PadRight(23));
-                    writer.Write(service.Element("serviceDate").Value.PadRight(20));
-                    writer.Write(service.Element("memberID").Value.PadRight(15));
-                    writer.Write(service.Element("serviceCode").Value.PadRight(15));
+                    writer.Write("  "+service.Element("currentDate").Value.PadRight(23) +"|   ");
+                    writer.Write(service.Element("serviceDate").Value.PadRight(20)+"|   ");
+                    writer.Write(service.Element("memberID").Value.PadRight(15)+"|   ");
+                    writer.Write(service.Element("serviceCode").Value.PadRight(15)+"|   ");
                     writer.Write(("$ " + service.Element("serviceFee").Value).PadRight(15));
                     totalFee += Convert.ToDouble(service.Element("serviceFee").Value);
                     writer.WriteLine();
                 }
+                writer.WriteLine("-".PadRight(105, '-'));
                 writer.WriteLine();
-                writer.Write("    " + "Total number of consultations: ");
-                writer.WriteLine(serviceList.Count);
-                writer.Write("    " + "Total service fee: $");
-                writer.WriteLine(totalFee);
 
-                Console.WriteLine("Report for provider {0} was created successfully, and it was saved to {1}", entityID, path);
+                writer.Write("    " + "Total number of consultations: "); writer.WriteLine(serviceList.Count);
+                writer.Write("    " + "Total service fee: $"); writer.WriteLine(totalFee);
+
+                Console.WriteLine("Report for provider [{0}] was created successfully, and it was saved to {1}", entityID, path);
             }
         }
         catch (Exception e)
